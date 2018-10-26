@@ -9,14 +9,14 @@
 #BSUB -x
 #BSUB -a openmp
 #BSUB -P jara0001
-#BSUB -M 126000
+##BSUB -M 126000
+#BSUB -M 1000000
 #BSUB -u j.klinkenberg@itc.rwth-aachen.de
 #BSUB -B
 #BSUB -N
 
 module use /home/jk869269/.modules
 source /home/jk869269/util/includes/env_chameleon_dev.sh
-module load python/3.6.0
 
 module li
 
