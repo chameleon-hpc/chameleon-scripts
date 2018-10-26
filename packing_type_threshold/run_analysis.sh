@@ -18,13 +18,13 @@
 module use /home/jk869269/.modules
 source /home/jk869269/util/includes/env_chameleon_dev.sh
 
-module li
-
 module unload chameleon-lib
 module load chameleon-lib/1.0
-python3.6 ./analyse_threshold_packing_type.py "buffer"
+module li
+python3.6 ./analyze_threshold_packing_type.py "buffer"
 
 module unload chameleon-lib
 module load chameleon-lib/1.0-zero-copy
-python3.6 ./analyse_threshold_packing_type.py "zero-copy"
+module li
+python3.6 ./analyze_threshold_packing_type.py "zero-copy"
 
