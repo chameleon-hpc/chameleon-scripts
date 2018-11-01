@@ -6,11 +6,12 @@ import numpy as np
 
 # flags to control what will be done -> provides the possibility to run on cluster but debug on laptop :)
 COMPILE_AND_RUN_APP     = True
-RUN_ANALYSIS            = False
+RUN_ANALYSIS            = True
+DELETE_OLD_STUFF        = True
 
 # hybrid execution parameters
 NUM_THREADS             = 4
-NUM_ITERS               = 3
+NUM_ITERS               = 1
 # local execution on a single node (used for testing)
 EXEC_SETTINGS           = "OMP_NUM_THREADS=" + str(NUM_THREADS) + " OMP_PLACES=cores OMP_PROC_BIND=spread I_MPI_PIN=1 I_MPI_PIN_DOMAIN=auto mpiexec.hydra -np 2 -genvall "
 # standard execution (single node or multi node depending on how many nodes were requested by batch)
@@ -22,21 +23,20 @@ APP_NAMES               = ['exec_mpi_sr_parallel']
 # application parameters
 # MATRIX_SIZES            = list([i for i in np.linspace(1600,2100,6)]) # for testing
 # MATRIX_SIZES            = [2000] # there seems to be a bug/deadlock when using exec_mpi_sr_task or exec_mpi_sr_task_comm_thread !!!
-MATRIX_SIZES            = list([i for i in np.linspace(10000,16000,4)])
-BLOCK_SIZE_DEVIDE       = [20, 50]
-CHECK_SOLUTION          = 1
+# MATRIX_SIZES            = list([i for i in np.linspace(10000,16000,4)])
+MATRIX_SIZES            = list([i for i in np.arange(10000,20001,2000)])
+BLOCK_SIZES             = list([i for i in np.arange(600,1001,100)])
+CHECK_SOLUTION          = 0
 
 # define directories
 script_dir              = os.path.dirname(os.path.abspath(__file__))
 application_dir         = os.path.join(script_dir, '..', '..', 'examples', 'cholesky', 'task_benchmarks', 'cholesky', 'mpi_omp')
 cur_working_dir         = os.getcwd()
-# make sure that common stuff is loaded. Dont worry about the warning that will be shown.. it works
-sys.path.append(os.path.join(script_dir, '..', 'common'))
-# import CChameleonStats as ch_stats
 
 def compileAndRun():
-    # first delete all previously created output files
-    os.system("rm -f output_*")
+    if DELETE_OLD_STUFF:
+        # first delete all previously created output files
+        os.system("rm -f output_*")
 
     # compile application
     os.chdir(application_dir)
@@ -46,8 +46,8 @@ def compileAndRun():
     for tmp_app in APP_NAMES:
         for cur_mat_size in MATRIX_SIZES:
             cur_mat_size = int(cur_mat_size)
-            for cur_block_size_divide in BLOCK_SIZE_DEVIDE:
-                cur_b_size = int(cur_mat_size / cur_block_size_divide)
+            for cur_b_size in BLOCK_SIZES:
+                cur_b_size = int(cur_b_size)
                 for n_iter in range(NUM_ITERS):
                     tmp_file_name           = "output_" + tmp_app + "_mat_" + str(cur_mat_size) + "_block_" + str(cur_b_size) + "_iter_" + str(n_iter)
                     tmp_file_path_orig      = os.path.join(cur_working_dir, tmp_file_name + "_orig")
@@ -60,21 +60,22 @@ def compileAndRun():
                     # output on command line once
                     os.system("grep \"time:\" " + tmp_file_path_orig)
     os.chdir(cur_working_dir)
+    os.system("rm *_orig")
 
 def runAnalysis():
     tmp_prefix_results = "result_times_"
-    # first delete all previously created results
-    os.system("rm -f " + tmp_prefix_results + "*")
+    if DELETE_OLD_STUFF:
+        # first delete all previously created results
+        os.system("rm -f " + tmp_prefix_results + "*")
 
     for tmp_app in APP_NAMES:
         tmp_path_results = os.path.join(cur_working_dir, tmp_prefix_results + tmp_app + ".txt")
         # init 2D result matrix here
-        arr_results_app = np.zeros([len(BLOCK_SIZE_DEVIDE), len(MATRIX_SIZES)])
+        arr_results_app = np.zeros([len(BLOCK_SIZES), len(MATRIX_SIZES)])
         for i_cur_mat_size in range(len(MATRIX_SIZES)):
             cur_mat_size = int(MATRIX_SIZES[i_cur_mat_size])
-            for i_cur_block_size_divide in range(len(BLOCK_SIZE_DEVIDE)):
-                cur_block_size_divide = BLOCK_SIZE_DEVIDE[i_cur_block_size_divide]
-                cur_b_size = int(cur_mat_size / cur_block_size_divide)
+            for i_cur_block_size in range(len(BLOCK_SIZES)):
+                cur_b_size = BLOCK_SIZES[i_cur_block_size]
 
                 cur_arr_times = []
                 for n_iter in range(NUM_ITERS):
@@ -85,11 +86,11 @@ def runAnalysis():
                         tmp_line = file.readline()
                     
                     # parse line and append time spend
-                    tmp_line.split(":")
-                    cur_arr_times.append(float(tmp_line[8]))
+                    cur_spl = tmp_line.split(":")
+                    cur_arr_times.append(float(cur_spl[13]))
                 
                 # calc mean and append add value to 2D array
-                arr_results_app[i_cur_block_size_divide, i_cur_mat_size] = np.mean(cur_arr_times)
+                arr_results_app[i_cur_block_size, i_cur_mat_size] = np.mean(cur_arr_times)
                 
         # save results to corresponding output file
         with open(tmp_path_results, "w") as file:
@@ -99,8 +100,8 @@ def runAnalysis():
             file.write("\n")
 
             # write results
-            for i_bs in range(len(BLOCK_SIZE_DEVIDE)):
-                cur_bs_d = BLOCK_SIZE_DEVIDE[i_bs]
+            for i_bs in range(len(BLOCK_SIZES)):
+                cur_bs_d = BLOCK_SIZES[i_bs]
                 file.write(str(int(cur_bs_d)))
                 for i_ms in range(len(MATRIX_SIZES)):
                     cur_ms = MATRIX_SIZES[i_ms]
