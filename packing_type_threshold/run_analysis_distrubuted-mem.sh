@@ -4,7 +4,7 @@
 #BSUB -e batch_analyse_threshold_packing_type.err.%J
 #BSUB -W 09:00
 #BSUB -m c24m128
-#BSUB -n 1
+#BSUB -n 2
 #BSUB -x
 #BSUB -a openmp
 #BSUB -P jara0001
@@ -19,10 +19,10 @@ source /home/jk869269/util/includes/env_chameleon_dev.sh
 module unload chameleon-lib
 module load chameleon-lib/1.0
 module li
-python3.6 ./analyze_threshold_packing_type.py "buffer"
+python3.6 ./analyze_threshold_packing_type.py "distributed_buffer" 14
 
 module unload chameleon-lib
 module load chameleon-lib/1.0-zero-copy
 module li
-python3.6 ./analyze_threshold_packing_type.py "zero-copy"
+python3.6 ./analyze_threshold_packing_type.py "distributed_zero-copy" 14
 
