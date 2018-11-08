@@ -3,6 +3,7 @@
 import os, sys
 import subprocess
 import numpy as np
+import math
 
 # flags to control what will be done -> provides the possibility to run on cluster but debug on laptop :)
 COMPILE_AND_RUN_APP     = True
@@ -11,21 +12,26 @@ DELETE_OLD_STUFF        = True
 
 # hybrid execution parameters
 NUM_THREADS             = 4
-NUM_ITERS               = 1
+NUM_ITERS               = 10
 # local execution on a single node (used for testing)
-EXEC_SETTINGS           = "OMP_NUM_THREADS=" + str(NUM_THREADS) + " OMP_PLACES=cores OMP_PROC_BIND=spread I_MPI_PIN=1 I_MPI_PIN_DOMAIN=auto mpiexec.hydra -np 2 -genvall "
+# EXEC_SETTINGS           = "I_MPI_DEBUG=5 OMP_NUM_THREADS=" + str(NUM_THREADS) + " OMP_PLACES=cores OMP_PROC_BIND=spread I_MPI_PIN=1 I_MPI_PIN_DOMAIN=auto mpiexec.hydra -np 2 -genvall "
 # standard execution (single node or multi node depending on how many nodes were requested by batch)
-# EXEC_SETTINGS           = "OMP_NUM_THREADS=" + str(NUM_THREADS) + " OMP_PLACES=cores OMP_PROC_BIND=spread I_MPI_PIN=1 I_MPI_PIN_DOMAIN=auto mpiexec -np 2 -genvall "
+EXEC_SETTINGS           = "I_MPI_DEBUG=5 OMP_NUM_THREADS=" + str(NUM_THREADS) + " OMP_PLACES=cores OMP_PROC_BIND=spread I_MPI_PIN=1 I_MPI_PIN_DOMAIN=auto mpiexec -np 2 -genvall "
 
 # APP_NAMES               = ['exec_mpi_sr_task_comm_thread', 'exec_mpi_sr_task', 'exec_mpi_sr_parallel']
-APP_NAMES               = ['exec_mpi_sr_parallel']
+# APP_NAMES               = ['exec_mpi_sr_parallel', 'exec_mpi_sr_task']
+APP_NAMES               = ['exec_mpi_sr_task']
+# APP_NAMES               = ['exec_mpi_sr_task_comm_thread']
 
 # application parameters
-# MATRIX_SIZES            = list([i for i in np.linspace(1600,2100,6)]) # for testing
-# MATRIX_SIZES            = [2000] # there seems to be a bug/deadlock when using exec_mpi_sr_task or exec_mpi_sr_task_comm_thread !!!
 # MATRIX_SIZES            = list([i for i in np.linspace(10000,16000,4)])
-MATRIX_SIZES            = list([i for i in np.arange(10000,20001,2000)])
-BLOCK_SIZES             = list([i for i in np.arange(600,1001,100)])
+# MATRIX_SIZES            = list([i for i in np.arange(10000,20001,20000)])
+MATRIX_SIZES            = [10000]
+# BLOCK_SIZES             = [5000, 2500, 2000, 1250, 1000, 500, 250]
+# BLOCK_SIZES             = [2000, 1000, 500, 250, 125, 100]
+BLOCK_SIZES             = [125]
+# BLOCK_SIZES             = list([math.ceil(MATRIX_SIZES[0] / i) for i in np.arange(2,61,8)])
+# BLOCK_SIZES             = list([i for i in np.arange(100,1001,100)])
 CHECK_SOLUTION          = 0
 
 # define directories
@@ -60,7 +66,7 @@ def compileAndRun():
                     # output on command line once
                     os.system("grep \"time:\" " + tmp_file_path_orig)
     os.chdir(cur_working_dir)
-    os.system("rm *_orig")
+    # os.system("rm *_orig")
 
 def runAnalysis():
     tmp_prefix_results = "result_times_"
