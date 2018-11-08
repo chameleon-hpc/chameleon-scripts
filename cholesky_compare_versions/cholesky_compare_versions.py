@@ -17,6 +17,7 @@ NUM_ITERS               = 10
 # EXEC_SETTINGS           = "I_MPI_DEBUG=5 OMP_NUM_THREADS=" + str(NUM_THREADS) + " OMP_PLACES=cores OMP_PROC_BIND=spread I_MPI_PIN=1 I_MPI_PIN_DOMAIN=auto mpiexec.hydra -np 2 -genvall "
 # standard execution (single node or multi node depending on how many nodes were requested by batch)
 EXEC_SETTINGS           = "I_MPI_DEBUG=5 OMP_NUM_THREADS=" + str(NUM_THREADS) + " OMP_PLACES=cores OMP_PROC_BIND=spread I_MPI_PIN=1 I_MPI_PIN_DOMAIN=auto mpiexec -np 2 -genvall "
+# EXEC_SETTINGS           = "I_MPI_DEBUG=5 OMP_NUM_THREADS=" + str(NUM_THREADS) + " OMP_PLACES=cores OMP_PROC_BIND=spread I_MPI_PIN=1 I_MPI_PIN_DOMAIN=auto mpiexec -np 2 --map-by node -report-bindings --bind-to socket --oversubscribe "
 
 # APP_NAMES               = ['exec_mpi_sr_task_comm_thread', 'exec_mpi_sr_task', 'exec_mpi_sr_parallel']
 # APP_NAMES               = ['exec_mpi_sr_parallel', 'exec_mpi_sr_task']
