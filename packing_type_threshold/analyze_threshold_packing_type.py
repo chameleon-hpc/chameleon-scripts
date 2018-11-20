@@ -9,8 +9,8 @@ COMPILE_AND_RUN_APP     = True
 RUN_ANALYSIS            = True
 
 # hybrid execution parameters
-NUM_THREADS             = 4
-NUM_ITERS               = 2
+NUM_THREADS             = 2
+NUM_ITERS               = 10
 # local execution on a single node (used for testing)
 # EXEC_SETTINGS           = "I_MPI_DEBUG=5 KMP_AFFINITY=verbose OMP_NUM_THREADS=" + str(NUM_THREADS) + " OMP_PLACES=cores OMP_PROC_BIND=spread I_MPI_PIN=1 I_MPI_PIN_DOMAIN=auto mpiexec.hydra -np 2 -genvall "
 # standard execution (single node or multi node depending on how many nodes were requested by batch)
@@ -138,9 +138,15 @@ def runAnalysis(name_suffix):
         file.write("Sizes;")
         for cur_s in MATRIX_SIZES:
             tmp_size_mb = cur_s * cur_s * 8.0 / 1024.0 / 1024.0
-            file.write(str(cur_s) + "(" + format(tmp_size_mb, ".2f") + " MiB/matrix);")
+            file.write(str(cur_s) + "x" + str(cur_s) + ";")
         file.write("\n")
 
+        file.write("SizePerMatrix;")
+        for cur_s in MATRIX_SIZES:
+            tmp_size_mb = cur_s * cur_s * 8.0 / 1024.0 / 1024.0
+            file.write(format(tmp_size_mb, ".3f") + " MiB;")
+        file.write("\n")
+        
         file.write("arr_encode_sum;")
         for tmp in arr_encode_sum:
             file.write(format(tmp, '.10f') + ";")
