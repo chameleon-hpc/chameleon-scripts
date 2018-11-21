@@ -7,7 +7,7 @@
 #BSUB -m c144m1024
 #BSUB -n 2
 #BSUB -x
-#BSUB -a openmp
+#BSUB -a intelmpi
 #BSUB -P jara0001
 ##BSUB -M 126000
 #BSUB -M 1000000
