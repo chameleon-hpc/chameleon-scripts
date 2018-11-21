@@ -75,7 +75,8 @@ class CPlotPackingTypeThresholds:
                 for idx_suffix in range(len(suffixes)):
                     tmp_suffix  = suffixes[idx_suffix]
                     tmp_data    = arr_data_plotting[idx_signal][idx_suffix]
-                    ax.plot(xtick[:3], np.array(tmp_data[:3]), 'x-')
+                    # ax.plot(xtick[:4], np.array(tmp_data[:4]), 'x-')
+                    ax.plot(xtick, np.array(tmp_data), 'x-')
                     labels.append(tmp_suffix)
                 
                 plt.xticks(xtick, arr_sizes)
