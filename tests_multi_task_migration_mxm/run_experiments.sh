@@ -9,7 +9,7 @@ DIR_MXM_EXAMPLE=${DIR_MXM_EXAMPLE:-../../chameleon-lib/examples/matrix_example}
 IS_DISTRIBUTED=0
 N_PROCS=4
 # TASK_GRANULARITY=(50 100 150 200 250)
-TASK_GRANULARITY=(250)
+TASK_GRANULARITY=(200 250)
 N_REPETITIONS=1
 # TODO: maybe also permutate MAX_TASKS_PER_RANK_TO_MIGRATE_AT_ONCE
 
@@ -28,7 +28,8 @@ case ${N_PROCS} in
         echo "Running with 4 procs"
         MXM_PARAMS="1000 667 333 0"
         if [ "${IS_DISTRIBUTED}" = "0" ]; then
-            N_THREADS=(2 3 4 5)
+            #N_THREADS=(2 3 4 5)
+            N_THREADS=(2 4)
         fi
         ;;
     8)
@@ -93,8 +94,8 @@ run_experiments "multi"
 export MAX_TASKS_PER_RANK_TO_MIGRATE_AT_ONCE=1
 run_experiments "single"
 
-# =============== Multi task offloading
-export MAX_TASKS_PER_RANK_TO_MIGRATE_AT_ONCE=30
-make clean -C ${DIR_CH_SRC}
-TARGET=claix_intel INSTALL_DIR=~/install/chameleon-lib/intel_1.0 CUSTOM_COMPILE_FLAGS='-DOFFLOAD_SEND_TASKS_SEPARATELY=1' make -C ${DIR_CH_SRC}
-run_experiments "separate"
+# # =============== Multi task offloading
+# export MAX_TASKS_PER_RANK_TO_MIGRATE_AT_ONCE=30
+# make clean -C ${DIR_CH_SRC}
+# TARGET=claix_intel INSTALL_DIR=~/install/chameleon-lib/intel_1.0 CUSTOM_COMPILE_FLAGS='-DOFFLOAD_SEND_TASKS_SEPARATELY=1' make -C ${DIR_CH_SRC}
+# run_experiments "separate"

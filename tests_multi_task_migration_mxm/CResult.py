@@ -16,13 +16,13 @@ class CResult():
 
     def parseFile(self, file_path):
         cur_file_name           = os.path.basename(file_path)
-        cur_file_name           = os.path.splitext(cur_file_name)
+        cur_file_name           = os.path.splitext(cur_file_name)[0]
         tmp_split               = cur_file_name.split("_")
 
-        self.result_type        = tmp_split[2].strip() + "_" + tmp_split[3].strip()
-        self.n_threads          = float(tmp_split[5].strip()[:-1])
-        self.task_granularity   = float(tmp_split[4].strip())
-        self.n_repetition       = float(tmp_split[6].strip())
+        self.result_type        = tmp_split[1].strip() + "_" + tmp_split[2].strip()
+        self.n_threads          = float(tmp_split[4].strip()[:-1])
+        self.task_granularity   = float(tmp_split[3].strip())
+        self.n_repetition       = float(tmp_split[5].strip())
 
         with open(file_path) as file:
             for line in file:
