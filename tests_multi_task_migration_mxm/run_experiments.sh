@@ -1,35 +1,48 @@
 #!/usr/local_rwth/bin/zsh
+#SBATCH --job-name=mxm_multi_task_migration
+#SBATCH --output=output_mxm_multi_task_migration.%J.txt
+#SBATCH --time=12:00:00
+#SBATCH --nodes=2
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=24
+#SBATCH --exclusive
+#SBATCH --account=jara0001
+#SBATCH --partition=c16m
+
 # =============== Load desired modules
+source /home/jk869269/.zshrc
 source env_ch_intel.sh
 
 # =============== Settings & environment variables
 DIR_CH_SRC=${DIR_CH_SRC:-../../chameleon-lib/src}
 DIR_MXM_EXAMPLE=${DIR_MXM_EXAMPLE:-../../chameleon-lib/examples/matrix_example}
+DIR_RESULT="$(date +"%Y%m%d_%H%M%S")_results"
 
-IS_DISTRIBUTED=0
-N_PROCS=4
-# TASK_GRANULARITY=(50 100 150 200 250)
-TASK_GRANULARITY=(200 250)
+# create result directory
+mkdir -p ${DIR_RESULT}
+
+IS_DISTRIBUTED=1
+N_PROCS=2
+TASK_GRANULARITY=(50 100 150 200 250 300 350 400)
 N_REPETITIONS=1
 # TODO: maybe also permutate MAX_TASKS_PER_RANK_TO_MIGRATE_AT_ONCE
 
 # default number of threads for distributed runs
-N_THREADS=(2 4 6 8 10 12 14 16 18 20 22)
+N_THREADS=(1 2 4 6 8 10 12 14 16 18 20 22)
 
 case ${N_PROCS} in
     2)
         echo "Running with 2 procs"
         MXM_PARAMS="1000 0"
         if [ "${IS_DISTRIBUTED}" = "0" ]; then
-            N_THREADS=(2 3 4 5 6 7 8 9 10 11)
+            N_THREADS=(1 2 3 4 5 6 7 8 9 10 11)
         fi
         ;;
     4)
         echo "Running with 4 procs"
         MXM_PARAMS="1000 667 333 0"
         if [ "${IS_DISTRIBUTED}" = "0" ]; then
-            #N_THREADS=(2 3 4 5)
-            N_THREADS=(2 4)
+            N_THREADS=(1 2 3 4 5)
         fi
         ;;
     8)
@@ -72,22 +85,23 @@ function run_experiments()
     do
         for t in "${N_THREADS[@]}"
         do
+            echo "Running experiments for ${exec_version} and granularity ${g} and n_threads=${t}"
             export OMP_NUM_THREADS=$t
             export MIN_LOCAL_TASKS_IN_QUEUE_BEFORE_MIGRATION=$t
             for r in {1..${N_REPETITIONS}}
             do
-                eval "${MPI_EXEC_CMD} -np ${N_PROCS} ${MPI_EXPORT_VARS} ${DIR_MXM_EXAMPLE}/main $g ${MXM_PARAMS}" &> results_${exec_version}_${g}_${t}t_${r}.log
+                eval "${MPI_EXEC_CMD} -np ${N_PROCS} ${MPI_EXPORT_VARS} ${DIR_MXM_EXAMPLE}/main $g ${MXM_PARAMS}" &> ${DIR_RESULT}/results_${exec_version}_${g}_${t}t_${r}.log
             done
         done
     done
 }
 
 # =============== Multi task offloading
-make clean -C ${DIR_CH_SRC}
-TARGET=claix_intel INSTALL_DIR=~/install/chameleon-lib/intel_1.0 make -C ${DIR_CH_SRC}
-# build matrix example once
-make clean -C ${DIR_MXM_EXAMPLE}
-ITERATIVE_VERSION=0 make -C ${DIR_MXM_EXAMPLE}
+# make clean -C ${DIR_CH_SRC}
+# TARGET=claix_intel INSTALL_DIR=~/install/chameleon-lib/intel_1.0 make -C ${DIR_CH_SRC}
+# # build matrix example once
+# make clean -C ${DIR_MXM_EXAMPLE}
+# ITERATIVE_VERSION=0 make -C ${DIR_MXM_EXAMPLE}
 run_experiments "multi"
 
 # =============== Only single task is offloaded
