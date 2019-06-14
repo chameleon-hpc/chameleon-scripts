@@ -1,7 +1,7 @@
 #!/usr/local_rwth/bin/zsh
 #SBATCH --job-name=mxm_multi_task_migration
 #SBATCH --output=output_mxm_multi_task_migration.%J.txt
-#SBATCH --time=12:00:00
+#SBATCH --time=04:00:00
 #SBATCH --nodes=2
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=24
@@ -13,10 +13,16 @@
 source /home/jk869269/.zshrc
 source env_ch_intel.sh
 
+export CUR_DATE_STR="$(date +"%Y%m%d_%H%M%S")"
+
+# # hack because currently vtune is not supported in batch usage
+# module load c_vtune
+# export CMD_VTUNE_PREFIX="amplxe-cl –collect hotspots –r ./${CUR_DATE_STR}_profiling_chameleon_${OMP_NUM_THREADS}t -trace-mpi -- "
+
 # =============== Settings & environment variables
 DIR_CH_SRC=${DIR_CH_SRC:-../../chameleon-lib/src}
 DIR_MXM_EXAMPLE=${DIR_MXM_EXAMPLE:-../../chameleon-lib/examples/matrix_example}
-DIR_RESULT="$(date +"%Y%m%d_%H%M%S")_results"
+DIR_RESULT="${CUR_DATE_STR}_results"
 
 # create result directory
 mkdir -p ${DIR_RESULT}
@@ -90,7 +96,7 @@ function run_experiments()
             export MIN_LOCAL_TASKS_IN_QUEUE_BEFORE_MIGRATION=$t
             for r in {1..${N_REPETITIONS}}
             do
-                eval "${MPI_EXEC_CMD} -np ${N_PROCS} ${MPI_EXPORT_VARS} ${DIR_MXM_EXAMPLE}/main $g ${MXM_PARAMS}" &> ${DIR_RESULT}/results_${exec_version}_${g}_${t}t_${r}.log
+                eval "${MPI_EXEC_CMD} -np ${N_PROCS} ${MPI_EXPORT_VARS} ${CMD_VTUNE_PREFIX} ${DIR_MXM_EXAMPLE}/main $g ${MXM_PARAMS}" &> ${DIR_RESULT}/results_${exec_version}_${g}_${t}t_${r}.log
             done
         done
     done
