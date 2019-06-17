@@ -1,10 +1,5 @@
 #!/usr/local_rwth/bin/zsh
-#SBATCH --job-name=mxm_multi_task_migration
-#SBATCH --output=output_mxm_multi_task_migration.%J.txt
 #SBATCH --time=04:00:00
-#SBATCH --nodes=2
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=24
 #SBATCH --exclusive
 #SBATCH --account=jara0001
 #SBATCH --partition=c16m
@@ -13,28 +8,30 @@
 source /home/jk869269/.zshrc
 source env_ch_intel.sh
 
-export CUR_DATE_STR="$(date +"%Y%m%d_%H%M%S")"
-
 # # hack because currently vtune is not supported in batch usage
 # module load c_vtune
 # export CMD_VTUNE_PREFIX="amplxe-cl –collect hotspots –r ./${CUR_DATE_STR}_profiling_chameleon_${OMP_NUM_THREADS}t -trace-mpi -- "
 
 # =============== Settings & environment variables
-DIR_CH_SRC=${DIR_CH_SRC:-../../chameleon-lib/src}
+IS_DISTRIBUTED=${IS_DISTRIBUTED:-1}
+IS_SEPARATE=${IS_SEPARATE:-0}
+N_PROCS=${N_PROCS:-2}
+N_REPETITIONS=${N_REPETITIONS:-11}
+CUR_DATE_STR=${CUR_DATE_STR:-"$(date +"%Y%m%d_%H%M%S")"}
+DIR_RESULT="${CUR_DATE_STR}_results/${N_PROCS}procs_dm_${IS_DISTRIBUTED}"
 DIR_MXM_EXAMPLE=${DIR_MXM_EXAMPLE:-../../chameleon-lib/examples/matrix_example}
-DIR_RESULT="${CUR_DATE_STR}_results"
+
+TASK_GRANULARITY=(50 100 150 200 250 300 350 400)
+# default number of threads for distributed runs
+N_THREADS=(1 2 4 6 8 10 12 14 16 18 20 22)
+# TODO: maybe also permutate MAX_TASKS_PER_RANK_TO_MIGRATE_AT_ONCE
 
 # create result directory
 mkdir -p ${DIR_RESULT}
 
-IS_DISTRIBUTED=1
-N_PROCS=2
-TASK_GRANULARITY=(50 100 150 200 250 300 350 400)
-N_REPETITIONS=1
-# TODO: maybe also permutate MAX_TASKS_PER_RANK_TO_MIGRATE_AT_ONCE
-
-# default number of threads for distributed runs
-N_THREADS=(1 2 4 6 8 10 12 14 16 18 20 22)
+if [ "${IS_SEPARATE}" = "1" ]; then
+    module switch chameleon-lib chameleon-lib/intel_1.0_separate
+fi
 
 case ${N_PROCS} in
     2)
@@ -65,8 +62,8 @@ case ${N_PROCS} in
     esac
 
 export MIN_REL_LOAD_IMBALANCE_BEFORE_MIGRATION=0.1
-export MAX_TASKS_PER_RANK_TO_MIGRATE_AT_ONCE=30
-export PERCENTAGE_DIFF_TASKS_TO_MIGRATE=0.4
+export MAX_TASKS_PER_RANK_TO_MIGRATE_AT_ONCE=15
+export PERCENTAGE_DIFF_TASKS_TO_MIGRATE=0.3
 
 # load flags
 source ../../chameleon-lib/flags_claix_intel.def
@@ -102,20 +99,10 @@ function run_experiments()
     done
 }
 
-# =============== Multi task offloading
-# make clean -C ${DIR_CH_SRC}
-# TARGET=claix_intel INSTALL_DIR=~/install/chameleon-lib/intel_1.0 make -C ${DIR_CH_SRC}
-# # build matrix example once
-# make clean -C ${DIR_MXM_EXAMPLE}
-# ITERATIVE_VERSION=0 make -C ${DIR_MXM_EXAMPLE}
-run_experiments "multi"
-
-# =============== Only single task is offloaded
-export MAX_TASKS_PER_RANK_TO_MIGRATE_AT_ONCE=1
-run_experiments "single"
-
-# # =============== Multi task offloading
-# export MAX_TASKS_PER_RANK_TO_MIGRATE_AT_ONCE=30
-# make clean -C ${DIR_CH_SRC}
-# TARGET=claix_intel INSTALL_DIR=~/install/chameleon-lib/intel_1.0 CUSTOM_COMPILE_FLAGS='-DOFFLOAD_SEND_TASKS_SEPARATELY=1' make -C ${DIR_CH_SRC}
-# run_experiments "separate"
+if [ "${IS_SEPARATE}" = "1" ]; then
+    run_experiments "separate"
+else
+    run_experiments "multi"
+    export MAX_TASKS_PER_RANK_TO_MIGRATE_AT_ONCE=1
+    run_experiments "single"
+fi
