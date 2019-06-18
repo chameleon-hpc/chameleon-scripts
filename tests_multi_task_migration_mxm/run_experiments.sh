@@ -18,8 +18,6 @@ IS_SEPARATE=${IS_SEPARATE:-0}
 N_PROCS=${N_PROCS:-2}
 N_REPETITIONS=${N_REPETITIONS:-11}
 CUR_DATE_STR=${CUR_DATE_STR:-"$(date +"%Y%m%d_%H%M%S")"}
-DIR_RESULT="${CUR_DATE_STR}_results/${N_PROCS}procs_dm_${IS_DISTRIBUTED}"
-DIR_MXM_EXAMPLE=${DIR_MXM_EXAMPLE:-../../chameleon-lib/examples/matrix_example}
 
 TASK_GRANULARITY=(50 100 150 200 250 300 350 400)
 # default number of threads for distributed runs
@@ -27,6 +25,13 @@ N_THREADS=(1 2 4 6 8 10 12 14 16 18 20 22)
 # TODO: maybe also permutate MAX_TASKS_PER_RANK_TO_MIGRATE_AT_ONCE
 
 # create result directory
+if [ "${IS_DISTRIBUTED}" = "1" ]; then
+    export SUFFIX_RESULT_DIR="dm"
+else
+    export SUFFIX_RESULT_DIR="sm"
+fi
+DIR_RESULT="${CUR_DATE_STR}_results/${N_PROCS}procs_${SUFFIX_RESULT_DIR}"
+DIR_MXM_EXAMPLE=${DIR_MXM_EXAMPLE:-../../chameleon-lib/examples/matrix_example}
 mkdir -p ${DIR_RESULT}
 
 if [ "${IS_SEPARATE}" = "1" ]; then

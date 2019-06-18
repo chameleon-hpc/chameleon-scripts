@@ -84,7 +84,7 @@ def plotData(target_file_path, arr_x_axis, arr_types, arr_time_baseline, arr_tim
 
 if __name__ == "__main__":
     # source_folder = os.path.dirname(os.path.abspath(__file__))
-    source_folder       = "C:\\J.Klinkenberg.Local\\repos\\chameleon\\chameleon-scripts\\tests_multi_task_migration_mxm\\results_8nodes_dm"
+    source_folder       = "C:\\J.Klinkenberg.Local\\repos\\chameleon\\chameleon-scripts\\tests_multi_task_migration_mxm\\20190617_231702_results\\4procs_dm"
     target_folder_data  = os.path.join(source_folder, "result_data")
     target_folder_plot  = os.path.join(source_folder, "result_plots")
 
@@ -93,6 +93,9 @@ if __name__ == "__main__":
         os.makedirs(target_folder_data)
     if not os.path.exists(target_folder_plot):
         os.makedirs(target_folder_plot)
+
+    # get file name from path
+    title_prefix = os.path.basename(source_folder)
 
     # list of result containers
     list_results = []
@@ -178,7 +181,7 @@ if __name__ == "__main__":
         # plot results
         tmp_target_file_name = "plot_granularity_" + str(int(gran))
         tmp_target_file_path = os.path.join(target_folder_plot, tmp_target_file_name)
-        plotData(tmp_target_file_path, unique_n_threads, arr_types, arr_time_original, arr_time_chameleon, arr_n_tasks_remote, "Granularity " + str(int(gran)), "# threads per rank")
+        plotData(tmp_target_file_path, unique_n_threads, arr_types, arr_time_original, arr_time_chameleon, arr_n_tasks_remote, title_prefix + " - Granularity " + str(int(gran)), "# threads per rank")
 
     # ========== Generate results with fixed number of threads
     for thr in unique_n_threads:
@@ -246,4 +249,4 @@ if __name__ == "__main__":
         # plot results
         tmp_target_file_name = "plot_threads_" + str(int(thr))
         tmp_target_file_path = os.path.join(target_folder_plot, tmp_target_file_name)
-        plotData(tmp_target_file_path, unique_granularities, arr_types, arr_time_original, arr_time_chameleon, arr_n_tasks_remote, str(int(thr)) + " Threads", "# task granularity (matrix size)")
+        plotData(tmp_target_file_path, unique_granularities, arr_types, arr_time_original, arr_time_chameleon, arr_n_tasks_remote, title_prefix + " - " + str(int(thr)) + " Threads", "# task granularity (matrix size)")
