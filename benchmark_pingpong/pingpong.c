@@ -6,6 +6,10 @@
 #define NUM_ITERATIONS 100
 #endif
 
+#ifndef MAX_MSG_SIZE_EXPONENT
+#define MAX_MSG_SIZE_EXPONENT 28
+#endif
+
 #ifndef BENCHMARK_TYPE
 #define BENCHMARK_TYPE 0 // regular ping pong benchmark using cached, contigious data
 // #define BENCHMARK_TYPE 1 // ping pong that always uses a different chunk of data (also contigious)
@@ -19,7 +23,7 @@ int main(int argc, char *argv[]) {
 	MPI_Comm_rank(MPI_COMM_WORLD, &iMyRank);
 
     int msg_size_start  = 2;
-    int msg_size_end    = 24;
+    int msg_size_end    = MAX_MSG_SIZE_EXPONENT;
     int msg_size;
     int iter;
     int b;
@@ -38,11 +42,11 @@ int main(int argc, char *argv[]) {
         int cur_size_bytes = pow(2.0, msg_size);
 
         #if BENCHMARK_TYPE == 0
-        void *tmp_buffer_send = malloc(NUM_ITERATIONS*cur_size_bytes);
-        void *tmp_buffer_recv = malloc(NUM_ITERATIONS*cur_size_bytes);
+        void *tmp_buffer_send = malloc(cur_size_bytes);
+        void *tmp_buffer_recv = malloc(cur_size_bytes);
         int *cur_send = (int*) tmp_buffer_send;
         int *cur_recv = (int*) tmp_buffer_recv;
-        for(b = 0; b < NUM_ITERATIONS*cur_size_bytes/4; b++) {
+        for(b = 0; b < cur_size_bytes/4; b++) {
             cur_send[b] = 1;
             cur_recv[b] = 0;
         }
