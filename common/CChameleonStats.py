@@ -1,35 +1,47 @@
 class ExecTimeStats():
     # def __init__(self, *args, **kwargs):
-    def __init__(self, name_in_output=None):
+    def __init__(self, cumulative=True, name_in_output=None):
         self.name_in_output     = name_in_output
-        self.time_sum           = 0.0
-        self.time_avg           = 0.0
-        self.count              = 0
+        self.cumulative         = cumulative
+        if(cumulative):
+          self.time_sum           = 0.0
+          self.time_avg           = 0.0
+          self.count              = 0
+        else:
+          self.time_sum           = []
+          self.time_avg           = []
+          self.count              = []
 
     def parseLine(self, str_line):
         tmp_split               = str_line.split("\t")
         self.name_in_output     = tmp_split[1].strip()
-        self.time_sum           = float(tmp_split[3].strip())
-        self.time_avg           = float(tmp_split[7].strip())
-        self.count              = float(tmp_split[5].strip())
+        if(self.cumulative):
+          self.time_sum           = float(tmp_split[3].strip())
+          self.time_avg           = float(tmp_split[7].strip())
+          self.count              = float(tmp_split[5].strip())
+        else: 
+          self.time_sum.append(float(tmp_split[3].strip()))
+          self.time_avg.append(float(tmp_split[7].strip()))
+          self.count.append(float(tmp_split[5].strip()))
 
 class ChameleonStatsPerRank():
 
-    def __init__(self, rank):
+    def __init__(self, rank, cumulative=True):
         self.rank                       = rank
 
         self.num_executed_task_local    = 0
         self.num_executed_task_stolen   = 0
         self.num_task_offloaded         = 0
 
-        self.task_exec_local            = ExecTimeStats()
-        self.task_exec_stolen           = ExecTimeStats()
-        self.offload_send_task          = ExecTimeStats()
-        self.offload_recv_task          = ExecTimeStats()
-        self.offload_send_results       = ExecTimeStats()
-        self.offload_recv_results       = ExecTimeStats()
-        self.encode                     = ExecTimeStats()
-        self.decode                     = ExecTimeStats()
+        self.task_exec_local            = ExecTimeStats(cumulative)
+        self.task_exec_stolen           = ExecTimeStats(cumulative)
+        self.task_exec_overall          = ExecTimeStats(cumulative)
+        self.offload_send_task          = ExecTimeStats(cumulative)
+        self.offload_recv_task          = ExecTimeStats(cumulative)
+        self.offload_send_results       = ExecTimeStats(cumulative)
+        self.offload_recv_results       = ExecTimeStats(cumulative)
+        self.encode                     = ExecTimeStats(cumulative)
+        self.decode                     = ExecTimeStats(cumulative)
 
     def parseContent(self, arr_content, pre_filtered=True):
         for line in arr_content:
@@ -51,6 +63,8 @@ class ChameleonStatsPerRank():
                 self.task_exec_local.parseLine(line)
             elif "_time_task_execution_stolen_sum" in line:
                 self.task_exec_stolen.parseLine(line)
+            elif "_time_task_execution_overall" in line:
+                self.task_exec_overall.parseLine(line)
             elif "_time_comm_send_task_sum" in line:
                 self.offload_send_task.parseLine(line)
             elif "_time_comm_recv_task_sum" in line:
