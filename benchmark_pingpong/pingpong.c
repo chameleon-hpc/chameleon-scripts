@@ -12,8 +12,8 @@
 #endif
 
 #ifndef BENCHMARK_TYPE
-#define BENCHMARK_TYPE 0 // regular ping pong benchmark using cached, contigious data
-// #define BENCHMARK_TYPE 1 // ping pong that always uses a different chunk of data (also contigious but might not be cached)
+#define BENCHMARK_TYPE 0 // regular ping pong benchmark using cached, contiguous data
+// #define BENCHMARK_TYPE 1 // ping pong that always uses a different chunk of data (also contiguous but might not be cached)
 // #define BENCHMARK_TYPE 2 // using custom MPI data types like done in Chameleon (strided data access but with cached data)
 #endif
 

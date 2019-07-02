@@ -7,12 +7,22 @@ from CResult import *
 import numpy as np
 import matplotlib.pyplot as plt
 
+F_SIZE = 16
+
+plt.rc('font', size=F_SIZE)             # controls default text sizes
+plt.rc('axes', titlesize=F_SIZE)        # fontsize of the axes title
+plt.rc('axes', labelsize=F_SIZE)        # fontsize of the x and y labels
+plt.rc('xtick', labelsize=F_SIZE)       # fontsize of the tick labels
+plt.rc('ytick', labelsize=F_SIZE)       # fontsize of the tick labels
+plt.rc('legend', fontsize=F_SIZE)       # legend fontsize
+plt.rc('figure', titlesize=F_SIZE)      # fontsize of the figure title
+
 def plotData(target_file_path, arr_x_axis, arr_types, arr_time_baseline, arr_time_chameleon, arr_remote_tasks, text_header, text_x_axis):
     xtick = list(range(len(arr_x_axis)))
 
     # ========== Time Plot
     path_result_img = target_file_path + "_time.png"
-    fig = plt.figure(figsize=(16, 9))
+    fig = plt.figure(figsize=(16, 9),frameon=False)
     ax = fig.gca()
     # baseline first
     labels = ['OpenMP baseline']
@@ -30,13 +40,13 @@ def plotData(target_file_path, arr_x_axis, arr_types, arr_time_baseline, arr_tim
     ax.set_ylabel("Time [sec]")
     ax.set_title(text_header + " - Execution Time" )
     fig.savefig(path_result_img, dpi=None, facecolor='w', edgecolor='w', 
-        format="png", transparent=False, bbox_inches=None, pad_inches=0.1,
-        frameon=None, metadata=None)
+        format="png", transparent=False, bbox_inches='tight', pad_inches=0,
+        frameon=False, metadata=None)
     plt.close(fig)
 
     # ========== Speedup Plot
     path_result_img = target_file_path + "_speedup.png"
-    fig = plt.figure(figsize=(16, 9))
+    fig = plt.figure(figsize=(16, 9),frameon=False)
     ax = fig.gca()
     # baseline first
     labels = ['OpenMP baseline']
@@ -55,13 +65,13 @@ def plotData(target_file_path, arr_x_axis, arr_types, arr_time_baseline, arr_tim
     ax.set_ylabel("Speedup")
     ax.set_title(text_header + " - Speedup" )
     fig.savefig(path_result_img, dpi=None, facecolor='w', edgecolor='w', 
-        format="png", transparent=False, bbox_inches=None, pad_inches=0.1,
-        frameon=None, metadata=None)
+        format="png", transparent=False, bbox_inches='tight', pad_inches=0,
+        frameon=False, metadata=None)
     plt.close(fig)
 
     # ========== Number of migrated tasks
     path_result_img = target_file_path + "_migrated.png"
-    fig = plt.figure(figsize=(16, 9))
+    fig = plt.figure(figsize=(16, 9),frameon=False)
     ax = fig.gca()
     labels = ['OpenMP baseline']
     ax.plot(xtick, np.array([0 for x in xtick]), 'x-', linewidth=2)
@@ -78,13 +88,13 @@ def plotData(target_file_path, arr_x_axis, arr_types, arr_time_baseline, arr_tim
     ax.set_ylabel("# migrated tasks")
     ax.set_title(text_header + " - Migrated Tasks" )
     fig.savefig(path_result_img, dpi=None, facecolor='w', edgecolor='w', 
-        format="png", transparent=False, bbox_inches=None, pad_inches=0.1,
-        frameon=None, metadata=None)
+        format="png", transparent=False, bbox_inches='tight', pad_inches=0,
+        frameon=False, metadata=None)
     plt.close(fig)
 
 if __name__ == "__main__":
     # source_folder = os.path.dirname(os.path.abspath(__file__))
-    source_folder       = "C:\\J.Klinkenberg.Local\\repos\\chameleon\\chameleon-scripts\\tests_multi_task_migration_mxm\\20190617_231702_results\\4procs_dm"
+    source_folder       = "C:\\J.Klinkenberg.Local\\repos\\chameleon\\chameleon-scripts\\tests_multi_task_migration_mxm\\20190702_084718_results\\2procs_sm"
     target_folder_data  = os.path.join(source_folder, "result_data")
     target_folder_plot  = os.path.join(source_folder, "result_plots")
 
