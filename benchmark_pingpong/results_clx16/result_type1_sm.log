@@ -1,0 +1,40 @@
+I_MPI_DEBUG=5 I_MPI_FABRICS="shm:tmi" I_MPI_PIN=1 I_MPI_PIN_DOMAIN=auto mpiexec.hydra -np 2 -hosts localhost pingpong.exe
+[0] MPI startup(): Multi-threaded optimized library
+[0] MPI startup(): shm and tmi data transfer modes
+[1] MPI startup(): shm and tmi data transfer modes
+[0] MPI startup(): Rank    Pid      Node name                      Pin cpu
+[0] MPI startup(): 0       6373     lnm064.hpc.itc.rwth-aachen.de  {0,1,2,3,4,5,6,7,8,9,10,11}
+[0] MPI startup(): 1       6374     lnm064.hpc.itc.rwth-aachen.de  {12,13,14,15,16,17,18,19,20,21,22,23}
+[0] MPI startup(): I_MPI_DEBUG=5
+[0] MPI startup(): I_MPI_FABRICS=shm:tmi
+[0] MPI startup(): I_MPI_HYDRA_UUID=e0180000-c361-402e-ad8c-05002c6f863d
+[0] MPI startup(): I_MPI_INFO_NUMA_NODE_MAP=hfi1_0:0
+[0] MPI startup(): I_MPI_INFO_NUMA_NODE_NUM=2
+[0] MPI startup(): I_MPI_PIN_MAPPING=2:0 0,1 12
+PingPong with msg_size:             4 (        0.004 KB) took      1.540 us with a throughput of      5.194 MB/s
+PingPong with msg_size:             8 (        0.008 KB) took      1.440 us with a throughput of     11.111 MB/s
+PingPong with msg_size:            16 (        0.016 KB) took      1.519 us with a throughput of     21.070 MB/s
+PingPong with msg_size:            32 (        0.032 KB) took      1.478 us with a throughput of     43.296 MB/s
+PingPong with msg_size:            64 (        0.064 KB) took      1.540 us with a throughput of     83.107 MB/s
+PingPong with msg_size:           128 (        0.128 KB) took      1.760 us with a throughput of    145.493 MB/s
+PingPong with msg_size:           256 (        0.256 KB) took      1.781 us with a throughput of    287.481 MB/s
+PingPong with msg_size:           512 (        0.512 KB) took      1.941 us with a throughput of    527.637 MB/s
+PingPong with msg_size:          1024 (        1.024 KB) took      2.480 us with a throughput of    825.955 MB/s
+PingPong with msg_size:          2048 (        2.048 KB) took      2.899 us with a throughput of   1412.818 MB/s
+PingPong with msg_size:          4096 (        4.096 KB) took      3.831 us with a throughput of   2138.129 MB/s
+PingPong with msg_size:          8192 (        8.192 KB) took      5.820 us with a throughput of   2815.218 MB/s
+PingPong with msg_size:         16384 (       16.384 KB) took      9.768 us with a throughput of   3354.624 MB/s
+PingPong with msg_size:         32768 (       32.768 KB) took     17.481 us with a throughput of   3749.017 MB/s
+PingPong with msg_size:         65536 (       65.536 KB) took     35.360 us with a throughput of   3706.802 MB/s
+PingPong with msg_size:        131072 (      131.072 KB) took     67.940 us with a throughput of   3858.477 MB/s
+PingPong with msg_size:        262144 (      262.144 KB) took    149.651 us with a throughput of   3503.415 MB/s
+PingPong with msg_size:        524288 (      524.288 KB) took    289.490 us with a throughput of   3622.147 MB/s
+PingPong with msg_size:       1048576 (     1048.576 KB) took    565.660 us with a throughput of   3707.443 MB/s
+PingPong with msg_size:       2097152 (     2097.152 KB) took   1124.480 us with a throughput of   3729.995 MB/s
+PingPong with msg_size:       4194304 (     4194.304 KB) took   2269.609 us with a throughput of   3696.059 MB/s
+PingPong with msg_size:       8388608 (     8388.608 KB) took   5084.889 us with a throughput of   3299.426 MB/s
+PingPong with msg_size:      16777216 (    16777.216 KB) took  12769.721 us with a throughput of   2627.656 MB/s
+PingPong with msg_size:      33554432 (    33554.432 KB) took  20391.610 us with a throughput of   3291.004 MB/s
+PingPong with msg_size:      67108864 (    67108.864 KB) took  41189.020 us with a throughput of   3258.580 MB/s
+PingPong with msg_size:     134217728 (   134217.728 KB) took  80067.739 us with a throughput of   3352.604 MB/s
+PingPong with msg_size:     268435456 (   268435.456 KB) took 154724.541 us with a throughput of   3469.850 MB/s
