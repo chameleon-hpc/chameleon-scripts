@@ -26,6 +26,8 @@ def plotDataMinMaxAvg(target_file_path, arr_x_axis, arr_types, arr_min, arr_max,
             arr_max[idx_type] = [x/divisor for x in arr_max[idx_type]]
             arr_avg[idx_type] = [x/divisor for x in arr_avg[idx_type]]
 
+    tmp_colors = ['darkorange', 'green', 'red']
+
     # ========== MinMaxAvg Plot
     if plot_per_type:
         for idx_type in range(len(arr_types)):
@@ -33,7 +35,7 @@ def plotDataMinMaxAvg(target_file_path, arr_x_axis, arr_types, arr_min, arr_max,
             fig = plt.figure(figsize=(16, 9),frameon=False)
             ax = fig.gca()
             labels = []
-            cur_line = ax.plot(xtick, np.array(arr_min[idx_type]), ':', linewidth=2)
+            cur_line = ax.plot(xtick, np.array(arr_min[idx_type]), ':', linewidth=2, color=tmp_colors[idx_type])
             cur_color = cur_line[0].get_color()
             labels.append(arr_types[idx_type] + "_min")
             cur_line = ax.plot(xtick, np.array(arr_max[idx_type]), '--', linewidth=2)
@@ -62,7 +64,7 @@ def plotDataMinMaxAvg(target_file_path, arr_x_axis, arr_types, arr_min, arr_max,
         labels = []
         # now versions
         for idx_type in range(len(arr_types)):
-            cur_line = ax.plot(xtick, np.array(arr_min[idx_type]), ':', linewidth=2)
+            cur_line = ax.plot(xtick, np.array(arr_min[idx_type]), ':', linewidth=2, color=tmp_colors[idx_type])
             cur_color = cur_line[0].get_color()
             labels.append(arr_types[idx_type] + "_min")
             cur_line = ax.plot(xtick, np.array(arr_max[idx_type]), '--', linewidth=2)
@@ -87,6 +89,8 @@ def plotDataMinMaxAvg(target_file_path, arr_x_axis, arr_types, arr_min, arr_max,
 def plotData(target_file_path, arr_x_axis, arr_types, arr_time_baseline, arr_time_chameleon, arr_remote_tasks, text_header, text_x_axis):
     xtick = list(range(len(arr_x_axis)))
 
+    tmp_colors = ['darkorange', 'green', 'red']
+
     # ========== Time Plot
     path_result_img = target_file_path + "_time.png"
     fig = plt.figure(figsize=(16, 9),frameon=False)
@@ -96,7 +100,7 @@ def plotData(target_file_path, arr_x_axis, arr_types, arr_time_baseline, arr_tim
     ax.plot(xtick, np.array(arr_time_baseline[0]), 'x-', linewidth=2)
     # now versions
     for idx_type in range(len(arr_types)):
-        ax.plot(xtick, np.array(arr_time_chameleon[idx_type]), 'x-', linewidth=2)
+        ax.plot(xtick, np.array(arr_time_chameleon[idx_type]), 'x-', linewidth=2, color=tmp_colors[idx_type])
         labels.append(arr_types[idx_type])
     plt.xticks(xtick, arr_x_axis)
     ax.minorticks_on()
@@ -121,7 +125,7 @@ def plotData(target_file_path, arr_x_axis, arr_types, arr_time_baseline, arr_tim
     # now versions
     for idx_type in range(len(arr_types)):
         tmp_speedups = [arr_time_baseline[0][x] / arr_time_chameleon[idx_type][x] for x in range(len(arr_x_axis))]
-        ax.plot(xtick, np.array(tmp_speedups), 'x-', linewidth=2)
+        ax.plot(xtick, np.array(tmp_speedups), 'x-', linewidth=2, color=tmp_colors[idx_type])
         labels.append(arr_types[idx_type])
     plt.xticks(xtick, arr_x_axis)
     ax.minorticks_on()
@@ -144,7 +148,7 @@ def plotData(target_file_path, arr_x_axis, arr_types, arr_time_baseline, arr_tim
     ax.plot(xtick, np.array([0 for x in xtick]), 'x-', linewidth=2)
     # now versions
     for idx_type in range(len(arr_types)):
-        ax.plot(xtick, np.array(arr_remote_tasks[idx_type]), 'x-', linewidth=2)
+        ax.plot(xtick, np.array(arr_remote_tasks[idx_type]), 'x-', linewidth=2, color=tmp_colors[idx_type])
         labels.append(arr_types[idx_type])
     plt.xticks(xtick, arr_x_axis)
     ax.minorticks_on()
@@ -161,7 +165,7 @@ def plotData(target_file_path, arr_x_axis, arr_types, arr_time_baseline, arr_tim
 
 if __name__ == "__main__":
     # source_folder = os.path.dirname(os.path.abspath(__file__))
-    source_folder       = "C:\\J.Klinkenberg.Local\\repos\\chameleon\\chameleon-scripts\\tests_multi_task_migration_mxm\\20190703_175846_results\\2procs_sm"
+    source_folder       = "C:\\J.Klinkenberg.Local\\repos\\chameleon\\chameleon-data\\20190704_114505_results\\2procs_sm"
     target_folder_data  = os.path.join(source_folder, "result_data")
     target_folder_plot  = os.path.join(source_folder, "result_plots")
 
