@@ -2,6 +2,8 @@ import os
 
 class CResult():
     def __init__(self, result_type="multi"):
+        self.n_ranks            = 0
+
         self.result_type        = result_type
         self.n_threads          = 0
         self.task_granularity   = 0
@@ -14,6 +16,22 @@ class CResult():
         self.n_local_tasks      = 0
         self.n_remote_tasks     = 0
 
+        # used from rank 0
+        self.bytes_send_per_msg_min = 0
+        self.bytes_send_per_msg_max = 0
+        self.bytes_send_per_msg_avg = 0
+        self.throughput_send_min = 0
+        self.throughput_send_max = 0
+        self.throughput_send_avg = 0
+
+        # used from last rank
+        self.bytes_recv_per_msg_min = 0
+        self.bytes_recv_per_msg_max = 0
+        self.bytes_recv_per_msg_avg = 0
+        self.throughput_recv_min = 0
+        self.throughput_recv_max = 0
+        self.throughput_recv_avg = 0
+
     def parseFile(self, file_path):
         cur_file_name           = os.path.basename(file_path)
         cur_file_name           = os.path.splitext(cur_file_name)[0]
@@ -25,6 +43,17 @@ class CResult():
         self.n_repetition       = float(tmp_split[5].strip())
 
         with open(file_path) as file:
+            # first get number of ranks
+            for line in file:
+                if "_num_overall_ranks" in line:
+                    tmp_split = line.split("\t")
+                    self.n_ranks = float(tmp_split[-1].strip())
+                    break
+
+            last_rank = int(self.n_ranks - 1)
+            file.seek(0)
+            
+            # now parse rest
             for line in file:
                 if "with chameleon took" in line:
                     tmp_split = line.split(" ")
@@ -42,5 +71,33 @@ class CResult():
                     tmp_split = line.split("\t")
                     self.n_remote_tasks = self.n_remote_tasks + float(tmp_split[-1].strip())
                     continue
+                if "Stats R#0" in line:
+                    tmp_split = line.split("\t")
+                    if "_throughput_send_min" in tmp_split[1]:
+                        self.throughput_send_min = float(tmp_split[-1].strip())
+                    elif "_throughput_send_max" in line:
+                        self.throughput_send_max = float(tmp_split[-1].strip())
+                    elif "_throughput_send_avg" in line:
+                        self.throughput_send_avg = float(tmp_split[-1].strip())
+                    elif "_bytes_send_per_message_min" in line:
+                        self.bytes_send_per_msg_min = float(tmp_split[-1].strip())
+                    elif "_bytes_send_per_message_max" in line:
+                        self.bytes_send_per_msg_max = float(tmp_split[-1].strip())
+                    elif "_bytes_send_per_message_avg" in line:
+                        self.bytes_send_per_msg_avg = float(tmp_split[-1].strip())
+                if "Stats R#" + str(last_rank) in line:
+                    tmp_split = line.split("\t")
+                    if "_throughput_recv_min" in tmp_split[1]:
+                        self.throughput_recv_min = float(tmp_split[-1].strip())
+                    elif "_throughput_recv_max" in line:
+                        self.throughput_recv_max = float(tmp_split[-1].strip())
+                    elif "_throughput_recv_avg" in line:
+                        self.throughput_recv_avg = float(tmp_split[-1].strip())
+                    elif "_bytes_recv_per_message_min" in line:
+                        self.bytes_recv_per_msg_min = float(tmp_split[-1].strip())
+                    elif "_bytes_recv_per_message_max" in line:
+                        self.bytes_recv_per_msg_max = float(tmp_split[-1].strip())
+                    elif "_bytes_recv_per_message_avg" in line:
+                        self.bytes_recv_per_msg_avg = float(tmp_split[-1].strip())
 
         self.speedup = self.time_openmp_only / self.time_chameleon
