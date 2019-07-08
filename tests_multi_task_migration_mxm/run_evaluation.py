@@ -165,7 +165,7 @@ def plotData(target_file_path, arr_x_axis, arr_types, arr_time_baseline, arr_tim
 
 if __name__ == "__main__":
     # source_folder = os.path.dirname(os.path.abspath(__file__))
-    source_folder       = "C:\\J.Klinkenberg.Local\\repos\\chameleon\\chameleon-data\\20190704_114505_results\\2procs_sm"
+    source_folder       = "C:\\J.Klinkenberg.Local\\repos\\chameleon\\chameleon-data\\20190704_173407_results\\2procs_sm"
     target_folder_data  = os.path.join(source_folder, "result_data")
     target_folder_plot  = os.path.join(source_folder, "result_plots")
 
@@ -256,19 +256,19 @@ if __name__ == "__main__":
                     tmp_n_tasks_local[idx]          = st.mean([x.n_local_tasks for x in tmp_list_thr])
                     tmp_n_tasks_remote[idx]         = st.mean([x.n_remote_tasks for x in tmp_list_thr])
                     
-                    tmp_bytes_send_per_msg_min[idx] = st.mean([x.bytes_send_per_msg_min for x in tmp_list_thr])
-                    tmp_bytes_send_per_msg_max[idx] = st.mean([x.bytes_send_per_msg_max for x in tmp_list_thr])
-                    tmp_bytes_send_per_msg_avg[idx] = st.mean([x.bytes_send_per_msg_avg for x in tmp_list_thr])
-                    tmp_throughput_send_min[idx]    = st.mean([x.throughput_send_min for x in tmp_list_thr])
-                    tmp_throughput_send_max[idx]    = st.mean([x.throughput_send_max for x in tmp_list_thr])
-                    tmp_throughput_send_avg[idx]    = st.mean([x.throughput_send_avg for x in tmp_list_thr])
+                    tmp_bytes_send_per_msg_min[idx] = st.mean([x.bytes_send_per_msg_min for x in tmp_list_thr if x.sends_happened])
+                    tmp_bytes_send_per_msg_max[idx] = st.mean([x.bytes_send_per_msg_max for x in tmp_list_thr if x.sends_happened])
+                    tmp_bytes_send_per_msg_avg[idx] = st.mean([x.bytes_send_per_msg_avg for x in tmp_list_thr if x.sends_happened])
+                    tmp_throughput_send_min[idx]    = st.mean([x.throughput_send_min for x in tmp_list_thr if x.sends_happened])
+                    tmp_throughput_send_max[idx]    = st.mean([x.throughput_send_max for x in tmp_list_thr if x.sends_happened])
+                    tmp_throughput_send_avg[idx]    = st.mean([x.throughput_send_avg for x in tmp_list_thr if x.sends_happened])
 
-                    tmp_bytes_recv_per_msg_min[idx] = st.mean([x.bytes_recv_per_msg_min for x in tmp_list_thr])
-                    tmp_bytes_recv_per_msg_max[idx] = st.mean([x.bytes_recv_per_msg_max for x in tmp_list_thr])
-                    tmp_bytes_recv_per_msg_avg[idx] = st.mean([x.bytes_recv_per_msg_avg for x in tmp_list_thr])
-                    tmp_throughput_recv_min[idx]    = st.mean([x.throughput_recv_min for x in tmp_list_thr])
-                    tmp_throughput_recv_max[idx]    = st.mean([x.throughput_recv_max for x in tmp_list_thr])
-                    tmp_throughput_recv_avg[idx]    = st.mean([x.throughput_recv_avg for x in tmp_list_thr])
+                    tmp_bytes_recv_per_msg_min[idx] = st.mean([x.bytes_recv_per_msg_min for x in tmp_list_thr if x.recvs_happened])
+                    tmp_bytes_recv_per_msg_max[idx] = st.mean([x.bytes_recv_per_msg_max for x in tmp_list_thr if x.recvs_happened])
+                    tmp_bytes_recv_per_msg_avg[idx] = st.mean([x.bytes_recv_per_msg_avg for x in tmp_list_thr if x.recvs_happened])
+                    tmp_throughput_recv_min[idx]    = st.mean([x.throughput_recv_min for x in tmp_list_thr if x.recvs_happened])
+                    tmp_throughput_recv_max[idx]    = st.mean([x.throughput_recv_max for x in tmp_list_thr if x.recvs_happened])
+                    tmp_throughput_recv_avg[idx]    = st.mean([x.throughput_recv_avg for x in tmp_list_thr if x.recvs_happened])
 
                     idx = idx + 1
                 # append arrays
@@ -438,19 +438,19 @@ if __name__ == "__main__":
                     tmp_n_tasks_local[idx]          = st.mean([x.n_local_tasks for x in tmp_list_thr])
                     tmp_n_tasks_remote[idx]         = st.mean([x.n_remote_tasks for x in tmp_list_thr])
 
-                    tmp_bytes_send_per_msg_min[idx] = st.mean([x.bytes_send_per_msg_min for x in tmp_list_thr])
-                    tmp_bytes_send_per_msg_max[idx] = st.mean([x.bytes_send_per_msg_max for x in tmp_list_thr])
-                    tmp_bytes_send_per_msg_avg[idx] = st.mean([x.bytes_send_per_msg_avg for x in tmp_list_thr])
-                    tmp_throughput_send_min[idx]    = st.mean([x.throughput_send_min for x in tmp_list_thr])
-                    tmp_throughput_send_max[idx]    = st.mean([x.throughput_send_max for x in tmp_list_thr])
-                    tmp_throughput_send_avg[idx]    = st.mean([x.throughput_send_avg for x in tmp_list_thr])
+                    tmp_bytes_send_per_msg_min[idx] = st.mean([x.bytes_send_per_msg_min for x in tmp_list_thr if x.sends_happened])
+                    tmp_bytes_send_per_msg_max[idx] = st.mean([x.bytes_send_per_msg_max for x in tmp_list_thr if x.sends_happened])
+                    tmp_bytes_send_per_msg_avg[idx] = st.mean([x.bytes_send_per_msg_avg for x in tmp_list_thr if x.sends_happened])
+                    tmp_throughput_send_min[idx]    = st.mean([x.throughput_send_min for x in tmp_list_thr if x.sends_happened])
+                    tmp_throughput_send_max[idx]    = st.mean([x.throughput_send_max for x in tmp_list_thr if x.sends_happened])
+                    tmp_throughput_send_avg[idx]    = st.mean([x.throughput_send_avg for x in tmp_list_thr if x.sends_happened])
 
-                    tmp_bytes_recv_per_msg_min[idx] = st.mean([x.bytes_recv_per_msg_min for x in tmp_list_thr])
-                    tmp_bytes_recv_per_msg_max[idx] = st.mean([x.bytes_recv_per_msg_max for x in tmp_list_thr])
-                    tmp_bytes_recv_per_msg_avg[idx] = st.mean([x.bytes_recv_per_msg_avg for x in tmp_list_thr])
-                    tmp_throughput_recv_min[idx]    = st.mean([x.throughput_recv_min for x in tmp_list_thr])
-                    tmp_throughput_recv_max[idx]    = st.mean([x.throughput_recv_max for x in tmp_list_thr])
-                    tmp_throughput_recv_avg[idx]    = st.mean([x.throughput_recv_avg for x in tmp_list_thr])
+                    tmp_bytes_recv_per_msg_min[idx] = st.mean([x.bytes_recv_per_msg_min for x in tmp_list_thr if x.recvs_happened])
+                    tmp_bytes_recv_per_msg_max[idx] = st.mean([x.bytes_recv_per_msg_max for x in tmp_list_thr if x.recvs_happened])
+                    tmp_bytes_recv_per_msg_avg[idx] = st.mean([x.bytes_recv_per_msg_avg for x in tmp_list_thr if x.recvs_happened])
+                    tmp_throughput_recv_min[idx]    = st.mean([x.throughput_recv_min for x in tmp_list_thr if x.recvs_happened])
+                    tmp_throughput_recv_max[idx]    = st.mean([x.throughput_recv_max for x in tmp_list_thr if x.recvs_happened])
+                    tmp_throughput_recv_avg[idx]    = st.mean([x.throughput_recv_avg for x in tmp_list_thr if x.recvs_happened])
 
                     idx = idx + 1
                 # append arrays

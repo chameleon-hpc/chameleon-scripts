@@ -17,6 +17,7 @@ class CResult():
         self.n_remote_tasks     = 0
 
         # used from rank 0
+        self.sends_happened = False
         self.bytes_send_per_msg_min = 0
         self.bytes_send_per_msg_max = 0
         self.bytes_send_per_msg_avg = 0
@@ -25,6 +26,7 @@ class CResult():
         self.throughput_send_avg = 0
 
         # used from last rank
+        self.recvs_happened = False
         self.bytes_recv_per_msg_min = 0
         self.bytes_recv_per_msg_max = 0
         self.bytes_recv_per_msg_avg = 0
@@ -73,28 +75,48 @@ class CResult():
                     continue
                 if "Stats R#0" in line:
                     tmp_split = line.split("\t")
-                    if "_throughput_send_min" in tmp_split[1]:
-                        self.throughput_send_min = float(tmp_split[-1].strip())
+                    if "_throughput_send_count" in tmp_split[1]:
+                        tmp_sends_happened = float(tmp_split[-1].strip())
+                        if tmp_sends_happened > 0:
+                            self.sends_happened = True
+                    elif "_throughput_send_min" in tmp_split[1]:
+                        if self.sends_happened:
+                            self.throughput_send_min = float(tmp_split[-1].strip())
+                        else:
+                            self.throughput_send_min = float('nan')
                     elif "_throughput_send_max" in line:
                         self.throughput_send_max = float(tmp_split[-1].strip())
                     elif "_throughput_send_avg" in line:
                         self.throughput_send_avg = float(tmp_split[-1].strip())
                     elif "_bytes_send_per_message_min" in line:
-                        self.bytes_send_per_msg_min = float(tmp_split[-1].strip())
+                        if self.sends_happened:
+                            self.bytes_send_per_msg_min = float(tmp_split[-1].strip())
+                        else:
+                            self.bytes_send_per_msg_min = float('nan')
                     elif "_bytes_send_per_message_max" in line:
                         self.bytes_send_per_msg_max = float(tmp_split[-1].strip())
                     elif "_bytes_send_per_message_avg" in line:
                         self.bytes_send_per_msg_avg = float(tmp_split[-1].strip())
                 if "Stats R#" + str(last_rank) in line:
                     tmp_split = line.split("\t")
-                    if "_throughput_recv_min" in tmp_split[1]:
-                        self.throughput_recv_min = float(tmp_split[-1].strip())
+                    if "_throughput_recv_count" in tmp_split[1]:
+                        tmp_recvs_happened = float(tmp_split[-1].strip())
+                        if tmp_recvs_happened > 0:
+                            self.recvs_happened = True
+                    elif "_throughput_recv_min" in tmp_split[1]:
+                        if self.recvs_happened:
+                            self.throughput_recv_min = float(tmp_split[-1].strip())
+                        else:
+                            self.throughput_recv_min = float('nan')
                     elif "_throughput_recv_max" in line:
                         self.throughput_recv_max = float(tmp_split[-1].strip())
                     elif "_throughput_recv_avg" in line:
                         self.throughput_recv_avg = float(tmp_split[-1].strip())
                     elif "_bytes_recv_per_message_min" in line:
-                        self.bytes_recv_per_msg_min = float(tmp_split[-1].strip())
+                        if self.recvs_happened:
+                            self.bytes_recv_per_msg_min = float(tmp_split[-1].strip())
+                        else:
+                            self.bytes_recv_per_msg_min = float('nan')
                     elif "_bytes_recv_per_message_max" in line:
                         self.bytes_recv_per_msg_max = float(tmp_split[-1].strip())
                     elif "_bytes_recv_per_message_avg" in line:
