@@ -25,4 +25,7 @@ ADDITIONAL_COMPILE_FLAGS="-DBENCHMARK_TYPE=1" make
 make run-sm &> ${CUR_DATE_STR}_result_type1_sm.log
 make run-dm &> ${CUR_DATE_STR}_result_type1_dm.log
 
-
+# Tests for Type 2
+ADDITIONAL_COMPILE_FLAGS="-DBENCHMARK_TYPE=2" make
+make run-sm &> ${CUR_DATE_STR}_result_type2_sm.log
+make run-dm &> ${CUR_DATE_STR}_result_type2_dm.log

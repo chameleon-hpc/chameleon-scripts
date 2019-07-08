@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <omp.h>
 
 #ifndef NUM_ITERATIONS
 #define NUM_ITERATIONS 100
@@ -110,7 +111,7 @@ int main(int argc, char *argv[]) {
             MPI_Barrier(MPI_COMM_WORLD);
             MPI_Barrier(MPI_COMM_WORLD);
 
-            time -= MPI_Wtime();
+            time -= omp_get_wtime();
             for(iter = 0; iter < NUM_ITERATIONS; iter++) {
                 #if BENCHMARK_TYPE == 0
                 MPI_Send(tmp_buffer_send, cur_size_bytes, MPI_BYTE, 1, 0, MPI_COMM_WORLD);
@@ -123,14 +124,14 @@ int main(int argc, char *argv[]) {
                 MPI_Recv(MPI_BOTTOM, 1, cur_type_recv, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
                 #endif
             }
-            time += MPI_Wtime();
+            time += omp_get_wtime();
             time /= NUM_ITERATIONS;
         } else {
             MPI_Barrier(MPI_COMM_WORLD);
             MPI_Barrier(MPI_COMM_WORLD);
             MPI_Barrier(MPI_COMM_WORLD);
 
-            time -= MPI_Wtime();
+            time -= omp_get_wtime();
             for(iter = 0; iter < NUM_ITERATIONS; iter++) {                
                 #if BENCHMARK_TYPE == 0
                 MPI_Recv(tmp_buffer_recv, cur_size_bytes, MPI_BYTE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
@@ -143,7 +144,7 @@ int main(int argc, char *argv[]) {
                 MPI_Send(MPI_BOTTOM, 1, cur_type_send, 0, 0, MPI_COMM_WORLD);
                 #endif
             }
-            time += MPI_Wtime();
+            time += omp_get_wtime();
             time /= NUM_ITERATIONS;
         }
 
