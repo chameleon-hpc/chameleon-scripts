@@ -18,6 +18,22 @@
 // #define BENCHMARK_TYPE 2 // using custom MPI data types like done in Chameleon (strided data access but with cached data)
 #endif
 
+#ifndef USE_PAPI
+#define USE_PAPI 1
+#endif
+
+// define number of PAPI events
+#define NUM_EVENTS 4
+#if USE_PAPI
+#include <papi.h>
+
+void handle_error (const char *msg)
+{
+    fprintf(stderr, "PAPI Error: %s\n", msg);
+    exit(1);
+}
+#endif
+
 int main(int argc, char *argv[]) {
     int iMyRank, iNumProcs;
 	MPI_Init(&argc, &argv);
@@ -29,11 +45,25 @@ int main(int argc, char *argv[]) {
     int msg_size;
     int iter;
     int b;
+    int tmp_err;
 
     if(iNumProcs != 2) {
         fprintf(stderr, "Wrong number of processes. Has to be 2.\n");
         return 1;
     }
+
+    long long papi_cntr_values_start[NUM_EVENTS];
+    long long papi_cntr_values_end[NUM_EVENTS];
+    long long papi_cntr_values_stop[NUM_EVENTS];
+    for(iter = 0; iter < NUM_EVENTS; iter++) {
+        papi_cntr_values_start[iter] = 0;
+        papi_cntr_values_end[iter] = 0;
+    }
+
+    #if USE_PAPI
+    tmp_err = PAPI_library_init(PAPI_VER_CURRENT);
+    int papi_events[NUM_EVENTS] = {PAPI_L2_TCA, PAPI_L2_TCM, PAPI_L3_TCA, PAPI_L3_TCM};
+    #endif
 
     #if BENCHMARK_TYPE == 1
     void **tmp_buffers_send = malloc(sizeof(void*)*NUM_ITERATIONS);
@@ -106,6 +136,12 @@ int main(int argc, char *argv[]) {
         #endif
         
         double time = 0.;
+        #if USE_PAPI
+        if (PAPI_start_counters(papi_events, NUM_EVENTS) != PAPI_OK)
+            handle_error("Starting PAPI counters failed");
+        if (PAPI_read_counters(papi_cntr_values_start, NUM_EVENTS) != PAPI_OK)
+            handle_error("Reading PAPI counters failed");
+        #endif
         if(iMyRank == 0) {
             MPI_Barrier(MPI_COMM_WORLD);
             MPI_Barrier(MPI_COMM_WORLD);
@@ -147,9 +183,29 @@ int main(int argc, char *argv[]) {
             time += omp_get_wtime();
             time /= NUM_ITERATIONS;
         }
+        #if USE_PAPI
+        if (PAPI_read_counters(papi_cntr_values_end, NUM_EVENTS) != PAPI_OK)
+            handle_error("Reading PAPI counters failed");
+        if (PAPI_stop_counters(papi_cntr_values_stop, NUM_EVENTS) != PAPI_OK)
+            handle_error("Stopping PAPI counters failed");
+        #endif
+
+        // calculate cache miss ratios
+        double miss_ratio_L2 = 0;
+        if(papi_cntr_values_end[0] != 0) {
+            miss_ratio_L2 = (double) papi_cntr_values_end[1] / (double) papi_cntr_values_end[0];
+        }
+        double miss_ratio_L3 = 0;
+        if(papi_cntr_values_end[2] != 0) {
+            miss_ratio_L3 = (double) papi_cntr_values_end[3] / (double) papi_cntr_values_end[2];
+        }
 
         if(iMyRank == 0) {
-            fprintf(stderr, "PingPong with msg_size: %*d (%*.3f KB) took %*.3f us with a throughput of %*.3f MB/s\n", 13, cur_size_bytes, 13, cur_size_bytes/1000.0 , 10, time*1e06, 10, ((double)cur_size_bytes*2.0/(1e06*time)));
+            double cur_size_kb      = cur_size_bytes/1000.0;
+            double cur_micro_secs   = time*1e06;
+            double cur_thoughput    = ((double)cur_size_bytes*2.0/(1e06*time));
+
+            fprintf(stderr, "PingPong with msg_size:\t%d\t(\t%.3f\tKB) took\t%.3f\tus with a throughput of\t%.3f\tMB/s\tL2_accesses\t%lld\tL2_misses\t%lld\tL2_miss_ratio\t%.3f\tL3_accesses\t%lld\tL3_misses\t%lld\tL3_miss_ratio\t%.3f\n", cur_size_bytes, cur_size_kb, cur_micro_secs, cur_thoughput, papi_cntr_values_end[0], papi_cntr_values_end[1], miss_ratio_L2, papi_cntr_values_end[2], papi_cntr_values_end[3], miss_ratio_L3);
         }
 
         #if BENCHMARK_TYPE == 0

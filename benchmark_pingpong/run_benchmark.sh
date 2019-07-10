@@ -11,6 +11,7 @@
 # =============== Load desired modules
 source /home/jk869269/.zshrc
 source env_ch_intel.sh
+module load DEV-TOOLS papi
 
 # =============== Settings & environment variables
 CUR_DATE_STR=${CUR_DATE_STR:-"$(date +"%Y%m%d_%H%M%S")"}
