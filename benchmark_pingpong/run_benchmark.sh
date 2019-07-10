@@ -11,18 +11,25 @@
 # =============== Load desired modules
 source /home/jk869269/.zshrc
 source env_ch_intel.sh
+module load DEV-TOOLS papi
 
 # =============== Settings & environment variables
 CUR_DATE_STR=${CUR_DATE_STR:-"$(date +"%Y%m%d_%H%M%S")"}
 
 # Tests for Type 0
 make
-make run-sm &> ${CUR_DATE_STR}_result_type0_sm.log
+make run-sm-socket &> ${CUR_DATE_STR}_result_type0_socket.log
+make run-sm-cache2 &> ${CUR_DATE_STR}_result_type0_cache2.log
 make run-dm &> ${CUR_DATE_STR}_result_type0_dm.log
 
 # Tests for Type 1
 ADDITIONAL_COMPILE_FLAGS="-DBENCHMARK_TYPE=1" make
-make run-sm &> ${CUR_DATE_STR}_result_type1_sm.log
+make run-sm-socket &> ${CUR_DATE_STR}_result_type1_socket.log
+make run-sm-cache2 &> ${CUR_DATE_STR}_result_type1_cache2.log
 make run-dm &> ${CUR_DATE_STR}_result_type1_dm.log
 
-
+# Tests for Type 2
+ADDITIONAL_COMPILE_FLAGS="-DBENCHMARK_TYPE=2" make
+make run-sm-socket &> ${CUR_DATE_STR}_result_type2_socket.log
+make run-sm-cache2 &> ${CUR_DATE_STR}_result_type2_cache2.log
+make run-dm &> ${CUR_DATE_STR}_result_type2_dm.log

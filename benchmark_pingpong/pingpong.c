@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <omp.h>
 
 #ifndef NUM_ITERATIONS
 #define NUM_ITERATIONS 100
@@ -12,9 +13,25 @@
 #endif
 
 #ifndef BENCHMARK_TYPE
-#define BENCHMARK_TYPE 0 // regular ping pong benchmark using cached, contigious data
-// #define BENCHMARK_TYPE 1 // ping pong that always uses a different chunk of data (also contigious but might not be cached)
+#define BENCHMARK_TYPE 0 // regular ping pong benchmark using cached, contiguous data
+// #define BENCHMARK_TYPE 1 // ping pong that always uses a different chunk of data (also contiguous but might not be cached)
 // #define BENCHMARK_TYPE 2 // using custom MPI data types like done in Chameleon (strided data access but with cached data)
+#endif
+
+#ifndef USE_PAPI
+#define USE_PAPI 1
+#endif
+
+// define number of PAPI events
+#define NUM_EVENTS 4
+#if USE_PAPI
+#include <papi.h>
+
+void handle_error (const char *msg)
+{
+    fprintf(stderr, "PAPI Error: %s\n", msg);
+    exit(1);
+}
 #endif
 
 int main(int argc, char *argv[]) {
@@ -28,18 +45,32 @@ int main(int argc, char *argv[]) {
     int msg_size;
     int iter;
     int b;
+    int tmp_err;
 
     if(iNumProcs != 2) {
         fprintf(stderr, "Wrong number of processes. Has to be 2.\n");
         return 1;
     }
 
+    long long papi_cntr_values_start[NUM_EVENTS];
+    long long papi_cntr_values_end[NUM_EVENTS];
+    long long papi_cntr_values_stop[NUM_EVENTS];
+    for(iter = 0; iter < NUM_EVENTS; iter++) {
+        papi_cntr_values_start[iter] = 0;
+        papi_cntr_values_end[iter] = 0;
+    }
+
+    #if USE_PAPI
+    tmp_err = PAPI_library_init(PAPI_VER_CURRENT);
+    int papi_events[NUM_EVENTS] = {PAPI_L3_TCA, PAPI_L3_TCM, PAPI_L3_LDM, PAPI_TOT_INS};
+    #endif
+
     #if BENCHMARK_TYPE == 1
-    void **tmp_buffers_send = malloc(sizeof(void*)*NUM_ITERATIONS);
-    void **tmp_buffers_recv = malloc(sizeof(void*)*NUM_ITERATIONS);
+    int **tmp_buffers_send = malloc(sizeof(int*)*NUM_ITERATIONS);
+    int **tmp_buffers_recv = malloc(sizeof(int*)*NUM_ITERATIONS);
     #elif BENCHMARK_TYPE == 2
-    void **tmp_buffers_send = (void **) malloc(sizeof(void*)*4);
-    void **tmp_buffers_recv = (void **) malloc(sizeof(void*)*4);
+    int **tmp_buffers_send = (int **) malloc(sizeof(int*)*4);
+    int **tmp_buffers_recv = (int **) malloc(sizeof(int*)*4);
     #endif
 
     for(msg_size = msg_size_start; msg_size <= msg_size_end; msg_size++) {
@@ -54,10 +85,10 @@ int main(int argc, char *argv[]) {
         }
         #elif BENCHMARK_TYPE == 1
         for(iter = 0; iter < NUM_ITERATIONS; iter++) {
-            tmp_buffers_send[iter] = malloc(cur_size_bytes);
-            tmp_buffers_recv[iter] = malloc(cur_size_bytes);
-            int *cur_send = (int*) tmp_buffers_send[iter];
-            int *cur_recv = (int*) tmp_buffers_recv[iter];
+            tmp_buffers_send[iter]  = (int*) malloc(cur_size_bytes);
+            tmp_buffers_recv[iter]  = (int*) malloc(cur_size_bytes);
+            int *cur_send           = tmp_buffers_send[iter];
+            int *cur_recv           = tmp_buffers_recv[iter];
             for(b = 0; b < cur_size_bytes/sizeof(int); b++) {
                 cur_send[b] = 1;
                 cur_recv[b] = 0;
@@ -65,10 +96,10 @@ int main(int argc, char *argv[]) {
         }
         #elif BENCHMARK_TYPE == 2
         for(iter = 0; iter < 4; iter++) {
-            tmp_buffers_send[iter] = malloc(cur_size_bytes);
-            tmp_buffers_recv[iter] = malloc(cur_size_bytes);
-            int *cur_send = (int*) tmp_buffers_send[iter];
-            int *cur_recv = (int*) tmp_buffers_recv[iter];
+            tmp_buffers_send[iter]  = (int*) malloc(cur_size_bytes);
+            tmp_buffers_recv[iter]  = (int*) malloc(cur_size_bytes);
+            int *cur_send           = tmp_buffers_send[iter];
+            int *cur_recv           = tmp_buffers_recv[iter];
             for(b = 0; b < cur_size_bytes/sizeof(int); b++) {
                 cur_send[b] = 1;
                 cur_recv[b] = 0;
@@ -105,12 +136,18 @@ int main(int argc, char *argv[]) {
         #endif
         
         double time = 0.;
+        #if USE_PAPI
+        if (PAPI_start_counters(papi_events, NUM_EVENTS) != PAPI_OK)
+            handle_error("Starting PAPI counters failed");
+        if (PAPI_read_counters(papi_cntr_values_start, NUM_EVENTS) != PAPI_OK)
+            handle_error("Reading PAPI counters failed");
+        #endif
         if(iMyRank == 0) {
             MPI_Barrier(MPI_COMM_WORLD);
             MPI_Barrier(MPI_COMM_WORLD);
             MPI_Barrier(MPI_COMM_WORLD);
 
-            time -= MPI_Wtime();
+            time -= omp_get_wtime();
             for(iter = 0; iter < NUM_ITERATIONS; iter++) {
                 #if BENCHMARK_TYPE == 0
                 MPI_Send(tmp_buffer_send, cur_size_bytes, MPI_BYTE, 1, 0, MPI_COMM_WORLD);
@@ -123,14 +160,14 @@ int main(int argc, char *argv[]) {
                 MPI_Recv(MPI_BOTTOM, 1, cur_type_recv, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
                 #endif
             }
-            time += MPI_Wtime();
+            time += omp_get_wtime();
             time /= NUM_ITERATIONS;
         } else {
             MPI_Barrier(MPI_COMM_WORLD);
             MPI_Barrier(MPI_COMM_WORLD);
             MPI_Barrier(MPI_COMM_WORLD);
 
-            time -= MPI_Wtime();
+            time -= omp_get_wtime();
             for(iter = 0; iter < NUM_ITERATIONS; iter++) {                
                 #if BENCHMARK_TYPE == 0
                 MPI_Recv(tmp_buffer_recv, cur_size_bytes, MPI_BYTE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
@@ -143,12 +180,33 @@ int main(int argc, char *argv[]) {
                 MPI_Send(MPI_BOTTOM, 1, cur_type_send, 0, 0, MPI_COMM_WORLD);
                 #endif
             }
-            time += MPI_Wtime();
+            time += omp_get_wtime();
             time /= NUM_ITERATIONS;
+        }
+        #if USE_PAPI
+        if (PAPI_read_counters(papi_cntr_values_end, NUM_EVENTS) != PAPI_OK)
+            handle_error("Reading PAPI counters failed");
+        if (PAPI_stop_counters(papi_cntr_values_stop, NUM_EVENTS) != PAPI_OK)
+            handle_error("Stopping PAPI counters failed");
+        #endif
+
+        // calculate cache miss ratios
+        double miss_ratio_L3        = 0;
+        double miss_ratio_L3_load   = 0;
+        if(papi_cntr_values_end[0] != 0) {
+            miss_ratio_L3       = (double) papi_cntr_values_end[1] / (double) papi_cntr_values_end[0];
+            miss_ratio_L3_load  = (double) papi_cntr_values_end[2] / (double) papi_cntr_values_end[0];
         }
 
         if(iMyRank == 0) {
-            fprintf(stderr, "PingPong with msg_size: %*d (%*.3f KB) took %*.3f us with a throughput of %*.3f MB/s\n", 13, cur_size_bytes, 13, cur_size_bytes/1000.0 , 10, time*1e06, 10, ((double)cur_size_bytes*2.0/(1e06*time)));
+            double cur_size_kb      = cur_size_bytes/1024.0;
+            double cur_micro_secs   = time*1e06;
+            double cur_thoughput    = ((double)cur_size_bytes*2.0/(1e06*time));
+
+            fprintf(stderr, "PingPong with msg_size:\t%d\t(\t%.3f\tKB) took\t%.3f\tus with a throughput of\t%.3f\tMB/s\t", cur_size_bytes, cur_size_kb, cur_micro_secs, cur_thoughput);
+            fprintf(stderr, "L3_accesses\t%lld\tL3_misses\t%lld\tL3_miss_ratio\t%.3f\t", papi_cntr_values_end[0], papi_cntr_values_end[1], miss_ratio_L3);
+            fprintf(stderr, "L3_load_misses\t%lld\tL3_load_miss_ratio\t%.3f\t", papi_cntr_values_end[2], miss_ratio_L3_load);
+            fprintf(stderr, "PAPI_TOT_INS\t%lld\n", papi_cntr_values_end[3]);
         }
 
         #if BENCHMARK_TYPE == 0
