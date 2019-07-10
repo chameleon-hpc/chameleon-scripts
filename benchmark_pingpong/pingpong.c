@@ -62,15 +62,15 @@ int main(int argc, char *argv[]) {
 
     #if USE_PAPI
     tmp_err = PAPI_library_init(PAPI_VER_CURRENT);
-    int papi_events[NUM_EVENTS] = {PAPI_L2_TCA, PAPI_L2_TCM, PAPI_L3_TCA, PAPI_L3_TCM};
+    int papi_events[NUM_EVENTS] = {PAPI_L3_TCA, PAPI_L3_TCM, PAPI_L3_LDM, PAPI_TOT_INS};
     #endif
 
     #if BENCHMARK_TYPE == 1
-    void **tmp_buffers_send = malloc(sizeof(void*)*NUM_ITERATIONS);
-    void **tmp_buffers_recv = malloc(sizeof(void*)*NUM_ITERATIONS);
+    int **tmp_buffers_send = malloc(sizeof(int*)*NUM_ITERATIONS);
+    int **tmp_buffers_recv = malloc(sizeof(int*)*NUM_ITERATIONS);
     #elif BENCHMARK_TYPE == 2
-    void **tmp_buffers_send = (void **) malloc(sizeof(void*)*4);
-    void **tmp_buffers_recv = (void **) malloc(sizeof(void*)*4);
+    int **tmp_buffers_send = (int **) malloc(sizeof(int*)*4);
+    int **tmp_buffers_recv = (int **) malloc(sizeof(int*)*4);
     #endif
 
     for(msg_size = msg_size_start; msg_size <= msg_size_end; msg_size++) {
@@ -85,10 +85,10 @@ int main(int argc, char *argv[]) {
         }
         #elif BENCHMARK_TYPE == 1
         for(iter = 0; iter < NUM_ITERATIONS; iter++) {
-            tmp_buffers_send[iter] = malloc(cur_size_bytes);
-            tmp_buffers_recv[iter] = malloc(cur_size_bytes);
-            int *cur_send = (int*) tmp_buffers_send[iter];
-            int *cur_recv = (int*) tmp_buffers_recv[iter];
+            tmp_buffers_send[iter]  = (int*) malloc(cur_size_bytes);
+            tmp_buffers_recv[iter]  = (int*) malloc(cur_size_bytes);
+            int *cur_send           = tmp_buffers_send[iter];
+            int *cur_recv           = tmp_buffers_recv[iter];
             for(b = 0; b < cur_size_bytes/sizeof(int); b++) {
                 cur_send[b] = 1;
                 cur_recv[b] = 0;
@@ -96,10 +96,10 @@ int main(int argc, char *argv[]) {
         }
         #elif BENCHMARK_TYPE == 2
         for(iter = 0; iter < 4; iter++) {
-            tmp_buffers_send[iter] = malloc(cur_size_bytes);
-            tmp_buffers_recv[iter] = malloc(cur_size_bytes);
-            int *cur_send = (int*) tmp_buffers_send[iter];
-            int *cur_recv = (int*) tmp_buffers_recv[iter];
+            tmp_buffers_send[iter]  = (int*) malloc(cur_size_bytes);
+            tmp_buffers_recv[iter]  = (int*) malloc(cur_size_bytes);
+            int *cur_send           = tmp_buffers_send[iter];
+            int *cur_recv           = tmp_buffers_recv[iter];
             for(b = 0; b < cur_size_bytes/sizeof(int); b++) {
                 cur_send[b] = 1;
                 cur_recv[b] = 0;
@@ -191,21 +191,22 @@ int main(int argc, char *argv[]) {
         #endif
 
         // calculate cache miss ratios
-        double miss_ratio_L2 = 0;
+        double miss_ratio_L3        = 0;
+        double miss_ratio_L3_load   = 0;
         if(papi_cntr_values_end[0] != 0) {
-            miss_ratio_L2 = (double) papi_cntr_values_end[1] / (double) papi_cntr_values_end[0];
-        }
-        double miss_ratio_L3 = 0;
-        if(papi_cntr_values_end[2] != 0) {
-            miss_ratio_L3 = (double) papi_cntr_values_end[3] / (double) papi_cntr_values_end[2];
+            miss_ratio_L3       = (double) papi_cntr_values_end[1] / (double) papi_cntr_values_end[0];
+            miss_ratio_L3_load  = (double) papi_cntr_values_end[2] / (double) papi_cntr_values_end[0];
         }
 
         if(iMyRank == 0) {
-            double cur_size_kb      = cur_size_bytes/1000.0;
+            double cur_size_kb      = cur_size_bytes/1024.0;
             double cur_micro_secs   = time*1e06;
             double cur_thoughput    = ((double)cur_size_bytes*2.0/(1e06*time));
 
-            fprintf(stderr, "PingPong with msg_size:\t%d\t(\t%.3f\tKB) took\t%.3f\tus with a throughput of\t%.3f\tMB/s\tL2_accesses\t%lld\tL2_misses\t%lld\tL2_miss_ratio\t%.3f\tL3_accesses\t%lld\tL3_misses\t%lld\tL3_miss_ratio\t%.3f\n", cur_size_bytes, cur_size_kb, cur_micro_secs, cur_thoughput, papi_cntr_values_end[0], papi_cntr_values_end[1], miss_ratio_L2, papi_cntr_values_end[2], papi_cntr_values_end[3], miss_ratio_L3);
+            fprintf(stderr, "PingPong with msg_size:\t%d\t(\t%.3f\tKB) took\t%.3f\tus with a throughput of\t%.3f\tMB/s\t", cur_size_bytes, cur_size_kb, cur_micro_secs, cur_thoughput);
+            fprintf(stderr, "L3_accesses\t%lld\tL3_misses\t%lld\tL3_miss_ratio\t%.3f\t", papi_cntr_values_end[0], papi_cntr_values_end[1], miss_ratio_L3);
+            fprintf(stderr, "L3_load_misses\t%lld\tL3_load_miss_ratio\t%.3f\t", papi_cntr_values_end[2], miss_ratio_L3_load);
+            fprintf(stderr, "PAPI_TOT_INS\t%lld\n", papi_cntr_values_end[3]);
         }
 
         #if BENCHMARK_TYPE == 0

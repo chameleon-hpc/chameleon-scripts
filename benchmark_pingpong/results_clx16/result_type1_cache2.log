@@ -1,0 +1,40 @@
+I_MPI_DEBUG=5 I_MPI_FABRICS="shm:tmi" I_MPI_PIN=1 I_MPI_PIN_DOMAIN=cache2 mpiexec.hydra -np 2 -hosts localhost pingpong.exe
+[0] MPI startup(): Multi-threaded optimized library
+[0] MPI startup(): shm and tmi data transfer modes
+[1] MPI startup(): shm and tmi data transfer modes
+[0] MPI startup(): Rank    Pid      Node name                      Pin cpu
+[0] MPI startup(): 0       2760     lnm599.hpc.itc.rwth-aachen.de  {0}
+[0] MPI startup(): 1       2761     lnm599.hpc.itc.rwth-aachen.de  {1}
+[0] MPI startup(): I_MPI_DEBUG=5
+[0] MPI startup(): I_MPI_FABRICS=shm:tmi
+[0] MPI startup(): I_MPI_HYDRA_UUID=c30a0000-b29f-388a-558d-05002e86863d
+[0] MPI startup(): I_MPI_INFO_NUMA_NODE_MAP=hfi1_0:0
+[0] MPI startup(): I_MPI_INFO_NUMA_NODE_NUM=2
+[0] MPI startup(): I_MPI_PIN_MAPPING=2:0 0,1 1
+PingPong with msg_size:	4	(	0.004	KB) took	0.839	us with a throughput of	9.533	MB/s	L3_accesses	2660	L3_misses	212	L3_miss_ratio	0.080	L3_load_misses	13	L3_load_miss_ratio	0.005	PAPI_TOT_INS	354125
+PingPong with msg_size:	8	(	0.008	KB) took	0.730	us with a throughput of	21.931	MB/s	L3_accesses	2038	L3_misses	2	L3_miss_ratio	0.001	L3_load_misses	0	L3_load_miss_ratio	0.000	PAPI_TOT_INS	286758
+PingPong with msg_size:	16	(	0.016	KB) took	0.730	us with a throughput of	43.862	MB/s	L3_accesses	1947	L3_misses	27	L3_miss_ratio	0.014	L3_load_misses	0	L3_load_miss_ratio	0.000	PAPI_TOT_INS	282392
+PingPong with msg_size:	32	(	0.031	KB) took	0.749	us with a throughput of	85.489	MB/s	L3_accesses	1993	L3_misses	11	L3_miss_ratio	0.006	L3_load_misses	0	L3_load_miss_ratio	0.000	PAPI_TOT_INS	301909
+PingPong with msg_size:	64	(	0.062	KB) took	0.751	us with a throughput of	170.435	MB/s	L3_accesses	2272	L3_misses	15	L3_miss_ratio	0.007	L3_load_misses	1	L3_load_miss_ratio	0.000	PAPI_TOT_INS	306627
+PingPong with msg_size:	128	(	0.125	KB) took	0.999	us with a throughput of	256.263	MB/s	L3_accesses	2792	L3_misses	0	L3_miss_ratio	0.000	L3_load_misses	0	L3_load_miss_ratio	0.000	PAPI_TOT_INS	321322
+PingPong with msg_size:	256	(	0.250	KB) took	0.930	us with a throughput of	550.637	MB/s	L3_accesses	3616	L3_misses	30	L3_miss_ratio	0.008	L3_load_misses	0	L3_load_miss_ratio	0.000	PAPI_TOT_INS	333969
+PingPong with msg_size:	512	(	0.500	KB) took	1.020	us with a throughput of	1003.497	MB/s	L3_accesses	4994	L3_misses	19	L3_miss_ratio	0.004	L3_load_misses	0	L3_load_miss_ratio	0.000	PAPI_TOT_INS	362570
+PingPong with msg_size:	1024	(	1.000	KB) took	1.240	us with a throughput of	1651.910	MB/s	L3_accesses	11416	L3_misses	12	L3_miss_ratio	0.001	L3_load_misses	1	L3_load_miss_ratio	0.000	PAPI_TOT_INS	446169
+PingPong with msg_size:	2048	(	2.000	KB) took	1.719	us with a throughput of	2382.784	MB/s	L3_accesses	19086	L3_misses	21	L3_miss_ratio	0.001	L3_load_misses	1	L3_load_miss_ratio	0.000	PAPI_TOT_INS	547509
+PingPong with msg_size:	4096	(	4.000	KB) took	2.611	us with a throughput of	3137.876	MB/s	L3_accesses	33587	L3_misses	63	L3_miss_ratio	0.002	L3_load_misses	0	L3_load_miss_ratio	0.000	PAPI_TOT_INS	842866
+PingPong with msg_size:	8192	(	8.000	KB) took	4.160	us with a throughput of	3938.079	MB/s	L3_accesses	64000	L3_misses	82	L3_miss_ratio	0.001	L3_load_misses	0	L3_load_miss_ratio	0.000	PAPI_TOT_INS	1312318
+PingPong with msg_size:	16384	(	16.000	KB) took	7.489	us with a throughput of	4375.643	MB/s	L3_accesses	125835	L3_misses	79	L3_miss_ratio	0.001	L3_load_misses	1	L3_load_miss_ratio	0.000	PAPI_TOT_INS	2304964
+PingPong with msg_size:	32768	(	32.000	KB) took	13.959	us with a throughput of	4694.755	MB/s	L3_accesses	227588	L3_misses	845	L3_miss_ratio	0.004	L3_load_misses	90	L3_load_miss_ratio	0.000	PAPI_TOT_INS	3519096
+PingPong with msg_size:	65536	(	64.000	KB) took	32.670	us with a throughput of	4011.938	MB/s	L3_accesses	17927	L3_misses	1659	L3_miss_ratio	0.093	L3_load_misses	165	L3_load_miss_ratio	0.009	PAPI_TOT_INS	8515473
+PingPong with msg_size:	131072	(	128.000	KB) took	77.350	us with a throughput of	3389.057	MB/s	L3_accesses	33215	L3_misses	2248	L3_miss_ratio	0.068	L3_load_misses	245	L3_load_miss_ratio	0.007	PAPI_TOT_INS	19706398
+PingPong with msg_size:	262144	(	256.000	KB) took	144.441	us with a throughput of	3629.769	MB/s	L3_accesses	68037	L3_misses	1561	L3_miss_ratio	0.023	L3_load_misses	285	L3_load_miss_ratio	0.004	PAPI_TOT_INS	36763783
+PingPong with msg_size:	524288	(	512.000	KB) took	274.630	us with a throughput of	3818.146	MB/s	L3_accesses	67135	L3_misses	1505	L3_miss_ratio	0.022	L3_load_misses	279	L3_load_miss_ratio	0.004	PAPI_TOT_INS	71273828
+PingPong with msg_size:	1048576	(	1024.000	KB) took	537.989	us with a throughput of	3898.131	MB/s	L3_accesses	71563	L3_misses	1742	L3_miss_ratio	0.024	L3_load_misses	268	L3_load_miss_ratio	0.004	PAPI_TOT_INS	140157664
+PingPong with msg_size:	2097152	(	2048.000	KB) took	1068.170	us with a throughput of	3926.626	MB/s	L3_accesses	80383	L3_misses	2969	L3_miss_ratio	0.037	L3_load_misses	279	L3_load_miss_ratio	0.003	PAPI_TOT_INS	280031894
+PingPong with msg_size:	4194304	(	4096.000	KB) took	2146.599	us with a throughput of	3907.859	MB/s	L3_accesses	81488	L3_misses	3216	L3_miss_ratio	0.039	L3_load_misses	306	L3_load_miss_ratio	0.004	PAPI_TOT_INS	562085007
+PingPong with msg_size:	8388608	(	8192.000	KB) took	4674.010	us with a throughput of	3589.469	MB/s	L3_accesses	84116	L3_misses	17041	L3_miss_ratio	0.203	L3_load_misses	6441	L3_load_miss_ratio	0.077	PAPI_TOT_INS	1047875832
+PingPong with msg_size:	16777216	(	16384.000	KB) took	8888.779	us with a throughput of	3774.920	MB/s	L3_accesses	97850	L3_misses	46551	L3_miss_ratio	0.476	L3_load_misses	20055	L3_load_miss_ratio	0.205	PAPI_TOT_INS	2073942137
+PingPong with msg_size:	33554432	(	32768.000	KB) took	17221.501	us with a throughput of	3896.807	MB/s	L3_accesses	138476	L3_misses	112447	L3_miss_ratio	0.812	L3_load_misses	35410	L3_load_miss_ratio	0.256	PAPI_TOT_INS	4460848230
+PingPong with msg_size:	67108864	(	65536.000	KB) took	34854.491	us with a throughput of	3850.802	MB/s	L3_accesses	187690	L3_misses	161107	L3_miss_ratio	0.858	L3_load_misses	53204	L3_load_miss_ratio	0.283	PAPI_TOT_INS	8636299780
+PingPong with msg_size:	134217728	(	131072.000	KB) took	71064.301	us with a throughput of	3777.360	MB/s	L3_accesses	8590013518	L3_misses	8590006064	L3_miss_ratio	1.000	L3_load_misses	8589959848	L3_load_miss_ratio	1.000	PAPI_TOT_INS	15972833582
+PingPong with msg_size:	268435456	(	262144.000	KB) took	160841.229	us with a throughput of	3337.894	MB/s	L3_accesses	399089	L3_misses	372801	L3_miss_ratio	0.934	L3_load_misses	136651	L3_load_miss_ratio	0.342	PAPI_TOT_INS	40261309547
