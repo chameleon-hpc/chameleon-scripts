@@ -68,7 +68,7 @@ export NREPS=1
 export SAMOA_BIN="/home/ps659535/chameleon/samoa_chameleon/bin/samoa_swe_chameleon"
 export SAMOA_PARAMS=" -lbfreq 1000000 -dmin ${CUR_DMIN} -dmax ${CUR_DMAX} -sections ${NUM_SECTIONS} -tmax ${SIM_TIME_SEC} ${TOHOKU_PARAMS}"
 export MODE=(0)
-export PROCS=(1 2 4 8 16 32)
+export PROCS=(32)
 
 export EXP_SUFFIX="_chameleon_strong"
 
