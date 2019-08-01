@@ -4,7 +4,7 @@ source env_ch_intel.sh
 
 export CUR_DATE_STR="$(date +"%Y%m%d_%H%M%S")"
 DIR_CH_SRC=${DIR_CH_SRC:-../../chameleon-lib/src}
-DIR_MXM_EXAMPLE=${DIR_MXM_EXAMPLE:-../../chameleon-lib/examples/matrix_example}
+DIR_MXM_EXAMPLE=${DIR_MXM_EXAMPLE:-../../chameleon-lib/examples/applications/matrix_example}
 
 # Build regular chunk version 
 make clean -C ${DIR_CH_SRC}

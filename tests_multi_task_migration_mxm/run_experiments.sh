@@ -31,7 +31,7 @@ else
     export SUFFIX_RESULT_DIR="sm"
 fi
 DIR_RESULT="${CUR_DATE_STR}_results/${N_PROCS}procs_${SUFFIX_RESULT_DIR}"
-DIR_MXM_EXAMPLE=${DIR_MXM_EXAMPLE:-../../chameleon-lib/examples/matrix_example}
+DIR_MXM_EXAMPLE=${DIR_MXM_EXAMPLE:-../../chameleon-lib/examples/applications/matrix_example}
 mkdir -p ${DIR_RESULT}
 
 if [ "${IS_SEPARATE}" = "1" ]; then
