@@ -13,6 +13,7 @@ export I_MPI_PIN_DOMAIN=auto
 export OMP_PLACES=cores
 export OMP_PROC_BIND=close
 
+
 if [ "${REP_MODE}" = "0" ]; then
   export SUFFIX_RESULT_DIR="rep_0"
   module load chameleon/intel_rep_0 
@@ -22,6 +23,10 @@ elif [ "${REP_MODE}" = "1" ]; then
 elif [ "${REP_MODE}" = "2" ]; then 
   export SUFFIX_RESULT_DIR="rep_2"
   module load chameleon/intel_rep_2
+elif [ "${REP_MODE}" = "-1" ]; then
+  export SUFFIX_RESULT_DIR="base_chameleon"
+  module load chameleon/intel_no_commthread
+  echo "loading base chameleon"
 fi
 
 DIR_RESULT="${OUTPUT_DIR_PRE}${CUR_DATE_STR}_results/${NPROCS}procs_${SUFFIX_RESULT_DIR}"
@@ -32,8 +37,8 @@ DMIN="${DMIN:-25}"
 DMAX="${DMAX:-25}" 
 LBFREQ="${LBFREQ:-1}"
 NMAX="${NMAX:-10}"
-#NTHREADS=(23)
-NTHREADS=(1 2 4 8 16)
+NTHREADS=(24)
+#NTHREADS=(1 2 4 8 16)
 
 NREPS="${NREPS:-1}"
 
@@ -53,10 +58,11 @@ function run_samoa()
      for t in "${NTHREADS[@]}"
      do
        export OMP_NUM_THREADS=${t}
-       export MIN_REL_LOAD_IMBALANCE_BEFORE_MIGRATION=10000.0
+       #export MIN_REL_LOAD_IMBALANCE_BEFORE_MIGRATION=10000.0
+       #eval "mpiexec -np ${NPROCS} ${SAMOA_BIN} ${SAMOA_PARAMS}" &>  ${DIR_RESULT}/results_no_stealing_t${t}_r${r}${EXP_SUFFIX}.log
+       #export MIN_REL_LOAD_IMBALANCE_BEFORE_MIGRATION=0.10
+       #eval "mpiexec -np ${NPROCS} ${SAMOA_BIN} ${SAMOA_PARAMS}" &>  ${DIR_RESULT}/results_stealing_t${t}_r${r}${EXP_SUFFIX}.log
        eval "mpiexec -np ${NPROCS} ${SAMOA_BIN} ${SAMOA_PARAMS}" &>  ${DIR_RESULT}/results_no_stealing_t${t}_r${r}${EXP_SUFFIX}.log
-       export MIN_REL_LOAD_IMBALANCE_BEFORE_MIGRATION=0.10
-       eval "mpiexec -np ${NPROCS} ${SAMOA_BIN} ${SAMOA_PARAMS}" &>  ${DIR_RESULT}/results_stealing_t${t}_r${r}${EXP_SUFFIX}.log
      done
   done
 }

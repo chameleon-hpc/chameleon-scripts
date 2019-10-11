@@ -36,6 +36,9 @@ class ChameleonStatsPerRank():
         self.task_exec_local            = ExecTimeStats(cumulative)
         self.task_exec_stolen           = ExecTimeStats(cumulative)
         self.task_exec_overall          = ExecTimeStats(cumulative)
+
+        self.time_taskwait              = ExecTimeStats(cumulative)
+
         self.offload_send_task          = ExecTimeStats(cumulative)
         self.offload_recv_task          = ExecTimeStats(cumulative)
         self.offload_send_results       = ExecTimeStats(cumulative)
@@ -77,6 +80,8 @@ class ChameleonStatsPerRank():
                 self.encode.parseLine(line)
             elif "_time_decode_sum" in line:
                 self.decode.parseLine(line)
+            elif "_time_taskwait_sum" in line:
+                self.time_taskwait.parseLine(line)
 
 class ChameleonStatsPerRun():
 
