@@ -1,17 +1,33 @@
 #!/bin/bash
 
 export CUR_DATE_STR="$(date +"%Y%m%d_%H%M%S")" 
-DIR_CH_SRC=${DIR_CH_SRC:-~/chameleon/chameleon-lib/src}
+DIR_CH=${DIR_CH:-~/chameleon/chameleon-lib/}
 
-make clean -C ${DIR_CH_SRC}
-TARGET=claix_intel CUSTOM_COMPILE_FLAGS="-DCHAM_REPLICATION_MODE=0 " INSTALL_DIR=~/chameleon/chameleon-lib/intel_1.0_rep_mode_0 make -C ${DIR_CH_SRC}
+CUR_DIR=${pwd}
 
-make clean -C ${DIR_CH_SRC}
-TARGET=claix_intel CUSTOM_COMPILE_FLAGS="-DCHAM_REPLICATION_MODE=1 " INSTALL_DIR=~/chameleon/chameleon-lib/intel_1.0_rep_mode_1 make -C ${DIR_CH_SRC}
+if [ "${BUILD_CHAM}" = "1" ]; then
 
-make clean -C ${DIR_CH_SRC}
-TARGET=claix_intel CUSTOM_COMPILE_FLAGS="-DCHAM_REPLICATION_MODE=2 " INSTALL_DIR=~/chameleon/chameleon-lib/intel_1.0_rep_mode_2 make -C ${DIR_CH_SRC}
+cd ${DIR_CH}
 
+make clean 
+cmake -DCMAKE_INSTALL_PREFIX="~/chameleon/chameleon_lib/intel_1.0_rep_mode_0" -DCMAKE_CXX_FLAGS="-DCHAM_STATS_RECORD -DCHAM_STATS_PRINT -DCHAM_REPLICATION_MODE=0 " cmake .
+make install
+
+make clean 
+cmake -DCMAKE_INSTALL_PREFIX="~/chameleon/chameleon_lib/intel_1.0_rep_mode_1" -DCMAKE_CXX_FLAGS="-DCHAM_STATS_RECORD -DCHAM_STATS_PRINT -DCHAM_REPLICATION_MODE=1 " cmake .
+make install
+
+make clean 
+cmake -DCMAKE_INSTALL_PREFIX="~/chameleon/chameleon_lib/intel_1.0_rep_mode_2" -DCMAKE_CXX_FLAGS="-DCHAM_STATS_RECORD -DCHAM_STATS_PRINT -DCHAM_REPLICATION_MODE=2 " cmake .
+make install
+
+make clean 
+cmake -DCMAKE_INSTALL_PREFIX="~/chameleon/chameleon_lib/intel_no_communication_thread" -DCMAKE_CXX_FLAGS="-DCHAM_STATS_RECORD -DCHAM_STATS_PRINT -DENABLE_COMM_THREAD=0 " cmake .
+make install
+
+cd ${CUR_DIR}
+
+fi
 
 SAMOA_DIR=/home/ps659535/chameleon/samoa_chameleon
 SAMOA_PATCH_ORDER=7
@@ -67,8 +83,8 @@ export SIM_TIME_SEC=3600
 export NREPS=1
 export SAMOA_BIN="/home/ps659535/chameleon/samoa_chameleon/bin/samoa_swe_chameleon"
 export SAMOA_PARAMS=" -lbfreq 1000000 -dmin ${CUR_DMIN} -dmax ${CUR_DMAX} -sections ${NUM_SECTIONS} -tmax ${SIM_TIME_SEC} ${TOHOKU_PARAMS}"
-export MODE=(0)
-export PROCS=(32)
+export MODE=(-1)
+export PROCS=(1 2 4 8 16 32)
 
 export EXP_SUFFIX="_chameleon_strong"
 
@@ -80,7 +96,6 @@ do
 for m in "${MODE[@]}"
 do 
   export REP_MODE=$m
-  
   export NPROCS=${p}
   sbatch --nodes=${p} --ntasks-per-node=1 --cpus-per-task=24 --job-name=samoa_strongrep${m}_${p}n --output=samoa_strong_rep${m}_${p}n.%J.txt --export="${EXPORTS}" ../run_samoa.sh 
 done
