@@ -30,17 +30,19 @@ def computeLoadImbalance(input_file_path, nranks):
   print (cur_max)
   print (cur_arg_max)
  
-  load_imbalance = np.divide(cur_max,cur_mean)-1
+  load_imbalance = np.divide(cur_max,cur_mean)
 
-  tmp_target_file_path = "C:\\J.Klinkenberg.Local\\repos\\chameleon\\chameleon-scripts\\tests_samoa\\strong_scaling_tests\\imbalances_no_stealing.log"
+  tmp_target_file_path = os.path.splitext(input_file_path)[0] + "_imbalance.txt"
+  print("Writing imbalance csv output to " + tmp_target_file_path)
+  
   with open(tmp_target_file_path, mode='w', newline='') as f:
     writer = csv.writer(f, delimiter=',')
-    # writer.writerow(['Max Values'])
-    # writer.writerow(cur_max)
-    # writer.writerow(['Mean Values'])
-    # writer.writerow(cur_mean)
-    # writer.writerow(['Argmax Values'])
-    # writer.writerow(cur_arg_max)
+    writer.writerow(['Max Values'])
+    writer.writerow(cur_max)
+    writer.writerow(['Mean Values'])
+    writer.writerow(cur_mean)
+    writer.writerow(['Argmax Values'])
+    writer.writerow(cur_arg_max)
     writer.writerow(['Load Imbalance'])
     writer.writerow(load_imbalance)
 
