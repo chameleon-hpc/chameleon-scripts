@@ -165,7 +165,7 @@ def plotData(target_file_path, arr_x_axis, arr_types, arr_time_baseline, arr_tim
 
 if __name__ == "__main__":
     # source_folder = os.path.dirname(os.path.abspath(__file__))
-    source_folder       = "C:\\J.Klinkenberg.Local\\repos\\chameleon\\chameleon-data\\20190704_173407_results\\2procs_sm"
+    source_folder       = "F:\\repos\\chameleon\\chameleon-scripts\\tests_multi_task_migration_mxm\\20191029_193654_results\\2procs_dm"
     target_folder_data  = os.path.join(source_folder, "result_data")
     target_folder_plot  = os.path.join(source_folder, "result_plots")
 
@@ -256,19 +256,19 @@ if __name__ == "__main__":
                     tmp_n_tasks_local[idx]          = st.mean([x.n_local_tasks for x in tmp_list_thr])
                     tmp_n_tasks_remote[idx]         = st.mean([x.n_remote_tasks for x in tmp_list_thr])
                     
-                    tmp_bytes_send_per_msg_min[idx] = st.mean([x.bytes_send_per_msg_min for x in tmp_list_thr if x.sends_happened])
-                    tmp_bytes_send_per_msg_max[idx] = st.mean([x.bytes_send_per_msg_max for x in tmp_list_thr if x.sends_happened])
-                    tmp_bytes_send_per_msg_avg[idx] = st.mean([x.bytes_send_per_msg_avg for x in tmp_list_thr if x.sends_happened])
-                    tmp_throughput_send_min[idx]    = st.mean([x.throughput_send_min for x in tmp_list_thr if x.sends_happened])
-                    tmp_throughput_send_max[idx]    = st.mean([x.throughput_send_max for x in tmp_list_thr if x.sends_happened])
-                    tmp_throughput_send_avg[idx]    = st.mean([x.throughput_send_avg for x in tmp_list_thr if x.sends_happened])
+                    # tmp_bytes_send_per_msg_min[idx] = st.mean([x.bytes_send_per_msg_min for x in tmp_list_thr if x.sends_happened])
+                    # tmp_bytes_send_per_msg_max[idx] = st.mean([x.bytes_send_per_msg_max for x in tmp_list_thr if x.sends_happened])
+                    # tmp_bytes_send_per_msg_avg[idx] = st.mean([x.bytes_send_per_msg_avg for x in tmp_list_thr if x.sends_happened])
+                    # tmp_throughput_send_min[idx]    = st.mean([x.throughput_send_min for x in tmp_list_thr if x.sends_happened])
+                    # tmp_throughput_send_max[idx]    = st.mean([x.throughput_send_max for x in tmp_list_thr if x.sends_happened])
+                    # tmp_throughput_send_avg[idx]    = st.mean([x.throughput_send_avg for x in tmp_list_thr if x.sends_happened])
 
-                    tmp_bytes_recv_per_msg_min[idx] = st.mean([x.bytes_recv_per_msg_min for x in tmp_list_thr if x.recvs_happened])
-                    tmp_bytes_recv_per_msg_max[idx] = st.mean([x.bytes_recv_per_msg_max for x in tmp_list_thr if x.recvs_happened])
-                    tmp_bytes_recv_per_msg_avg[idx] = st.mean([x.bytes_recv_per_msg_avg for x in tmp_list_thr if x.recvs_happened])
-                    tmp_throughput_recv_min[idx]    = st.mean([x.throughput_recv_min for x in tmp_list_thr if x.recvs_happened])
-                    tmp_throughput_recv_max[idx]    = st.mean([x.throughput_recv_max for x in tmp_list_thr if x.recvs_happened])
-                    tmp_throughput_recv_avg[idx]    = st.mean([x.throughput_recv_avg for x in tmp_list_thr if x.recvs_happened])
+                    # tmp_bytes_recv_per_msg_min[idx] = st.mean([x.bytes_recv_per_msg_min for x in tmp_list_thr if x.recvs_happened])
+                    # tmp_bytes_recv_per_msg_max[idx] = st.mean([x.bytes_recv_per_msg_max for x in tmp_list_thr if x.recvs_happened])
+                    # tmp_bytes_recv_per_msg_avg[idx] = st.mean([x.bytes_recv_per_msg_avg for x in tmp_list_thr if x.recvs_happened])
+                    # tmp_throughput_recv_min[idx]    = st.mean([x.throughput_recv_min for x in tmp_list_thr if x.recvs_happened])
+                    # tmp_throughput_recv_max[idx]    = st.mean([x.throughput_recv_max for x in tmp_list_thr if x.recvs_happened])
+                    # tmp_throughput_recv_avg[idx]    = st.mean([x.throughput_recv_avg for x in tmp_list_thr if x.recvs_happened])
 
                     idx = idx + 1
                 # append arrays
@@ -317,65 +317,65 @@ if __name__ == "__main__":
             for tmp_idx in range(len(arr_types)):
                 writer.writerow([arr_types[tmp_idx]] + arr_n_tasks_remote[tmp_idx])
             
-            writer.writerow([])
-            writer.writerow(['Bytes_Send_Per_Msg_Min'] + unique_n_threads)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_bytes_send_per_msg_min[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Bytes_Send_Per_Msg_Max'] + unique_n_threads)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_bytes_send_per_msg_max[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Bytes_Send_Per_Msg_Avg'] + unique_n_threads)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_bytes_send_per_msg_avg[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Throughput_Send_Min'] + unique_n_threads)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_throughput_send_min[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Throughput_Send_Max'] + unique_n_threads)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_throughput_send_max[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Throughput_Send_Avg'] + unique_n_threads)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_throughput_send_avg[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Bytes_Send_Per_Msg_Min'] + unique_n_threads)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_send_per_msg_min[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Bytes_Send_Per_Msg_Max'] + unique_n_threads)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_send_per_msg_max[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Bytes_Send_Per_Msg_Avg'] + unique_n_threads)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_send_per_msg_avg[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Throughput_Send_Min'] + unique_n_threads)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_send_min[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Throughput_Send_Max'] + unique_n_threads)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_send_max[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Throughput_Send_Avg'] + unique_n_threads)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_send_avg[tmp_idx])
 
-            writer.writerow([])
-            writer.writerow(['Bytes_Recv_Per_Msg_Min'] + unique_n_threads)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_bytes_recv_per_msg_min[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Bytes_Recv_Per_Msg_Max'] + unique_n_threads)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_bytes_recv_per_msg_max[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Bytes_Recv_Per_Msg_Avg'] + unique_n_threads)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_bytes_recv_per_msg_avg[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Throughput_Recv_Min'] + unique_n_threads)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_throughput_recv_min[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Throughput_Recv_Max'] + unique_n_threads)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_throughput_recv_max[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Throughput_Recv_Avg'] + unique_n_threads)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_throughput_recv_avg[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Bytes_Recv_Per_Msg_Min'] + unique_n_threads)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_recv_per_msg_min[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Bytes_Recv_Per_Msg_Max'] + unique_n_threads)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_recv_per_msg_max[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Bytes_Recv_Per_Msg_Avg'] + unique_n_threads)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_recv_per_msg_avg[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Throughput_Recv_Min'] + unique_n_threads)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_recv_min[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Throughput_Recv_Max'] + unique_n_threads)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_recv_max[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Throughput_Recv_Avg'] + unique_n_threads)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_recv_avg[tmp_idx])
 
         # plot results
         tmp_target_file_name = "plot_granularity_" + str(int(gran))
         tmp_target_file_path = os.path.join(target_folder_plot, tmp_target_file_name)
         plotData(tmp_target_file_path, unique_n_threads, arr_types, arr_time_original, arr_time_chameleon, arr_n_tasks_remote, title_prefix + " - Granularity " + str(int(gran)), "# threads per rank")
         
-        plotDataMinMaxAvg(tmp_target_file_path + "_bytes_send", unique_n_threads, arr_types, arr_bytes_send_per_msg_min, arr_bytes_send_per_msg_max, arr_bytes_send_per_msg_avg, title_prefix + " - Granularity " + str(int(gran)) + " - Bytes Send", "# threads per rank", "Data Volume [KB]", True, divisor=1000)
-        plotDataMinMaxAvg(tmp_target_file_path + "_bytes_recv", unique_n_threads, arr_types, arr_bytes_recv_per_msg_min, arr_bytes_recv_per_msg_max, arr_bytes_recv_per_msg_avg, title_prefix + " - Granularity " + str(int(gran)) + " - Bytes Recv", "# threads per rank", "Data Volume [KB]", True, divisor=1000)
-        plotDataMinMaxAvg(tmp_target_file_path + "_throughput_send", unique_n_threads, arr_types, arr_throughput_send_min, arr_throughput_send_max, arr_throughput_send_avg, title_prefix + " - Granularity " + str(int(gran)) + " - Throughput Send", "# threads per rank", "Throughput [MB/s]")
-        plotDataMinMaxAvg(tmp_target_file_path + "_throughput_recv", unique_n_threads, arr_types, arr_throughput_recv_min, arr_throughput_recv_max, arr_throughput_recv_avg, title_prefix + " - Granularity " + str(int(gran)) + " - Throughput Recv", "# threads per rank", "Throughput [MB/s]")
+        # plotDataMinMaxAvg(tmp_target_file_path + "_bytes_send", unique_n_threads, arr_types, arr_bytes_send_per_msg_min, arr_bytes_send_per_msg_max, arr_bytes_send_per_msg_avg, title_prefix + " - Granularity " + str(int(gran)) + " - Bytes Send", "# threads per rank", "Data Volume [KB]", True, divisor=1000)
+        # plotDataMinMaxAvg(tmp_target_file_path + "_bytes_recv", unique_n_threads, arr_types, arr_bytes_recv_per_msg_min, arr_bytes_recv_per_msg_max, arr_bytes_recv_per_msg_avg, title_prefix + " - Granularity " + str(int(gran)) + " - Bytes Recv", "# threads per rank", "Data Volume [KB]", True, divisor=1000)
+        # plotDataMinMaxAvg(tmp_target_file_path + "_throughput_send", unique_n_threads, arr_types, arr_throughput_send_min, arr_throughput_send_max, arr_throughput_send_avg, title_prefix + " - Granularity " + str(int(gran)) + " - Throughput Send", "# threads per rank", "Throughput [MB/s]")
+        # plotDataMinMaxAvg(tmp_target_file_path + "_throughput_recv", unique_n_threads, arr_types, arr_throughput_recv_min, arr_throughput_recv_max, arr_throughput_recv_avg, title_prefix + " - Granularity " + str(int(gran)) + " - Throughput Recv", "# threads per rank", "Throughput [MB/s]")
 
     # ========== Generate results with fixed number of threads
     for thr in unique_n_threads:
@@ -438,19 +438,19 @@ if __name__ == "__main__":
                     tmp_n_tasks_local[idx]          = st.mean([x.n_local_tasks for x in tmp_list_thr])
                     tmp_n_tasks_remote[idx]         = st.mean([x.n_remote_tasks for x in tmp_list_thr])
 
-                    tmp_bytes_send_per_msg_min[idx] = st.mean([x.bytes_send_per_msg_min for x in tmp_list_thr if x.sends_happened])
-                    tmp_bytes_send_per_msg_max[idx] = st.mean([x.bytes_send_per_msg_max for x in tmp_list_thr if x.sends_happened])
-                    tmp_bytes_send_per_msg_avg[idx] = st.mean([x.bytes_send_per_msg_avg for x in tmp_list_thr if x.sends_happened])
-                    tmp_throughput_send_min[idx]    = st.mean([x.throughput_send_min for x in tmp_list_thr if x.sends_happened])
-                    tmp_throughput_send_max[idx]    = st.mean([x.throughput_send_max for x in tmp_list_thr if x.sends_happened])
-                    tmp_throughput_send_avg[idx]    = st.mean([x.throughput_send_avg for x in tmp_list_thr if x.sends_happened])
+                    # tmp_bytes_send_per_msg_min[idx] = st.mean([x.bytes_send_per_msg_min for x in tmp_list_thr if x.sends_happened])
+                    # tmp_bytes_send_per_msg_max[idx] = st.mean([x.bytes_send_per_msg_max for x in tmp_list_thr if x.sends_happened])
+                    # tmp_bytes_send_per_msg_avg[idx] = st.mean([x.bytes_send_per_msg_avg for x in tmp_list_thr if x.sends_happened])
+                    # tmp_throughput_send_min[idx]    = st.mean([x.throughput_send_min for x in tmp_list_thr if x.sends_happened])
+                    # tmp_throughput_send_max[idx]    = st.mean([x.throughput_send_max for x in tmp_list_thr if x.sends_happened])
+                    # tmp_throughput_send_avg[idx]    = st.mean([x.throughput_send_avg for x in tmp_list_thr if x.sends_happened])
 
-                    tmp_bytes_recv_per_msg_min[idx] = st.mean([x.bytes_recv_per_msg_min for x in tmp_list_thr if x.recvs_happened])
-                    tmp_bytes_recv_per_msg_max[idx] = st.mean([x.bytes_recv_per_msg_max for x in tmp_list_thr if x.recvs_happened])
-                    tmp_bytes_recv_per_msg_avg[idx] = st.mean([x.bytes_recv_per_msg_avg for x in tmp_list_thr if x.recvs_happened])
-                    tmp_throughput_recv_min[idx]    = st.mean([x.throughput_recv_min for x in tmp_list_thr if x.recvs_happened])
-                    tmp_throughput_recv_max[idx]    = st.mean([x.throughput_recv_max for x in tmp_list_thr if x.recvs_happened])
-                    tmp_throughput_recv_avg[idx]    = st.mean([x.throughput_recv_avg for x in tmp_list_thr if x.recvs_happened])
+                    # tmp_bytes_recv_per_msg_min[idx] = st.mean([x.bytes_recv_per_msg_min for x in tmp_list_thr if x.recvs_happened])
+                    # tmp_bytes_recv_per_msg_max[idx] = st.mean([x.bytes_recv_per_msg_max for x in tmp_list_thr if x.recvs_happened])
+                    # tmp_bytes_recv_per_msg_avg[idx] = st.mean([x.bytes_recv_per_msg_avg for x in tmp_list_thr if x.recvs_happened])
+                    # tmp_throughput_recv_min[idx]    = st.mean([x.throughput_recv_min for x in tmp_list_thr if x.recvs_happened])
+                    # tmp_throughput_recv_max[idx]    = st.mean([x.throughput_recv_max for x in tmp_list_thr if x.recvs_happened])
+                    # tmp_throughput_recv_avg[idx]    = st.mean([x.throughput_recv_avg for x in tmp_list_thr if x.recvs_happened])
 
                     idx = idx + 1
                 # append arrays
@@ -499,62 +499,62 @@ if __name__ == "__main__":
             for tmp_idx in range(len(arr_types)):
                 writer.writerow([arr_types[tmp_idx]] + arr_n_tasks_remote[tmp_idx])
 
-            writer.writerow([])
-            writer.writerow(['Bytes_Send_Per_Msg_Min'] + unique_granularities)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_bytes_send_per_msg_min[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Bytes_Send_Per_Msg_Max'] + unique_granularities)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_bytes_send_per_msg_max[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Bytes_Send_Per_Msg_Avg'] + unique_granularities)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_bytes_send_per_msg_avg[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Throughput_Send_Min'] + unique_granularities)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_throughput_send_min[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Throughput_Send_Max'] + unique_granularities)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_throughput_send_max[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Throughput_Send_Avg'] + unique_granularities)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_throughput_send_avg[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Bytes_Send_Per_Msg_Min'] + unique_granularities)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_send_per_msg_min[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Bytes_Send_Per_Msg_Max'] + unique_granularities)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_send_per_msg_max[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Bytes_Send_Per_Msg_Avg'] + unique_granularities)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_send_per_msg_avg[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Throughput_Send_Min'] + unique_granularities)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_send_min[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Throughput_Send_Max'] + unique_granularities)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_send_max[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Throughput_Send_Avg'] + unique_granularities)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_send_avg[tmp_idx])
 
-            writer.writerow([])
-            writer.writerow(['Bytes_Recv_Per_Msg_Min'] + unique_granularities)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_bytes_recv_per_msg_min[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Bytes_Recv_Per_Msg_Max'] + unique_granularities)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_bytes_recv_per_msg_max[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Bytes_Recv_Per_Msg_Avg'] + unique_granularities)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_bytes_recv_per_msg_avg[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Throughput_Recv_Min'] + unique_granularities)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_throughput_recv_min[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Throughput_Recv_Max'] + unique_granularities)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_throughput_recv_max[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Throughput_Recv_Avg'] + unique_granularities)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_throughput_recv_avg[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Bytes_Recv_Per_Msg_Min'] + unique_granularities)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_recv_per_msg_min[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Bytes_Recv_Per_Msg_Max'] + unique_granularities)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_recv_per_msg_max[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Bytes_Recv_Per_Msg_Avg'] + unique_granularities)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_recv_per_msg_avg[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Throughput_Recv_Min'] + unique_granularities)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_recv_min[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Throughput_Recv_Max'] + unique_granularities)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_recv_max[tmp_idx])
+            # writer.writerow([])
+            # writer.writerow(['Throughput_Recv_Avg'] + unique_granularities)
+            # for tmp_idx in range(len(arr_types)):
+            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_recv_avg[tmp_idx])
 
         # plot results
         tmp_target_file_name = "plot_threads_" + str(int(thr))
         tmp_target_file_path = os.path.join(target_folder_plot, tmp_target_file_name)
         plotData(tmp_target_file_path, unique_granularities, arr_types, arr_time_original, arr_time_chameleon, arr_n_tasks_remote, title_prefix + " - " + str(int(thr)) + " Threads", "# task granularity (matrix size)")
 
-        plotDataMinMaxAvg(tmp_target_file_path + "_bytes_send", unique_granularities, arr_types, arr_bytes_send_per_msg_min, arr_bytes_send_per_msg_max, arr_bytes_send_per_msg_avg, title_prefix + " - " + str(int(thr)) + " Threads" + " - Bytes Send", "# task granularity (matrix size)", "Data Volume [KB]", True, divisor=1000)
-        plotDataMinMaxAvg(tmp_target_file_path + "_bytes_recv", unique_granularities, arr_types, arr_bytes_recv_per_msg_min, arr_bytes_recv_per_msg_max, arr_bytes_recv_per_msg_avg, title_prefix + " - " + str(int(thr)) + " Threads" + " - Bytes Recv", "# task granularity (matrix size)", "Data Volume [KB]", True, divisor=1000)
-        plotDataMinMaxAvg(tmp_target_file_path + "_throughput_send", unique_granularities, arr_types, arr_throughput_send_min, arr_throughput_send_max, arr_throughput_send_avg, title_prefix + " - " + str(int(thr)) + " Threads" + " - Throughput Send", "# task granularity (matrix size)", "Throughput [MB/s]")
-        plotDataMinMaxAvg(tmp_target_file_path + "_throughput_recv", unique_granularities, arr_types, arr_throughput_recv_min, arr_throughput_recv_max, arr_throughput_recv_avg, title_prefix + " - " + str(int(thr)) + " Threads" + " - Throughput Recv", "# task granularity (matrix size)", "Throughput [MB/s]")
+        # plotDataMinMaxAvg(tmp_target_file_path + "_bytes_send", unique_granularities, arr_types, arr_bytes_send_per_msg_min, arr_bytes_send_per_msg_max, arr_bytes_send_per_msg_avg, title_prefix + " - " + str(int(thr)) + " Threads" + " - Bytes Send", "# task granularity (matrix size)", "Data Volume [KB]", True, divisor=1000)
+        # plotDataMinMaxAvg(tmp_target_file_path + "_bytes_recv", unique_granularities, arr_types, arr_bytes_recv_per_msg_min, arr_bytes_recv_per_msg_max, arr_bytes_recv_per_msg_avg, title_prefix + " - " + str(int(thr)) + " Threads" + " - Bytes Recv", "# task granularity (matrix size)", "Data Volume [KB]", True, divisor=1000)
+        # plotDataMinMaxAvg(tmp_target_file_path + "_throughput_send", unique_granularities, arr_types, arr_throughput_send_min, arr_throughput_send_max, arr_throughput_send_avg, title_prefix + " - " + str(int(thr)) + " Threads" + " - Throughput Send", "# task granularity (matrix size)", "Throughput [MB/s]")
+        # plotDataMinMaxAvg(tmp_target_file_path + "_throughput_recv", unique_granularities, arr_types, arr_throughput_recv_min, arr_throughput_recv_max, arr_throughput_recv_avg, title_prefix + " - " + str(int(thr)) + " Threads" + " - Throughput Recv", "# task granularity (matrix size)", "Throughput [MB/s]")
