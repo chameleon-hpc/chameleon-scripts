@@ -17,6 +17,197 @@ plt.rc('ytick', labelsize=F_SIZE)       # fontsize of the tick labels
 plt.rc('legend', fontsize=F_SIZE)       # legend fontsize
 plt.rc('figure', titlesize=F_SIZE)      # fontsize of the figure title
 
+def writeOutputDetailed(tmp_target_file_path, unique_granularities, unique_threads, arr_types, list_results):
+    with open(tmp_target_file_path, mode='w', newline='') as f:
+        writer = csv.writer(f, delimiter=',')
+        for gran in unique_granularities:
+            for thr in unique_threads:
+                sub_list = [x for x in list_results if x.task_granularity == gran and x.n_threads == thr]
+                writer.writerow(['Details for granularity ' + str(gran) + ' - and thread ' + str(thr)])
+                
+                print_openmp = True
+                writer.writerow(['Execution Time:'])
+                for ty in arr_types:                    
+                    if print_openmp:
+                        # print OpenMP time once
+                        time_openmp_only = [x.time_openmp_only for x in sub_list if x.result_type == ty]
+                        writer.writerow(['OpenMP'] + time_openmp_only)
+                        print_openmp = False
+                    tmp_val = [x.time_chameleon for x in sub_list if x.result_type == ty]
+                    writer.writerow([ty] + tmp_val)
+                writer.writerow([])
+
+                writer.writerow(['Speedup:'])
+                for ty in arr_types:
+                    tmp_val = [x.speedup for x in sub_list if x.result_type == ty]
+                    writer.writerow([ty] + tmp_val)
+                writer.writerow([])
+
+                writer.writerow(['N_LocalTasks:'])
+                for ty in arr_types:
+                    tmp_val = [x.n_local_tasks for x in sub_list if x.result_type == ty]
+                    writer.writerow([ty] + tmp_val)
+                writer.writerow([])
+
+                writer.writerow(['N_RemoteTasks:'])
+                for ty in arr_types:
+                    tmp_val = [x.n_remote_tasks for x in sub_list if x.result_type == ty]
+                    writer.writerow([ty] + tmp_val)
+                writer.writerow([])
+
+def writeOutputMeanValues_fixed(tmp_target_file_path, use_thread, fixed_unit, unique_vals, arr_types, list_results):
+    if use_thread:
+        tmp_list = [x for x in list_results if x.n_threads == fixed_unit]
+    else:
+        tmp_list = [x for x in list_results if x.task_granularity == fixed_unit]
+
+    with open(tmp_target_file_path, mode='w', newline='') as f:
+        writer = csv.writer(f, delimiter=',')
+        writer.writerow(['OpenMP'] + unique_vals)
+        for tmp_idx in range(len(arr_types)):
+            tmp_arr_mean        = []
+            tmp_arr_std_dev     = []
+            for g in unique_vals:
+                if use_thread:
+                    tmp_vals = [x.time_openmp_only for x in tmp_list if x.task_granularity == g]
+                else:
+                    tmp_vals = [x.time_openmp_only for x in tmp_list if x.n_threads == g]
+                tmp_arr_mean.append(st.mean(tmp_vals))
+                tmp_arr_std_dev.append(st.stdev(tmp_vals))
+            writer.writerow([arr_types[tmp_idx] + "_mean"] + tmp_arr_mean)
+            writer.writerow([arr_types[tmp_idx] + "_std_dev"] + tmp_arr_std_dev)
+        writer.writerow([])
+        writer.writerow(['Chameleon'] + unique_vals)
+        for tmp_idx in range(len(arr_types)):
+            tmp_arr_mean        = []
+            tmp_arr_std_dev     = []
+            for g in unique_vals:
+                if use_thread:
+                    tmp_vals = [x.time_chameleon for x in tmp_list if x.task_granularity == g]
+                else:
+                    tmp_vals = [x.time_chameleon for x in tmp_list if x.n_threads == g]
+                tmp_arr_mean.append(st.mean(tmp_vals))
+                tmp_arr_std_dev.append(st.stdev(tmp_vals))
+            writer.writerow([arr_types[tmp_idx] + "_mean"] + tmp_arr_mean)
+            writer.writerow([arr_types[tmp_idx] + "_std_dev"] + tmp_arr_std_dev)
+        writer.writerow([])
+        writer.writerow(['Speedup'] + unique_vals)
+        for tmp_idx in range(len(arr_types)):
+            tmp_arr_mean        = []
+            tmp_arr_std_dev     = []
+            for g in unique_vals:
+                if use_thread:
+                    tmp_vals = [x.speedup for x in tmp_list if x.task_granularity == g]
+                else:
+                    tmp_vals = [x.speedup for x in tmp_list if x.n_threads == g]
+                tmp_arr_mean.append(st.mean(tmp_vals))
+                tmp_arr_std_dev.append(st.stdev(tmp_vals))
+            writer.writerow([arr_types[tmp_idx] + "_mean"] + tmp_arr_mean)
+            writer.writerow([arr_types[tmp_idx] + "_std_dev"] + tmp_arr_std_dev)
+        writer.writerow([])
+        writer.writerow(['N_LocalTasks'] + unique_vals)
+        for tmp_idx in range(len(arr_types)):
+            tmp_arr_mean        = []
+            tmp_arr_std_dev     = []
+            for g in unique_vals:
+                if use_thread:
+                    tmp_vals = [x.n_local_tasks for x in tmp_list if x.task_granularity == g]
+                else:
+                    tmp_vals = [x.n_local_tasks for x in tmp_list if x.n_threads == g]
+                tmp_arr_mean.append(st.mean(tmp_vals))
+                tmp_arr_std_dev.append(st.stdev(tmp_vals))
+            writer.writerow([arr_types[tmp_idx] + "_mean"] + tmp_arr_mean)
+            writer.writerow([arr_types[tmp_idx] + "_std_dev"] + tmp_arr_std_dev)
+        writer.writerow([])
+        writer.writerow(['N_RemoteTasks'] + unique_vals)
+        for tmp_idx in range(len(arr_types)):
+            tmp_arr_mean        = []
+            tmp_arr_std_dev     = []
+            for g in unique_vals:
+                if use_thread:
+                    tmp_vals = [x.n_remote_tasks for x in tmp_list if x.task_granularity == g]
+                else:
+                    tmp_vals = [x.n_remote_tasks for x in tmp_list if x.n_threads == g]
+                tmp_arr_mean.append(st.mean(tmp_vals))
+                tmp_arr_std_dev.append(st.stdev(tmp_vals))
+            writer.writerow([arr_types[tmp_idx] + "_mean"] + tmp_arr_mean)
+            writer.writerow([arr_types[tmp_idx] + "_std_dev"] + tmp_arr_std_dev)
+        writer.writerow([])
+
+def writeOutputMeanValues(tmp_target_file_path, unique_vals, arr_types, arr_time_original, arr_time_chameleon, arr_n_tasks_local, arr_n_tasks_remote):
+    with open(tmp_target_file_path, mode='w', newline='') as f:
+        writer = csv.writer(f, delimiter=',')
+        writer.writerow(['OpenMP'] + unique_vals)
+        for tmp_idx in range(len(arr_types)):
+            writer.writerow([arr_types[tmp_idx]] + arr_time_original[tmp_idx])
+        writer.writerow([])
+        writer.writerow(['Chameleon'] + unique_vals)
+        for tmp_idx in range(len(arr_types)):
+            writer.writerow([arr_types[tmp_idx]] + arr_time_chameleon[tmp_idx])
+        writer.writerow([])
+        writer.writerow(['Speedup'] + unique_vals)
+        for tmp_idx in range(len(arr_types)):
+            tmp_speedups = [arr_time_original[0][x] / arr_time_chameleon[tmp_idx][x] for x in range(len(unique_vals))]
+            writer.writerow([arr_types[tmp_idx]] + tmp_speedups)
+        writer.writerow([])
+        writer.writerow(['N_LocalTasks'] + unique_vals)
+        for tmp_idx in range(len(arr_types)):
+            writer.writerow([arr_types[tmp_idx]] + arr_n_tasks_local[tmp_idx])
+        writer.writerow([])
+        writer.writerow(['N_RemoteTasks'] + unique_vals)
+        for tmp_idx in range(len(arr_types)):
+            writer.writerow([arr_types[tmp_idx]] + arr_n_tasks_remote[tmp_idx])
+        
+        # writer.writerow([])
+        # writer.writerow(['Bytes_Send_Per_Msg_Min'] + unique_vals)
+        # for tmp_idx in range(len(arr_types)):
+        #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_send_per_msg_min[tmp_idx])
+        # writer.writerow([])
+        # writer.writerow(['Bytes_Send_Per_Msg_Max'] + unique_vals)
+        # for tmp_idx in range(len(arr_types)):
+        #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_send_per_msg_max[tmp_idx])
+        # writer.writerow([])
+        # writer.writerow(['Bytes_Send_Per_Msg_Avg'] + unique_vals)
+        # for tmp_idx in range(len(arr_types)):
+        #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_send_per_msg_avg[tmp_idx])
+        # writer.writerow([])
+        # writer.writerow(['Throughput_Send_Min'] + unique_vals)
+        # for tmp_idx in range(len(arr_types)):
+        #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_send_min[tmp_idx])
+        # writer.writerow([])
+        # writer.writerow(['Throughput_Send_Max'] + unique_vals)
+        # for tmp_idx in range(len(arr_types)):
+        #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_send_max[tmp_idx])
+        # writer.writerow([])
+        # writer.writerow(['Throughput_Send_Avg'] + unique_vals)
+        # for tmp_idx in range(len(arr_types)):
+        #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_send_avg[tmp_idx])
+
+        # writer.writerow([])
+        # writer.writerow(['Bytes_Recv_Per_Msg_Min'] + unique_vals)
+        # for tmp_idx in range(len(arr_types)):
+        #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_recv_per_msg_min[tmp_idx])
+        # writer.writerow([])
+        # writer.writerow(['Bytes_Recv_Per_Msg_Max'] + unique_vals)
+        # for tmp_idx in range(len(arr_types)):
+        #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_recv_per_msg_max[tmp_idx])
+        # writer.writerow([])
+        # writer.writerow(['Bytes_Recv_Per_Msg_Avg'] + unique_vals)
+        # for tmp_idx in range(len(arr_types)):
+        #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_recv_per_msg_avg[tmp_idx])
+        # writer.writerow([])
+        # writer.writerow(['Throughput_Recv_Min'] + unique_vals)
+        # for tmp_idx in range(len(arr_types)):
+        #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_recv_min[tmp_idx])
+        # writer.writerow([])
+        # writer.writerow(['Throughput_Recv_Max'] + unique_vals)
+        # for tmp_idx in range(len(arr_types)):
+        #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_recv_max[tmp_idx])
+        # writer.writerow([])
+        # writer.writerow(['Throughput_Recv_Avg'] + unique_vals)
+        # for tmp_idx in range(len(arr_types)):
+        #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_recv_avg[tmp_idx])
+
 def plotDataMinMaxAvg(target_file_path, arr_x_axis, arr_types, arr_min, arr_max, arr_avg, text_header, text_x_axis, text_y_axis, plot_per_type=False, divisor=None):
     xtick = list(range(len(arr_x_axis)))
 
@@ -165,7 +356,7 @@ def plotData(target_file_path, arr_x_axis, arr_types, arr_time_baseline, arr_tim
 
 if __name__ == "__main__":
     # source_folder = os.path.dirname(os.path.abspath(__file__))
-    source_folder       = "F:\\repos\\chameleon\\chameleon-scripts\\tests_multi_task_migration_mxm\\20191029_193654_results\\2procs_dm"
+    source_folder       = "F:\\repos\\chameleon\\chameleon-scripts\\tests_multi_task_migration_mxm\\20191029_201619_results\\2procs_dm"
     target_folder_data  = os.path.join(source_folder, "result_data")
     target_folder_plot  = os.path.join(source_folder, "result_plots")
 
@@ -294,78 +485,7 @@ if __name__ == "__main__":
         # output results
         tmp_target_file_name = "output_granularity_" + str(gran) + ".result"
         tmp_target_file_path = os.path.join(target_folder_data, tmp_target_file_name)
-        with open(tmp_target_file_path, mode='w', newline='') as f:
-            writer = csv.writer(f, delimiter=',')
-            writer.writerow(['OpenMP'] + unique_n_threads)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_time_original[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Chameleon'] + unique_n_threads)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_time_chameleon[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Speedup'] + unique_n_threads)
-            for tmp_idx in range(len(arr_types)):
-                tmp_speedups = [arr_time_original[0][x] / arr_time_chameleon[tmp_idx][x] for x in range(len(unique_n_threads))]
-                writer.writerow([arr_types[tmp_idx]] + tmp_speedups)
-            writer.writerow([])
-            writer.writerow(['N_LocalTasks'] + unique_n_threads)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_n_tasks_local[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['N_RemoteTasks'] + unique_n_threads)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_n_tasks_remote[tmp_idx])
-            
-            # writer.writerow([])
-            # writer.writerow(['Bytes_Send_Per_Msg_Min'] + unique_n_threads)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_send_per_msg_min[tmp_idx])
-            # writer.writerow([])
-            # writer.writerow(['Bytes_Send_Per_Msg_Max'] + unique_n_threads)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_send_per_msg_max[tmp_idx])
-            # writer.writerow([])
-            # writer.writerow(['Bytes_Send_Per_Msg_Avg'] + unique_n_threads)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_send_per_msg_avg[tmp_idx])
-            # writer.writerow([])
-            # writer.writerow(['Throughput_Send_Min'] + unique_n_threads)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_send_min[tmp_idx])
-            # writer.writerow([])
-            # writer.writerow(['Throughput_Send_Max'] + unique_n_threads)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_send_max[tmp_idx])
-            # writer.writerow([])
-            # writer.writerow(['Throughput_Send_Avg'] + unique_n_threads)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_send_avg[tmp_idx])
-
-            # writer.writerow([])
-            # writer.writerow(['Bytes_Recv_Per_Msg_Min'] + unique_n_threads)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_recv_per_msg_min[tmp_idx])
-            # writer.writerow([])
-            # writer.writerow(['Bytes_Recv_Per_Msg_Max'] + unique_n_threads)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_recv_per_msg_max[tmp_idx])
-            # writer.writerow([])
-            # writer.writerow(['Bytes_Recv_Per_Msg_Avg'] + unique_n_threads)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_recv_per_msg_avg[tmp_idx])
-            # writer.writerow([])
-            # writer.writerow(['Throughput_Recv_Min'] + unique_n_threads)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_recv_min[tmp_idx])
-            # writer.writerow([])
-            # writer.writerow(['Throughput_Recv_Max'] + unique_n_threads)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_recv_max[tmp_idx])
-            # writer.writerow([])
-            # writer.writerow(['Throughput_Recv_Avg'] + unique_n_threads)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_recv_avg[tmp_idx])
+        writeOutputMeanValues_fixed(tmp_target_file_path, False, gran, unique_n_threads, arr_types, list_results)
 
         # plot results
         tmp_target_file_name = "plot_granularity_" + str(int(gran))
@@ -476,78 +596,7 @@ if __name__ == "__main__":
         # output results
         tmp_target_file_name = "output_thread_" + str(thr) + ".result"
         tmp_target_file_path = os.path.join(target_folder_data, tmp_target_file_name)
-        with open(tmp_target_file_path, mode='w', newline='') as f:
-            writer = csv.writer(f, delimiter=',')
-            writer.writerow(['OpenMP'] + unique_granularities)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_time_original[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Chameleon'] + unique_granularities)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_time_chameleon[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['Speedup'] + unique_granularities)
-            for tmp_idx in range(len(arr_types)):
-                tmp_speedups = [arr_time_original[0][x] / arr_time_chameleon[tmp_idx][x] for x in range(len(unique_granularities))]
-                writer.writerow([arr_types[tmp_idx]] + tmp_speedups)
-            writer.writerow([])
-            writer.writerow(['N_LocalTasks'] + unique_granularities)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_n_tasks_local[tmp_idx])
-            writer.writerow([])
-            writer.writerow(['N_RemoteTasks'] + unique_granularities)
-            for tmp_idx in range(len(arr_types)):
-                writer.writerow([arr_types[tmp_idx]] + arr_n_tasks_remote[tmp_idx])
-
-            # writer.writerow([])
-            # writer.writerow(['Bytes_Send_Per_Msg_Min'] + unique_granularities)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_send_per_msg_min[tmp_idx])
-            # writer.writerow([])
-            # writer.writerow(['Bytes_Send_Per_Msg_Max'] + unique_granularities)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_send_per_msg_max[tmp_idx])
-            # writer.writerow([])
-            # writer.writerow(['Bytes_Send_Per_Msg_Avg'] + unique_granularities)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_send_per_msg_avg[tmp_idx])
-            # writer.writerow([])
-            # writer.writerow(['Throughput_Send_Min'] + unique_granularities)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_send_min[tmp_idx])
-            # writer.writerow([])
-            # writer.writerow(['Throughput_Send_Max'] + unique_granularities)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_send_max[tmp_idx])
-            # writer.writerow([])
-            # writer.writerow(['Throughput_Send_Avg'] + unique_granularities)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_send_avg[tmp_idx])
-
-            # writer.writerow([])
-            # writer.writerow(['Bytes_Recv_Per_Msg_Min'] + unique_granularities)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_recv_per_msg_min[tmp_idx])
-            # writer.writerow([])
-            # writer.writerow(['Bytes_Recv_Per_Msg_Max'] + unique_granularities)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_recv_per_msg_max[tmp_idx])
-            # writer.writerow([])
-            # writer.writerow(['Bytes_Recv_Per_Msg_Avg'] + unique_granularities)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_bytes_recv_per_msg_avg[tmp_idx])
-            # writer.writerow([])
-            # writer.writerow(['Throughput_Recv_Min'] + unique_granularities)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_recv_min[tmp_idx])
-            # writer.writerow([])
-            # writer.writerow(['Throughput_Recv_Max'] + unique_granularities)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_recv_max[tmp_idx])
-            # writer.writerow([])
-            # writer.writerow(['Throughput_Recv_Avg'] + unique_granularities)
-            # for tmp_idx in range(len(arr_types)):
-            #     writer.writerow([arr_types[tmp_idx]] + arr_throughput_recv_avg[tmp_idx])
+        writeOutputMeanValues_fixed(tmp_target_file_path, True, thr, unique_granularities, arr_types, list_results)
 
         # plot results
         tmp_target_file_name = "plot_threads_" + str(int(thr))
@@ -558,3 +607,7 @@ if __name__ == "__main__":
         # plotDataMinMaxAvg(tmp_target_file_path + "_bytes_recv", unique_granularities, arr_types, arr_bytes_recv_per_msg_min, arr_bytes_recv_per_msg_max, arr_bytes_recv_per_msg_avg, title_prefix + " - " + str(int(thr)) + " Threads" + " - Bytes Recv", "# task granularity (matrix size)", "Data Volume [KB]", True, divisor=1000)
         # plotDataMinMaxAvg(tmp_target_file_path + "_throughput_send", unique_granularities, arr_types, arr_throughput_send_min, arr_throughput_send_max, arr_throughput_send_avg, title_prefix + " - " + str(int(thr)) + " Threads" + " - Throughput Send", "# task granularity (matrix size)", "Throughput [MB/s]")
         # plotDataMinMaxAvg(tmp_target_file_path + "_throughput_recv", unique_granularities, arr_types, arr_throughput_recv_min, arr_throughput_recv_max, arr_throughput_recv_avg, title_prefix + " - " + str(int(thr)) + " Threads" + " - Throughput Recv", "# task granularity (matrix size)", "Throughput [MB/s]")
+
+    tmp_target_file_name = "output_detailed.result"
+    tmp_target_file_path = os.path.join(target_folder_data, tmp_target_file_name)
+    writeOutputDetailed(tmp_target_file_path, unique_granularities, unique_n_threads, arr_types, list_results)
