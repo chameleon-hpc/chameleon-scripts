@@ -85,7 +85,7 @@ def runAnalysis(name_suffix):
         for n_iter in range(NUM_ITERS):
             tmp_file_name = "output_" + name_suffix + "_size_" + str(cur_size) + "_iter_" + str(n_iter)
             # parse statistics
-            cur_stats = ch_stats.ChameleonStatsPerRun()
+            cur_stats = ch_stats.CChameleonStatsPerRun()
             cur_stats.parseFile(tmp_file_name)
 
             tmp_arr_encode_sum.append(  cur_stats.stats_per_rank[0].encode.time_sum)

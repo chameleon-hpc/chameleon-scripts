@@ -17,7 +17,7 @@ def computeLoadImbalance(input_file_path, nranks):
     for line in file:
       tmp_arr.append(line)
 
-  rank_stats = [ch_stats.ChameleonStatsPerRank(i, False) for i in range(nranks)]
+  rank_stats = [ch_stats.CChameleonStatsPerRank(i, False) for i in range(nranks)]
   for stats in rank_stats:
      stats.parseContent(tmp_arr, pre_filtered=False)
 
