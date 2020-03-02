@@ -21,12 +21,12 @@ export ORIG_CPATH="${CPATH}"
 # =============== Settings & environment variables
 IS_DISTRIBUTED=${IS_DISTRIBUTED:-1}
 N_PROCS=${N_PROCS:-2}
-N_REPETITIONS=${N_REPETITIONS:-1}
+N_REPETITIONS=${N_REPETITIONS:-2}
 CUR_DATE_STR=${CUR_DATE_STR:-"$(date +"%Y%m%d_%H%M%S")"}
 FULL_NR_THREADS=${FULL_NR_THREADS:-24}
 
-TASK_GRANULARITY=(50 100 150 200 250 300 350 400 450 500 550 600)
-# TASK_GRANULARITY=(50 250)
+# TASK_GRANULARITY=(50 100 150 200 250 300 350 400 450 500 550 600)
+TASK_GRANULARITY=(50 250)
 
 # create result directory
 if [ "${IS_DISTRIBUTED}" = "1" ]; then
@@ -90,18 +90,21 @@ function run_experiments()
         export MIN_LOCAL_TASKS_IN_QUEUE_BEFORE_MIGRATION=$2
         for r in {1..${N_REPETITIONS}}
         do
-            eval "${MPI_EXEC_CMD} -np ${N_PROCS} ${MPI_EXPORT_VARS} ${CMD_VTUNE_PREFIX} ${DIR_MXM_EXAMPLE}/main $g ${MXM_PARAMS}" &> ${DIR_RESULT}/results_${exec_version}_${g}_$2n_${t}t_${r}.log
+            eval "${MPI_EXEC_CMD} -np ${N_PROCS} ${MPI_EXPORT_VARS} ${CMD_VTUNE_PREFIX} ${DIR_MXM_EXAMPLE}/main $g ${MXM_PARAMS}" &> ${DIR_RESULT}/results_${exec_version}_${g}_${N_PROCS}procs_$2t_${r}.log
         done
     done
 }
 
-for VAR in 0 1 2 3
+for VAR in 0 1 2 3 4
 do
     echo "Running tests for communication mode ${VAR}"
     name_install="DIR_CH_MODE${VAR}_INSTALL"
     eval cur_install=\$${name_install}
     tmp_n_threads=${FULL_NR_THREADS}
     if [[ "${VAR}" == "0" ]]; then
+        tmp_n_threads=$((FULL_NR_THREADS-1))
+    fi
+    if [[ "${VAR}" == "3" ]]; then
         tmp_n_threads=$((FULL_NR_THREADS-1))
     fi
     # set env vars to use lib
