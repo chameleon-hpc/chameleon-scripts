@@ -18,9 +18,11 @@ export DIR_CH_MODE2_BUILD=$(pwd)/chameleon_mode2_build
 export DIR_CH_MODE2_INSTALL=$(pwd)/chameleon_mode2_install
 export DIR_CH_MODE3_BUILD=$(pwd)/chameleon_mode3_build
 export DIR_CH_MODE3_INSTALL=$(pwd)/chameleon_mode3_install
+export DIR_CH_MODE4_BUILD=$(pwd)/chameleon_mode4_build
+export DIR_CH_MODE4_INSTALL=$(pwd)/chameleon_mode4_install
 
 # Build versions
-for VAR in 0 1 2 3
+for VAR in 0 1 2 3 4
 do
     name_build="DIR_CH_MODE${VAR}_BUILD"
     name_install="DIR_CH_MODE${VAR}_INSTALL"
@@ -41,38 +43,40 @@ export INCLUDE="${DIR_CH_MODE0_INSTALL}/include:${INCLUDE}"
 export CPATH="${DIR_CH_MODE0_INSTALL}/include:${CPATH}"
 
 # build matrix example
-make clean -C ${DIR_MXM_EXAMPLE}
-ITERATIVE_VERSION=0 make -C ${DIR_MXM_EXAMPLE}
+PROG=mxm_chameleon make clean -C ${DIR_MXM_EXAMPLE}
+PROG=mxm_tasking make clean -C ${DIR_MXM_EXAMPLE}
+PROG=mxm_chameleon COMPILE_TASKING=0 COMPILE_CHAMELEON=1 ITERATIVE_VERSION=0 make -C ${DIR_MXM_EXAMPLE}
+PROG=mxm_tasking COMPILE_TASKING=1 COMPILE_CHAMELEON=0 ITERATIVE_VERSION=0 make -C ${DIR_MXM_EXAMPLE}
 
 : << COMMENT
 # 2 node job - shared memory
 export IS_DISTRIBUTED=0
 export N_PROCS=2
-sbatch --nodes=1 --ntasks-per-node=2 --cpus-per-task=12 --job-name=mxm_communication_modes_2n_sm --output=mxm_communication_modes_2n_sm.%J.txt --export=DIR_CH_MODE0_INSTALL,DIR_CH_MODE1_INSTALL,DIR_CH_MODE2_INSTALL,DIR_CH_MODE3_INSTALL,IS_DISTRIBUTED,CUR_DATE_STR,N_PROCS run_experiments.sh
+sbatch --nodes=1 --ntasks-per-node=2 --cpus-per-task=12 --job-name=mxm_communication_modes_2n_sm --output=mxm_communication_modes_2n_sm.%J.txt --export=DIR_CH_MODE0_INSTALL,DIR_CH_MODE1_INSTALL,DIR_CH_MODE2_INSTALL,DIR_CH_MODE3_INSTALL,DIR_CH_MODE4_INSTALL,IS_DISTRIBUTED,CUR_DATE_STR,N_PROCS run_experiments.sh
 COMMENT
 
 # 2 node job - distributed memory
 export IS_DISTRIBUTED=1
 export N_PROCS=2
-sbatch --nodes=2 --ntasks-per-node=1 --cpus-per-task=24 --job-name=mxm_communication_modes_2n_dm --output=mxm_communication_modes_2n_dm.%J.txt --export=DIR_CH_MODE0_INSTALL,DIR_CH_MODE1_INSTALL,DIR_CH_MODE2_INSTALL,DIR_CH_MODE3_INSTALL,IS_DISTRIBUTED,CUR_DATE_STR,N_PROCS run_experiments.sh
+sbatch --nodes=2 --ntasks-per-node=1 --cpus-per-task=24 --job-name=mxm_communication_modes_2n_dm --output=mxm_communication_modes_2n_dm.%J.txt --export=DIR_CH_MODE0_INSTALL,DIR_CH_MODE1_INSTALL,DIR_CH_MODE2_INSTALL,DIR_CH_MODE3_INSTALL,DIR_CH_MODE4_INSTALL,IS_DISTRIBUTED,CUR_DATE_STR,N_PROCS run_experiments.sh
 
 : << COMMENT
 # 4 node job - shared memory
 export IS_DISTRIBUTED=0
 export N_PROCS=4
-sbatch --nodes=1 --ntasks-per-node=4 --cpus-per-task=6 --job-name=mxm_communication_modes_4n_sm --output=mxm_communication_modes_4n_sm.%J.txt --export=DIR_CH_MODE0_INSTALL,DIR_CH_MODE1_INSTALL,DIR_CH_MODE2_INSTALL,DIR_CH_MODE3_INSTALL,IS_DISTRIBUTED,CUR_DATE_STR,N_PROCS run_experiments.sh
+sbatch --nodes=1 --ntasks-per-node=4 --cpus-per-task=6 --job-name=mxm_communication_modes_4n_sm --output=mxm_communication_modes_4n_sm.%J.txt --export=DIR_CH_MODE0_INSTALL,DIR_CH_MODE1_INSTALL,DIR_CH_MODE2_INSTALL,DIR_CH_MODE3_INSTALL,DIR_CH_MODE4_INSTALL,IS_DISTRIBUTED,CUR_DATE_STR,N_PROCS run_experiments.sh
 COMMENT
 
 # 4 node job - distributed memory
 : << COMMENT
 export IS_DISTRIBUTED=1
 export N_PROCS=4
-sbatch --nodes=4 --ntasks-per-node=1 --cpus-per-task=24 --job-name=mxm_communication_modes_4n_dm --output=mxm_communication_modes_4n_dm.%J.txt --export=DIR_CH_MODE0_INSTALL,DIR_CH_MODE1_INSTALL,DIR_CH_MODE2_INSTALL,DIR_CH_MODE3_INSTALL,IS_DISTRIBUTED,CUR_DATE_STR,N_PROCS run_experiments.sh
+sbatch --nodes=4 --ntasks-per-node=1 --cpus-per-task=24 --job-name=mxm_communication_modes_4n_dm --output=mxm_communication_modes_4n_dm.%J.txt --export=DIR_CH_MODE0_INSTALL,DIR_CH_MODE1_INSTALL,DIR_CH_MODE2_INSTALL,DIR_CH_MODE3_INSTALL,DIR_CH_MODE4_INSTALL,IS_DISTRIBUTED,CUR_DATE_STR,N_PROCS run_experiments.sh
 COMMENT
 
 : << COMMENT
 # 8 node job - distributed memory
 export IS_DISTRIBUTED=1
 export N_PROCS=8
-sbatch --nodes=8 --ntasks-per-node=1 --cpus-per-task=24 --job-name=mxm_communication_modes_8n_dm --output=mxm_communication_modes_8n_dm.%J.txt --export=DIR_CH_MODE0_INSTALL,DIR_CH_MODE1_INSTALL,DIR_CH_MODE2_INSTALL,DIR_CH_MODE3_INSTALL,IS_DISTRIBUTED,CUR_DATE_STR,N_PROCS run_experiments.sh
+sbatch --nodes=8 --ntasks-per-node=1 --cpus-per-task=24 --job-name=mxm_communication_modes_8n_dm --output=mxm_communication_modes_8n_dm.%J.txt --export=DIR_CH_MODE0_INSTALL,DIR_CH_MODE1_INSTALL,DIR_CH_MODE2_INSTALL,DIR_CH_MODE3_INSTALL,DIR_CH_MODE4_INSTALL,IS_DISTRIBUTED,CUR_DATE_STR,N_PROCS run_experiments.sh
 COMMENT
