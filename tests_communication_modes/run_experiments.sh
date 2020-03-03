@@ -66,21 +66,29 @@ echo "Loading compiler flags"
 # load flags
 source ../../chameleon/flags_claix_intel.def
 
-echo "Determine MPI Command"
-if [ "${IS_DISTRIBUTED}" = "0" ]; then
-    MPI_EXEC_CMD="${RUN_SETTINGS} mpiexec.hydra"
-else
-    MPI_EXEC_CMD="${RUN_SETTINGS} mpiexec"
-fi
+# echo "Determine MPI Command"
+# if [ "${IS_DISTRIBUTED}" = "0" ]; then
+#     MPI_EXEC_CMD="${RUN_SETTINGS} mpiexec.hydra"
+# else
+#     MPI_EXEC_CMD="${RUN_SETTINGS} mpiexec"
+# fi
+MPI_EXEC_CMD="${RUN_SETTINGS_SLURM} ${MPIEXEC} "
 
 # =============== Execution Function
 function run_experiments()
 {
     exec_version=$1
+    is_baseline=$3
     if [ "${IS_DISTRIBUTED}" = "0" ]; then
         exec_version="${exec_version}_sm"
     else
         exec_version="${exec_version}_dm"
+    fi
+
+    if [ "${is_baseline}" = "1" ]; then
+        name_exe="mxm_tasking"
+    else
+        name_exe="mxm_chameleon"
     fi
 
     for g in "${TASK_GRANULARITY[@]}"
@@ -90,7 +98,7 @@ function run_experiments()
         export MIN_LOCAL_TASKS_IN_QUEUE_BEFORE_MIGRATION=$2
         for r in {1..${N_REPETITIONS}}
         do
-            eval "${MPI_EXEC_CMD} -np ${N_PROCS} ${MPI_EXPORT_VARS} ${CMD_VTUNE_PREFIX} ${DIR_MXM_EXAMPLE}/main $g ${MXM_PARAMS}" &> ${DIR_RESULT}/results_${exec_version}_${g}_${N_PROCS}procs_$2t_${r}.log
+            eval "${MPI_EXEC_CMD} ${MPI_EXPORT_VARS_SLURM} ${CMD_VTUNE_PREFIX} ${DIR_MXM_EXAMPLE}/${name_exe} $g ${MXM_PARAMS}" &> ${DIR_RESULT}/results_${exec_version}_${g}_${N_PROCS}procs_$2t_${r}.log
         done
     done
 }
@@ -113,5 +121,10 @@ do
     export INCLUDE="${cur_install}/include:${ORIG_INCLUDE}"
     export CPATH="${cur_install}/include:${ORIG_CPATH}"
 
-    run_experiments "mode${VAR}" "${tmp_n_threads}"
+    if [[ "${VAR}" == "0" ]]; then
+        # run baseline first
+        run_experiments "baseline" "${FULL_NR_THREADS}" "1"
+    fi
+
+    run_experiments "mode${VAR}" "${tmp_n_threads}" "0"
 done
