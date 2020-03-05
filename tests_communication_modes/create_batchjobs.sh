@@ -6,7 +6,7 @@ module unload chameleon-lib
 
 export CUR_DATE_STR="$(date +"%Y%m%d_%H%M%S")"
 CUR_DIR=$(pwd)
-DIR_CH=${DIR_CH:-../../../chameleon}
+DIR_CH=${DIR_CH:-../../chameleon}
 DIR_MXM_EXAMPLE=${DIR_MXM_EXAMPLE:-../../chameleon-apps/applications/matrix_example}
 
 # define result dirs
@@ -29,8 +29,8 @@ do
     eval cur_build=\$${name_build}
     eval cur_install=\$${name_install}
 
-    rm -rf ${cur_build} && mkdir ${cur_build} && cd ${cur_build}
-    cmake -DCMAKE_INSTALL_PREFIX=${cur_install} -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-DCOMMUNICATION_MODE=${VAR}" -DCMAKE_C_FLAGS="-DCOMMUNICATION_MODE=${VAR}" ${DIR_CH}
+    rm -rf ${cur_build} && mkdir -p ${cur_build} && cd ${cur_build}
+    cmake -DCMAKE_INSTALL_PREFIX=${cur_install} -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-DCOMMUNICATION_MODE=${VAR}" -DCMAKE_C_FLAGS="-DCOMMUNICATION_MODE=${VAR}" ${CUR_DIR}/${DIR_CH}
     make -j8
     make install
 done
