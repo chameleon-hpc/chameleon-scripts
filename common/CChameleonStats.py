@@ -110,6 +110,8 @@ class CChameleonStatsPerRun():
     def parseContent(self, arr_content, pre_filtered=False):
         # first we need to identify the number of overall ranks
         num_overall_ranks = -1
+        self.stats_per_rank = None
+        
         for line in arr_content:
             if("Stats R#" in line and "_num_overall_ranks" in line):
                 tmp_spl                         = line.split("\t")
@@ -117,7 +119,8 @@ class CChameleonStatsPerRun():
                 break
         
         if num_overall_ranks == -1:
-            raise TypeError("_num_overall_ranks not included in statistics output")
+            print("WARNING: _num_overall_ranks not included in statistics output")
+            return
 
         # init corresponding objects
         self.stats_per_rank = [CChameleonStatsPerRank(i) for i in range(num_overall_ranks)]
