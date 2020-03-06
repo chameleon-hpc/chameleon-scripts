@@ -30,7 +30,12 @@ def write_stats_data_mean(  tmp_target_file_path,
                     cur_list_stats  = eval("[x.stats for x in sub_list if x." + field_name_header_value + " == " + str(hv) + "]")
                     tmp_vals        = aggregate_chameleon_statistics(cur_list_stats, [sig], aggegration_for_group=EnumAggregationTypeGroup.ALL) # TODO: add aggregation info to interface
                     tmp_vals        = tmp_vals[0] # only need first return value here
-                    tmp_arr_mean.append(st.mean(tmp_vals))
+                    if len(tmp_vals) == 0:
+                        continue
+                    if len(tmp_vals) == 1:
+                        tmp_arr_mean.append(tmp_vals[0])
+                    else:
+                        tmp_arr_mean.append(st.mean(tmp_vals))
                     if add_std_dev:
                         if len(tmp_vals) < 2:
                             tmp_arr_std_dev.append(0)

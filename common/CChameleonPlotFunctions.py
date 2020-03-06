@@ -23,7 +23,7 @@ def plot_data_normal(   target_file_path,
                         save_fig=True):
 
     xtick = list(range(len(arr_x_axis)))
-    tmp_colors = ['darkorange', 'green', 'red']
+    tmp_colors = ['darkorange', 'green', 'red', 'blue', 'black', 'purple']
     fig = plt.figure(figsize=(16, 9),frameon=False)
     ax = fig.gca()
     # plot data for labels
