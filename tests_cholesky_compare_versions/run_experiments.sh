@@ -25,7 +25,7 @@ MPI_EXEC_CMD="${RUN_SETTINGS_SLURM} ${MPIEXEC} "
 M_SIZES=(15360 23040 30720 46080 61440)
 B_SIZES=(128 256 512 1024)
 B_CHECK=0
-N_THREADS=(23)
+FULL_N_THREADS=(24)
 SUB_FOLDERS=(pure-parallel)
 
 # === create result directory
@@ -46,7 +46,7 @@ export MIN_REL_LOAD_IMBALANCE_BEFORE_MIGRATION=0.1
 export MAX_TASKS_PER_RANK_TO_MIGRATE_AT_ONCE=1
 export PERCENTAGE_DIFF_TASKS_TO_MIGRATE=0.3
 
-for target in intel chameleon-manual
+for target in intel chameleon
 do
     # load default modules
     module purge
@@ -72,13 +72,20 @@ do
                 for b_size in "${B_SIZES[@]}"
                 do
                     echo "Running experiments for ${version} and matrix size ${m_size} and block size ${b_size}"
-                    for n_thr in "${N_THREADS[@]}"
+                    for n_thr in "${FULL_N_THREADS[@]}"
                     do
-                        export OMP_NUM_THREADS=${n_thr}
-                        export MIN_LOCAL_TASKS_IN_QUEUE_BEFORE_MIGRATION=${n_thr}
+                        if [[ "${target}" == "intel" ]]; then
+                            # use full number of threads with baseline
+                            tmp_n_threads=${n_thr}
+                        else
+                            # use one thread less with chameleon
+                            tmp_n_threads=$((n_thr-1))    
+                        fi
+                        export OMP_NUM_THREADS=${tmp_n_threads}
+                        export MIN_LOCAL_TASKS_IN_QUEUE_BEFORE_MIGRATION=${tmp_n_threads}
                         for r in {1..${N_REPETITIONS}}
                         do
-                            eval "${MPI_EXEC_CMD} ${EXPORT_SETTINGS_SLURM} ${CMD_VTUNE_PREFIX} ${sub}/${version} ${m_size} ${b_size} ${B_CHECK} " &> ${DIR_RESULT}/results_${sub}_${version}_${m_size}_${b_size}_${N_PROCS}procs_${n_thr}t_${r}.log
+                            eval "${MPI_EXEC_CMD} ${EXPORT_SETTINGS_SLURM} ${CMD_VTUNE_PREFIX} ${sub}/${version} ${m_size} ${b_size} ${B_CHECK} " &> ${DIR_RESULT}/results_${sub}_${version}_${m_size}_${b_size}_${N_PROCS}procs_${tmp_n_threads}t_${r}.log
                         done
                     done
                 done
