@@ -118,7 +118,7 @@ if __name__ == "__main__":
             for ver in unique_versions:
                 cur_list = [x for x in tmp_list2 if x.version == ver]
                 if cur_list:
-                    arr_types.append(ver)
+                    arr_types.append(ver + " (" + str(cur_list[0].nr_threads) + "t"+ ")")
                     tmp_stat_objs_per_type.append([x for x in cur_list])
                     tmp_data_plot = [[] for x in list_signals]
 
@@ -157,7 +157,7 @@ if __name__ == "__main__":
             for ver in unique_versions:
                 cur_list = [x for x in tmp_list2 if x.version == ver]
                 if cur_list:
-                    arr_types.append(ver)
+                    arr_types.append(ver + " (" + str(cur_list[0].nr_threads) + "t"+ ")")
                     tmp_stat_objs_per_type.append([x for x in cur_list])
                     tmp_data_plot = [[] for x in list_signals]
 

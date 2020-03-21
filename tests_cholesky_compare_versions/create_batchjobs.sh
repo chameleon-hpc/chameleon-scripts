@@ -6,7 +6,7 @@ DIR_CHOLESKY=${DIR_CHOLESKY:-../../chameleon-apps/applications/cholesky}
 
 # Build versions
 cd ${DIR_CHOLESKY}
-for target in intel chameleon-manual
+for target in intel chameleon
 do
     # load default modules
     module purge
