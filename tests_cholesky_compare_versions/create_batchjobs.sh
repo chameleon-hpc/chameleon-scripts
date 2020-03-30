@@ -3,6 +3,7 @@
 export CUR_DATE_STR="$(date +"%Y%m%d_%H%M%S")"
 CUR_DIR=$(pwd)
 DIR_CHOLESKY=${DIR_CHOLESKY:-../../chameleon-apps/applications/cholesky}
+SUB_FOLDERS=(pure-parallel singlecom-deps)
 
 # Build versions
 cd ${DIR_CHOLESKY}
@@ -23,10 +24,11 @@ do
     module load ${LOAD_LIBS}
     module li
 
-    # make corresponding targets
-    TARGET=${target} make -C pure-parallel clean all -j8
-    #TARGET=${target} make -C singlecom-deps clean all
-    #TARGET=${target} make -C fine-deps clean all
+    for sub in "${SUB_FOLDERS[@]}"
+    do
+        # make corresponding targets
+        TARGET=${target} make -C ${sub} clean all -j8
+    done
 done
 
 cd ${CUR_DIR}
@@ -48,7 +50,6 @@ sbatch --nodes=2 --ntasks-per-node=1 --cpus-per-task=24 --job-name=cham_cholesky
 export IS_DISTRIBUTED=0
 export N_PROCS=4
 sbatch --nodes=1 --ntasks-per-node=4 --cpus-per-task=6 --job-name=cham_cholesky_tests_4n_sm --output=cham_cholesky_tests_4n_sm.%J.txt --export=IS_DISTRIBUTED,CUR_DATE_STR,N_PROCS,N_THREADS run_experiments.sh
-COMMENT
 
 # 4 node job - distributed memory
 export IS_DISTRIBUTED=1
@@ -59,3 +60,4 @@ sbatch --nodes=4 --ntasks-per-node=1 --cpus-per-task=24 --job-name=cham_cholesky
 export IS_DISTRIBUTED=1
 export N_PROCS=8
 sbatch --nodes=8 --ntasks-per-node=1 --cpus-per-task=24 --job-name=cham_cholesky_tests_8n_dm --output=cham_cholesky_tests_8n_dm.%J.txt --export=IS_DISTRIBUTED,CUR_DATE_STR,N_PROCS,N_THREADS run_experiments.sh
+COMMENT
