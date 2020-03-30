@@ -15,18 +15,18 @@ source env_ch_intel.sh
 # =============== Settings & environment variables
 IS_DISTRIBUTED=${IS_DISTRIBUTED:-1}
 N_PROCS=${N_PROCS:-2}
-N_REPETITIONS=${N_REPETITIONS:-3}
+N_REPETITIONS=${N_REPETITIONS:-1}
 CUR_DATE_STR=${CUR_DATE_STR:-"$(date +"%Y%m%d_%H%M%S")"}
 RUN_SETTINGS_SLURM=${RUN_SETTINGS_SLURM:-"OMP_PLACES=cores OMP_PROC_BIND=close I_MPI_FABRICS="shm:tmi" I_MPI_DEBUG=5 KMP_AFFINITY=verbose"}
 EXPORT_SETTINGS_SLURM=${EXPORT_SETTINGS_SLURM:-"--export=PATH,CPLUS_INCLUDE_PATH,C_INCLUDE_PATH,CPATH,INCLUDE,LD_LIBRARY_PATH,LIBRARY_PATH,I_MPI_DEBUG,I_MPI_TMI_NBITS_RANK,OMP_NUM_THREADS,OMP_PLACES,OMP_PROC_BIND,KMP_AFFINITY,I_MPI_FABRICS,MIN_ABS_LOAD_IMBALANCE_BEFORE_MIGRATION,MIN_LOCAL_TASKS_IN_QUEUE_BEFORE_MIGRATION,MIN_REL_LOAD_IMBALANCE_BEFORE_MIGRATION,MAX_TASKS_PER_RANK_TO_MIGRATE_AT_ONCE,PERCENTAGE_DIFF_TASKS_TO_MIGRATE,ENABLE_TRACE_FROM_SYNC_CYCLE,ENABLE_TRACE_TO_SYNC_CYCLE"}
-MPI_EXEC_CMD="${RUN_SETTINGS_SLURM} ${MPIEXEC} "
+export MPI_EXEC_CMD="${MPIEXEC} ${FLAGS_MPI_BATCH} ${EXPORT_SETTINGS_SLURM} ${CMD_VTUNE_PREFIX} "
 
 # === Cholesky Settings
 M_SIZES=(15360 23040 30720 46080 61440)
 B_SIZES=(128 256 512 1024)
 B_CHECK=0
 FULL_N_THREADS=(24)
-SUB_FOLDERS=(pure-parallel)
+SUB_FOLDERS=(pure-parallel singlecom-deps)
 
 # === create result directory
 if [ "${IS_DISTRIBUTED}" = "1" ]; then
@@ -65,28 +65,25 @@ do
   
     for sub in "${SUB_FOLDERS[@]}"
     do
-        for version in ch-${target}-par-timing
+        for m_size in "${M_SIZES[@]}"
         do
-            for m_size in "${M_SIZES[@]}"
+            for b_size in "${B_SIZES[@]}"
             do
-                for b_size in "${B_SIZES[@]}"
+                echo "Running experiments for ${target}/${sub} and matrix size ${m_size} and block size ${b_size}"
+                for n_thr in "${FULL_N_THREADS[@]}"
                 do
-                    echo "Running experiments for ${version} and matrix size ${m_size} and block size ${b_size}"
-                    for n_thr in "${FULL_N_THREADS[@]}"
+                    if [[ "${target}" == "intel" ]]; then
+                        # use full number of threads with baseline
+                        tmp_n_threads=${n_thr}
+                    else
+                        # use one thread less with chameleon
+                        tmp_n_threads=$((n_thr-1))    
+                    fi
+                    export OMP_NUM_THREADS=${tmp_n_threads}
+                    export MIN_LOCAL_TASKS_IN_QUEUE_BEFORE_MIGRATION=${tmp_n_threads}
+                    for r in {1..${N_REPETITIONS}}
                     do
-                        if [[ "${target}" == "intel" ]]; then
-                            # use full number of threads with baseline
-                            tmp_n_threads=${n_thr}
-                        else
-                            # use one thread less with chameleon
-                            tmp_n_threads=$((n_thr-1))    
-                        fi
-                        export OMP_NUM_THREADS=${tmp_n_threads}
-                        export MIN_LOCAL_TASKS_IN_QUEUE_BEFORE_MIGRATION=${tmp_n_threads}
-                        for r in {1..${N_REPETITIONS}}
-                        do
-                            eval "${MPI_EXEC_CMD} ${EXPORT_SETTINGS_SLURM} ${CMD_VTUNE_PREFIX} ${sub}/${version} ${m_size} ${b_size} ${B_CHECK} " &> ${DIR_RESULT}/results_${sub}_${version}_${m_size}_${b_size}_${N_PROCS}procs_${tmp_n_threads}t_${r}.log
-                        done
+                        TARGET=${target} RUN_SETTINGS=${RUN_SETTINGS_SLURM} MATRIX_SIZE=${m_size} BLOCK_SIZE=${b_size} BOOL_CHECK=${B_CHECK} make -C ${sub} run &> ${DIR_RESULT}/results_${sub}_${target}_${m_size}_${b_size}_${N_PROCS}procs_${tmp_n_threads}t_${r}.log
                     done
                 done
             done
