@@ -2,7 +2,7 @@
 
 export OMP_PLACES=${SB_OMP_PLACES:-cores}
 export OMP_PROC_BIND=${SB_OMP_PROC_BIND:-spread}
-export OMP_NUM_THREADS=${OMP_NUM_THREADS:-24}
+export OMP_NUM_THREADS=${SB_OMP_NUM_THREADS:-24}
 export DISTURB_RANKS=${SB_DISTURB_RANKS:-0}
 export PROG=${SB_PROG:-main}
 export NAME=${SB_NAME}
@@ -22,6 +22,7 @@ export DIST_RAM_MB=30000
 module use -a ~/.modules
 module load chameleon-lib
 #mpiexec.hydra -np 4 -genvall ./wrapper.sh
+echo "Run Num Threads: $OMP_NUM_THREADS";
 
 for i in {0..30}
 do

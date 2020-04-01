@@ -5,7 +5,7 @@
 #echo "Number of Ranks Requested $PMI_SIZE. Executing Rank $PMI_RANK, iteration num: $ITERATION_NUM"
 
 export MATRIX_SIZE=300
-export NUM_TASKS=1000
+export NUM_TASKS=4000
 #kleinere größe, mehr tasks, zb 1000 tasks, size = 300
 RANKS_TO_DISTURB=(1 3)
 
@@ -16,7 +16,7 @@ PATH_TO_DIST_PROG=~/repos/hpc/chameleon-apps/applications/interference_app/
 args="--type=$DIST_TYPE --rank_number=$PMI_RANK --use_multiple_cores=$DIST_NUM_THREADS --use_random=$DIST_RANDOM --window_size_min=$DIST_MIN_COMP_WINDOW --window_size_max=$DIST_MAX_COMP_WINDOW --use_ram=$DIST_RAM_MB"
 
 echo "This is the Outputfile for Rank $PMI_RANK" >> $FILENAME
-
+echo "Num Threads: $OMP_NUM_THREADS";
 processID=""
 
 if [[ 1 = $DISTURB_RANKS ]]; then

@@ -41,26 +41,6 @@ export PROG=chameleon
 export SB_OMP_PLACES=cores
 export SB_OMP_PROC_BIND=spread
 
-##########################################################################
-#tasking
-##########################################################################
-
-export SB_OMP_NUM_THREADS=24
-export SB_PROG=tasking
-
-export SB_DISTURB_RANKS=0
-export SB_NAME=tasking_baseline
-run_sbatch
-
-export SB_DISTURB_RANKS=1
-export SB_DIST_TYPE=compute
-export SB_NAME=tasking_comp
-run_sbatch
-
-export SB_DISTURB_RANKS=1
-export SB_DIST_TYPE=memory
-export SB_NAME=tasking_mem
-run_sbatch
 
 ###########################################################################
 #chameleon
@@ -81,6 +61,27 @@ run_sbatch
 export SB_DISTURB_RANKS=1
 export SB_DIST_TYPE=memory
 export SB_NAME=chameleon_mem
+run_sbatch
+
+##########################################################################
+#tasking
+##########################################################################
+
+export SB_OMP_NUM_THREADS=24
+export SB_PROG=tasking
+
+export SB_DISTURB_RANKS=0
+export SB_NAME=tasking_baseline
+run_sbatch
+
+export SB_DISTURB_RANKS=1
+export SB_DIST_TYPE=compute
+export SB_NAME=tasking_comp
+run_sbatch
+
+export SB_DISTURB_RANKS=1
+export SB_DIST_TYPE=memory
+export SB_NAME=tasking_mem
 run_sbatch
 
 
