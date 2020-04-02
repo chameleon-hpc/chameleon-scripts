@@ -1,31 +1,35 @@
-#!/bin/zsh
+#!/usr/local_rwth/bin/zsh
 
 export OMP_PLACES=${SB_OMP_PLACES:-cores}
-export OMP_PROC_BIND=${SB_OMP_PROC_BIND:-spread}
+export OMP_PROC_BIND=${SB_OMP_PROC_BIND:-close}
 export OMP_NUM_THREADS=${SB_OMP_NUM_THREADS:-24}
 export DISTURB_RANKS=${SB_DISTURB_RANKS:-0}
 export PROG=${SB_PROG:-main}
 export NAME=${SB_NAME}
 
-export DIST_NUM_THREADS=24
+CUR_DATE_STR=${CUR_DATE_STR:-"$(date +"%Y%m%d_%H%M%S")"}
+
+export DIST_NUM_THREADS=23
 export DIST_TYPE=${SB_DIST_TYPE:-compute}
 #export DIST_TYPE?=memory
 #export DIST_TYPE?=communication
 export DIST_RANDOM=false
 #export DIST_RANDOM?=true
-export DIST_COMP_WINDOW=10
-export DIST_PAUSE_WINDOW=0
-export DIST_MIN_COMP_WINDOW=2
-export DIST_MAX_COMP_WINDOW=20
+export DIST_WINDOW_US_COMP=2000000
+#export DIST_WINDOW_US_PAUSE=1000000
+export DIST_WINDOW_US_PAUSE=-1
+export DIST_WINDOW_US_COMP_MIN=1000000
+export DIST_WINDOW_US_COMP_MAX=3000000
 export DIST_RAM_MB=30000
 
-module use -a ~/.modules
-module load chameleon-lib
 #mpiexec.hydra -np 4 -genvall ./wrapper.sh
 echo "Run Num Threads: $OMP_NUM_THREADS";
 
-for i in {0..30}
+export OUTPUT_DIR="${CUR_DATE_STR}_output-files"
+
+for i in {0..0}
 do
     export ITERATION_NUM=$i
-    ${MPIEXEC} ${FLAGS_MPI_BATCH} ./wrapper.sh
+    export FILENAME=${OUTPUT_DIR}/output_${NAME}_${ITERATION_NUM}
+    ${MPIEXEC} ${FLAGS_MPI_BATCH} --export=ITERATION_NUM,OMP_PLACES,OMP_PROC_BIND,OMP_NUM_THREADS,DISTURB_RANKS,PROG,NAME,DIST_NUM_THREADS,DIST_TYPE,DIST_WINDOW_US_COMP,DIST_WINDOW_US_PAUSE,DIST_WINDOW_US_COMP_MIN,DIST_WINDOW_US_COMP_MAX,DIST_RANDOM,DIST_RAM_MB,FILENAME -- ./wrapper.sh &> ${FILENAME}.txt
 done
