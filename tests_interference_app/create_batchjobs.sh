@@ -10,8 +10,8 @@ SB_JOB_NAME_PREFIX=distrubance
 SB_OUTPUT_PREFIX=sbatch
 SB_EXTRA_ARGS=--exclusive
 
-#PATH_TO_MAIN_PROG=/work/jk869269/repos/disturbance/chameleon-apps/applications/
-PATH_TO_MAIN_PROG=~/repos/hpc/chameleon-apps/applications/
+PATH_TO_MAIN_PROG=/work/jk869269/repos/disturbance/chameleon-apps/applications/
+#PATH_TO_MAIN_PROG=~/repos/hpc/chameleon-apps/applications/
 
 export SB_OMP_PLACES=cores
 export SB_OMP_PROC_BIND=close
@@ -37,15 +37,17 @@ module load chameleon-lib
 
 # recreate fresh
 export OUTPUT_DIR="${CUR_DATE_STR}_output-files"
+export DIST_PID_FOLDER="${OUTPUT_DIR}/pid"
 rm -rf ${OUTPUT_DIR}
 rm *.txt
-mkdir ${OUTPUT_DIR}
+mkdir -p ${DIST_PID_FOLDER}
 
 ###########################################################################
 #build
 ###########################################################################
 make -C ${PATH_TO_MAIN_PROG}interference_app clean
 make -C ${PATH_TO_MAIN_PROG}interference_app dist
+#make -C ${PATH_TO_MAIN_PROG}interference_app trace
 COMPILE_CHAMELEON=0 COMPILE_TASKING=1 PROG=tasking   ITERATIVE_VERSION=0 make -C ${PATH_TO_MAIN_PROG}matrix_example
 COMPILE_CHAMELEON=1 COMPILE_TASKING=0 PROG=chameleon ITERATIVE_VERSION=0 make -C ${PATH_TO_MAIN_PROG}matrix_example
 
@@ -58,7 +60,7 @@ export SB_PROG=chameleon
 
 export SB_DISTURB_RANKS=0
 export SB_NAME=chameleon_baseline
-run_sbatch
+#run_sbatch
 
 export SB_DISTURB_RANKS=1
 export SB_DIST_TYPE=compute
@@ -79,7 +81,7 @@ export SB_PROG=tasking
 
 export SB_DISTURB_RANKS=0
 export SB_NAME=tasking_baseline
-run_sbatch
+#run_sbatch
 
 export SB_DISTURB_RANKS=1
 export SB_DIST_TYPE=compute
