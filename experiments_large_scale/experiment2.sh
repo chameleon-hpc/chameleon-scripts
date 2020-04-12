@@ -28,8 +28,7 @@ MXM_PROG_NAME=${MXM_PROG_NAME:-main}
 
 TASK_GRANULARITY=(600)
 NUM_TASKS=3200
-# ARRAY_POWERCAP=(105 100 95 90 85 80 75 70 65 60)
-ARRAY_POWERCAP=(105)
+SLOW_NODES_CPU_FREQS=(1200000 1300000 1400000 1500000 1600000 1700000 1800000 1900000 2000000 2100000 2200000)
 
 # # hack because currently vtune is not supported in batch usage
 # module load c_vtune
@@ -38,7 +37,7 @@ ARRAY_POWERCAP=(105)
 echo "===== Resetting power caps and CPU frequencies of all machines (${N_NODES} nodes)"
 zsh ./hardware_manipulation/reset_all.sh ${N_NODES}
 
-DIR_RESULT="results_experiment1"
+DIR_RESULT="results_experiment2"
 DIR_MXM_EXAMPLE=${DIR_MXM_EXAMPLE:-../../chameleon-apps/applications/matrix_example}
 mkdir -p ${DIR_RESULT}
 
@@ -77,19 +76,48 @@ do
     MXM_PARAMS="${MXM_PARAMS}${NUM_TASKS} "
 done
 
+# determine slow node limit (here 50% of all nodes)
+SLOW_NODES_LIMIT=$((N_NODES/2))
+if [[ ${N_NODES} -lt 32 ]]; then
+    if [[ ${N_NODES} -lt 16 ]]; then
+        SLOW_NODES_STEP=2
+    else
+        SLOW_NODES_STEP=4
+    fi
+else
+    SLOW_NODES_STEP=8
+fi
+echo "===== N_NODES=${N_NODES} => SLOW_NODES_LIMIT=${SLOW_NODES_LIMIT}, SLOW_NODES_STEP=${SLOW_NODES_STEP}"
+
 for gran in "${TASK_GRANULARITY[@]}"
 do
-    for pc in "${ARRAY_POWERCAP[@]}"
+    for cpufreq in "${SLOW_NODES_CPU_FREQS[@]}"
     do
-        echo "===== Running experiment 1 for ${current_name}, granularity=${gran}, n_threads=${tmp_n_threads} and powercap=${pc}W"
-        zsh ./hardware_manipulation/set_pc_all.sh ${N_NODES} ${pc}
-
-        for rep in {1..${N_REPETITIONS}}
+        zsh ./hardware_manipulation/reset_all.sh ${N_NODES}
+        CUR_NUM_SLOW_NODES=1
+        while [[ ${CUR_NUM_SLOW_NODES} -le ${SLOW_NODES_LIMIT} ]]
         do
-            TMP_FILE_NAME="${DIR_RESULT}/results_${current_name}_${gran}gran_${N_NODES}nodes_${tmp_n_threads}thr_${pc}pc_${rep}"
-            # TODO: measure power consumption + change client to accept output file
-            #./utils/powermeter/power_client.py --params
-            eval "${MPI_EXEC_CMD} ${MPI_EXPORT_VARS_SLURM} ${CMD_VTUNE_PREFIX} ${DIR_MXM_EXAMPLE}/${MXM_PROG_NAME} ${gran} ${MXM_PARAMS}" &> ${TMP_FILE_NAME}.log
+            echo "===== Running experiment 2 for ${current_name}, granularity=${gran}, n_threads=${tmp_n_threads}, slow_freq=${cpufreq} and nr_slow_nodes=${CUR_NUM_SLOW_NODES}"
+            for i_node in {1..${CUR_NUM_SLOW_NODES}}
+            do
+                CUR_NODE_NUM=$(printf "%03d" ${i_node})
+                zsh ./hardware_manipulation/set_freq.sh "lnm${CUR_NODE_NUM}" ${cpufreq}
+            done
+
+            for rep in {1..${N_REPETITIONS}}
+            do
+                TMP_FILE_NAME="${DIR_RESULT}/results_${current_name}_${gran}gran_${N_NODES}nodes_${tmp_n_threads}thr_${CUR_NUM_SLOW_NODES}slow_${cpufreq}freq_${rep}"
+                # TODO: measure power consumption + change client to accept output file
+                #./utils/powermeter/power_client.py --params
+                eval "${MPI_EXEC_CMD} ${MPI_EXPORT_VARS_SLURM} ${CMD_VTUNE_PREFIX} ${DIR_MXM_EXAMPLE}/${MXM_PROG_NAME} ${gran} ${MXM_PARAMS}" &> ${TMP_FILE_NAME}.log
+            done
+            # increment number of slow nodes
+            if [[ "${CUR_NUM_SLOW_NODES}" == "1" ]]; then
+                # special case to get from 1 to regular schedule
+                CUR_NUM_SLOW_NODES=${SLOW_NODES_STEP}
+            else
+                CUR_NUM_SLOW_NODES=$((CUR_NUM_SLOW_NODES+SLOW_NODES_STEP))
+            fi
         done
     done
 done

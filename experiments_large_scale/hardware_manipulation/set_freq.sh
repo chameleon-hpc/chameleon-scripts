@@ -1,8 +1,5 @@
 #!/usr/local_rwth/bin/zsh
-# Note: 1200000=1.2 GHz
-CUR_FREQ=$1
-echo "Setting CPU frequency of $(hostname) to ${CUR_FREQ}"
-for i in {0..23}
-	#echo "${CUR_FREQ}" > /sys/devices/system/cpu/cpu${i}/cpufreq/scaling_min_freq
-	echo ${CUR_FREQ} > /sys/devices/system/cpu/cpu${i}/cpufreq/scaling_max_freq
-done
+# Sets a frequency for a specific node
+CUR_NODE=$1
+CUR_FREQ=$2
+ssh login-hpc2 "ssh ${CUR_NODE} -lroot 'zsh /work/jk869269/scripts_experiments_large_scale/node_set_freq.sh ${CUR_FREQ}'"
