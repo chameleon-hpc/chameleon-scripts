@@ -14,13 +14,12 @@ SAMOA_BUILD_PARAMS="target=release scenario=swe swe_patch_order=7 flux_solver=au
 # define result dirs
 export DIR_CH_BUILD=$(pwd)/chameleon_build
 export DIR_CH_INSTALL=$(pwd)/chameleon_install
+export SAMOA_OUT_DIR=$(pwd)/samoa_output
 
 rm -rf ${DIR_CH_BUILD} && mkdir -p ${DIR_CH_BUILD} && cd ${DIR_CH_BUILD}
 cmake -DCMAKE_INSTALL_PREFIX=${DIR_CH_INSTALL} -DCMAKE_BUILD_TYPE=Release ${CUR_DIR}/${DIR_CH}
 make -j8
 make install
-
-cd ${CUR_DIR}
 
 # set env vars to use lib
 export LD_LIBRARY_PATH="${DIR_CH_INSTALL}/lib:${LD_LIBRARY_PATH}"
@@ -39,9 +38,13 @@ cd ${DIR_SAMOA}
 rm -rf ${DIR_SAMOA}/bin/*
 scons asagi=on ${SAMOA_BUILD_PARAMS} asagi_dir=/work/jk869269/repos/chameleon/ASAGI_install chameleon=2 -j8
 scons asagi=on ${SAMOA_BUILD_PARAMS} asagi_dir=/work/jk869269/repos/chameleon/ASAGI_install chameleon=1 -j8
+mkdir -p ${SAMOA_OUT_DIR}
 
-export N_NODES=4
-export N_REPETITIONS=3
+# go back to current directory again
+cd ${CUR_DIR}
+
+export N_NODES=12
+export N_REPETITIONS=5
 
 # ==================== Experiment 1: MxM Example - Check for manufacturing variations (power capping) ====================
 export IS_CHAMELEON=1
@@ -64,8 +67,18 @@ export MXM_PROG_NAME=mxm_tasking
 # ==================== Experiment 4: MxM Example - Unbalanced ====================
 export IS_CHAMELEON=1
 export MXM_PROG_NAME=mxm_chameleon
-sbatch --nodes=${N_NODES} --job-name=experiment4_mxm_${N_NODES}nodes_cham --output=sbatch_experiment4_mxm_${N_NODES}nodes_cham.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,MXM_PROG_NAME experiment4.sh
+# sbatch --nodes=${N_NODES} --job-name=experiment4_mxm_${N_NODES}nodes_cham --output=sbatch_experiment4_mxm_${N_NODES}nodes_cham.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,MXM_PROG_NAME experiment4.sh
 
 export IS_CHAMELEON=0
 export MXM_PROG_NAME=mxm_tasking
-sbatch --nodes=${N_NODES} --job-name=experiment4_mxm_${N_NODES}nodes_task --output=sbatch_experiment4_mxm_${N_NODES}nodes_task.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,MXM_PROG_NAME experiment4.sh
+# sbatch --nodes=${N_NODES} --job-name=experiment4_mxm_${N_NODES}nodes_task --output=sbatch_experiment4_mxm_${N_NODES}nodes_task.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,MXM_PROG_NAME experiment4.sh
+
+# ==================== Experiment 5: sam(oa)^2 ====================
+export DIR_SAMOA
+export IS_CHAMELEON=1
+export SAMOA_EXE_NAME=samoa_swe_chameleon
+sbatch --nodes=${N_NODES} --job-name=experiment5_samoa_${N_NODES}nodes_cham --output=sbatch_experiment5_samoa_${N_NODES}nodes_cham.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,DIR_SAMOA,SAMOA_EXE_NAME,SAMOA_OUT_DIR experiment5.sh
+
+export IS_CHAMELEON=0
+export SAMOA_EXE_NAME=samoa_swe_packing
+sbatch --nodes=${N_NODES} --job-name=experiment5_samoa_${N_NODES}nodes_task --output=sbatch_experiment5_samoa_${N_NODES}nodes_task.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,DIR_SAMOA,SAMOA_EXE_NAME,SAMOA_OUT_DIR experiment5.sh
