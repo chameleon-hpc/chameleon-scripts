@@ -4,9 +4,8 @@
 #SBATCH --partition=c16m
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=24
-#SBATCH --account=jara0001
-##SBATCH --account=rwth0548
-##SBATCH --reservation=rwth0548
+#SBATCH --account=rwth0548
+#SBATCH --reservation=rwth0548
 
 # =============== Load desired modules
 source ~/.zshrc
@@ -82,8 +81,6 @@ do
     for rep in {1..${N_REPETITIONS}}
     do
         TMP_FILE_NAME="${DIR_RESULT}/results_${current_name}_${gran}gran_${N_NODES}nodes_${tmp_n_threads}thr_${rep}"
-        # TODO: measure power consumption + change client to accept output file
-        #./utils/powermeter/power_client.py --params
-        eval "${MPI_EXEC_CMD} ${MPI_EXPORT_VARS_SLURM} ${CMD_VTUNE_PREFIX} ${DIR_MXM_EXAMPLE}/${MXM_PROG_NAME} ${gran} ${MXM_PARAMS}" &> ${TMP_FILE_NAME}.log
+        python3.6 ../../utils/powermeter/power_client.py -p 0.1 -t -C -o ${TMP_FILE_NAME}_power.log "${MPI_EXEC_CMD} ${MPI_EXPORT_VARS_SLURM} ${CMD_VTUNE_PREFIX} ${DIR_MXM_EXAMPLE}/${MXM_PROG_NAME} ${gran} ${MXM_PARAMS} &> ${TMP_FILE_NAME}.log"
     done
 done

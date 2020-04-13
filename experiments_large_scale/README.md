@@ -54,3 +54,9 @@ The following experiments are conducted to measure the power consumption behavio
 * What is an appropriate problem size for MxM example
   * I will figure it out (should be at least 20 seconds)
 * Do we need to repeat frequency tests with sam(oa)^2
+* Bo:
+  * What is the min recommended value for Powercap?
+  * Does it make sense to also set min freq?
+  * Are the additional services deactivated on all nodes (likwid + telegraf)
+  * Stability of the powermeter?
+  * Need to test new python client with redirecting
