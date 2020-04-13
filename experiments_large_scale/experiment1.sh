@@ -4,9 +4,8 @@
 #SBATCH --partition=c16m
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=24
-#SBATCH --account=jara0001
-##SBATCH --account=rwth0548
-##SBATCH --reservation=rwth0548
+#SBATCH --account=rwth0548
+#SBATCH --reservation=rwth0548
 
 # =============== Load desired modules
 source ~/.zshrc
@@ -28,8 +27,8 @@ MXM_PROG_NAME=${MXM_PROG_NAME:-main}
 
 TASK_GRANULARITY=(600)
 NUM_TASKS=3200
-# ARRAY_POWERCAP=(105 100 95 90 85 80 75 70 65 60)
-ARRAY_POWERCAP=(105)
+# ARRAY_POWERCAP=(105 100 95 90 85 80 75 70 65 60 55)
+ARRAY_POWERCAP=(105 100)
 
 # # hack because currently vtune is not supported in batch usage
 # module load c_vtune
@@ -87,9 +86,7 @@ do
         for rep in {1..${N_REPETITIONS}}
         do
             TMP_FILE_NAME="${DIR_RESULT}/results_${current_name}_${gran}gran_${N_NODES}nodes_${tmp_n_threads}thr_${pc}pc_${rep}"
-            # TODO: measure power consumption + change client to accept output file
-            #./utils/powermeter/power_client.py --params
-            eval "${MPI_EXEC_CMD} ${MPI_EXPORT_VARS_SLURM} ${CMD_VTUNE_PREFIX} ${DIR_MXM_EXAMPLE}/${MXM_PROG_NAME} ${gran} ${MXM_PARAMS}" &> ${TMP_FILE_NAME}.log
+            python3.6 ../../utils/powermeter/power_client.py -p 0.1 -t -C -o ${TMP_FILE_NAME}_power.log "${MPI_EXEC_CMD} ${MPI_EXPORT_VARS_SLURM} ${CMD_VTUNE_PREFIX} ${DIR_MXM_EXAMPLE}/${MXM_PROG_NAME} ${gran} ${MXM_PARAMS} &> ${TMP_FILE_NAME}.log"
         done
     done
 done
