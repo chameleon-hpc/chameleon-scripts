@@ -1,9 +1,3 @@
 #!/usr/local_rwth/bin/zsh
 N_NODES=$1
-echo "Resetting ${N_NODES} nodes to default"
-
-for i_node in {1..${N_NODES}}
-do
-    cur_number=$(printf "%03d" ${i_node})
-    ssh login-hpc2 "ssh lnm${cur_number} -lroot 'zsh /work/jk869269/scripts_experiments_large_scale/node_reset.sh'"
-done
+ssh login-hpc2 "zsh /work/jk869269/repos/chameleon/chameleon-scripts/experiments_large_scale/hardware_manipulation/wrapper_reset_all.sh ${N_NODES}"

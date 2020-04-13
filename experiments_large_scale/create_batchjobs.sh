@@ -8,6 +8,8 @@ export CUR_DATE_STR="$(date +"%Y%m%d_%H%M%S")"
 CUR_DIR=$(pwd)
 DIR_CH=${DIR_CH:-../../chameleon}
 DIR_MXM_EXAMPLE=${DIR_MXM_EXAMPLE:-../../chameleon-apps/applications/matrix_example}
+DIR_SAMOA=${DIR_SAMOA:-../../samoa-chameleon}
+SAMOA_BUILD_PARAMS="target=release scenario=swe swe_patch_order=7 flux_solver=aug_riemann assertions=on compiler=intel"
 
 # define result dirs
 export DIR_CH_BUILD=$(pwd)/chameleon_build
@@ -31,6 +33,12 @@ PROG=mxm_chameleon make clean -C ${DIR_MXM_EXAMPLE}
 PROG=mxm_tasking make clean -C ${DIR_MXM_EXAMPLE}
 PROG=mxm_chameleon COMPILE_TASKING=0 COMPILE_CHAMELEON=1 ITERATIVE_VERSION=0 make -C ${DIR_MXM_EXAMPLE}
 PROG=mxm_tasking COMPILE_TASKING=1 COMPILE_CHAMELEON=0 ITERATIVE_VERSION=0 make -C ${DIR_MXM_EXAMPLE}
+
+# build samoa
+cd ${DIR_SAMOA}
+rm -rf ${DIR_SAMOA}/bin/*
+scons asagi=on ${SAMOA_BUILD_PARAMS} asagi_dir=/work/jk869269/repos/chameleon/ASAGI_install chameleon=2 -j8
+scons asagi=on ${SAMOA_BUILD_PARAMS} asagi_dir=/work/jk869269/repos/chameleon/ASAGI_install chameleon=1 -j8
 
 export N_NODES=4
 export N_REPETITIONS=3
