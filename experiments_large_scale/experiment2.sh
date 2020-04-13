@@ -4,9 +4,8 @@
 #SBATCH --partition=c16m
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=24
-#SBATCH --account=jara0001
-##SBATCH --account=rwth0548
-##SBATCH --reservation=rwth0548
+#SBATCH --account=rwth0548
+#SBATCH --reservation=rwth0548
 
 # =============== Load desired modules
 source ~/.zshrc
@@ -98,18 +97,12 @@ do
         while [[ ${CUR_NUM_SLOW_NODES} -le ${SLOW_NODES_LIMIT} ]]
         do
             echo "===== Running experiment 2 for ${current_name}, granularity=${gran}, n_threads=${tmp_n_threads}, slow_freq=${cpufreq} and nr_slow_nodes=${CUR_NUM_SLOW_NODES}"
-            for i_node in {1..${CUR_NUM_SLOW_NODES}}
-            do
-                CUR_NODE_NUM=$(printf "%03d" ${i_node})
-                zsh ./hardware_manipulation/set_freq.sh "lnm${CUR_NODE_NUM}" ${cpufreq}
-            done
+            zsh ./hardware_manipulation/set_freq_all.sh ${CUR_NUM_SLOW_NODES} ${cpufreq}
 
             for rep in {1..${N_REPETITIONS}}
             do
                 TMP_FILE_NAME="${DIR_RESULT}/results_${current_name}_${gran}gran_${N_NODES}nodes_${tmp_n_threads}thr_${CUR_NUM_SLOW_NODES}slow_${cpufreq}freq_${rep}"
-                # TODO: measure power consumption + change client to accept output file
-                #./utils/powermeter/power_client.py --params
-                eval "${MPI_EXEC_CMD} ${MPI_EXPORT_VARS_SLURM} ${CMD_VTUNE_PREFIX} ${DIR_MXM_EXAMPLE}/${MXM_PROG_NAME} ${gran} ${MXM_PARAMS}" &> ${TMP_FILE_NAME}.log
+                python3.6 ../../utils/powermeter/power_client.py -p 0.1 -t -C -o ${TMP_FILE_NAME}_power.log "${MPI_EXEC_CMD} ${MPI_EXPORT_VARS_SLURM} ${CMD_VTUNE_PREFIX} ${DIR_MXM_EXAMPLE}/${MXM_PROG_NAME} ${gran} ${MXM_PARAMS} &> ${TMP_FILE_NAME}.log"
             done
             # increment number of slow nodes
             if [[ "${CUR_NUM_SLOW_NODES}" == "1" ]]; then
