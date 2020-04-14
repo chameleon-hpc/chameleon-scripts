@@ -6,5 +6,5 @@ echo "Setting CPU freq of ${N_NODES} nodes to ${CUR_FREQ} from $(hostname)"
 for i_node in {1..${N_NODES}}
 do
     cur_number=$(printf "%03d" ${i_node})
-    ssh lnm${cur_number} -lroot 'zsh /work/jk869269/scripts_experiments_large_scale/node_set_freq.sh ${CUR_FREQ}'
+    ssh lnm${cur_number} -lroot "zsh /work/jk869269/scripts_experiments_large_scale/node_set_freq.sh ${CUR_FREQ}"
 done
