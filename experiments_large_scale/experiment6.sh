@@ -19,15 +19,25 @@ export ORIG_CPATH="${CPATH}"
 
 # =============== Settings & environment variables
 N_NODES=${N_NODES:-1}
-N_REPETITIONS=${N_REPETITIONS:-5}
+#N_REPETITIONS=${N_REPETITIONS:-5}
+N_REPETITIONS=1 # for this test restrict to 1 run
 CUR_DATE_STR=${CUR_DATE_STR:-"$(date +"%Y%m%d_%H%M%S")"}
 FULL_NR_THREADS=${FULL_NR_THREADS:-24}
 IS_CHAMELEON=${IS_CHAMELEON:-0}
-MXM_PROG_NAME=${MXM_PROG_NAME:-main}
+DIR_SAMOA=${DIR_SAMOA:-../../samoa-chameleon}
+SAMOA_EXE_NAME=${SAMOA_EXE_NAME:-samoa_swe_packing}
+SAMOA_OUT_DIR=${SAMOA_OUT_DIR:-.}
 
-TASK_GRANULARITY=(600)
-NUM_TASKS=3200
 ARRAY_POWERCAP=(105 100 95 90 85 80 75 70 65 60 55)
+
+export TOHOKU_PARAMS="-fbath /work/jk869269/repos/chameleon/samoa_data/tohoku_static/bath.nc -fdispl /work/jk869269/repos/chameleon/samoa_data/tohoku_static/displ.nc"
+export NUM_SECTIONS=16
+export CUR_DMIN=15
+export CUR_DMAX=25
+export NUM_STEPS=150
+export SIM_TIME_SEC=3000
+export LB_STEPS=5000
+export SAMOA_PARAMS=" -output_dir ${SAMOA_OUT_DIR} -lbthreshold 0.1 -dmin ${CUR_DMIN} -dmax ${CUR_DMAX} -sections ${NUM_SECTIONS} -tmax ${SIM_TIME_SEC} ${TOHOKU_PARAMS}"
 
 # # hack because currently vtune is not supported in batch usage
 # module load c_vtune
@@ -36,8 +46,7 @@ ARRAY_POWERCAP=(105 100 95 90 85 80 75 70 65 60 55)
 echo "===== Resetting power caps and CPU frequencies of all machines (${N_NODES} nodes)"
 zsh ./hardware_manipulation/reset_all.sh ${N_NODES}
 
-DIR_RESULT="results_experiment1"
-DIR_MXM_EXAMPLE=${DIR_MXM_EXAMPLE:-../../chameleon-apps/applications/matrix_example}
+DIR_RESULT="results_experiment5"
 mkdir -p ${DIR_RESULT}
 
 echo "===== Setting initial env vars"
@@ -69,23 +78,21 @@ fi
 export OMP_NUM_THREADS=${tmp_n_threads}
 export MIN_LOCAL_TASKS_IN_QUEUE_BEFORE_MIGRATION=${tmp_n_threads}
 
-MXM_PARAMS=""
-for i_node in {1..${N_NODES}}
+for pc in "${ARRAY_POWERCAP[@]}"
 do
-    MXM_PARAMS="${MXM_PARAMS}${NUM_TASKS} "
-done
-
-for gran in "${TASK_GRANULARITY[@]}"
-do
-    for pc in "${ARRAY_POWERCAP[@]}"
+    zsh ./hardware_manipulation/set_pc_all.sh ${N_NODES} ${pc}
+    
+    echo "===== Running experiment 5 for ${current_name}, n_threads=${tmp_n_threads} - sam(oa)^2 without CCP and powercap=${pc}W"
+    for rep in {1..${N_REPETITIONS}}
     do
-        echo "===== Running experiment 1 for ${current_name}, granularity=${gran}, n_threads=${tmp_n_threads} and powercap=${pc}W"
-        zsh ./hardware_manipulation/set_pc_all.sh ${N_NODES} ${pc}
+        TMP_FILE_NAME="${DIR_RESULT}/results_${current_name}_${N_NODES}nodes_${tmp_n_threads}thr_${pc}pc_${rep}"
+        python3.6 ../../utils/powermeter/power_client.py -p 0.1 -t -C -o ${TMP_FILE_NAME}_power.log "${MPI_EXEC_CMD} ${MPI_EXPORT_VARS_SLURM},SAMOA_PARAMS ${CMD_VTUNE_PREFIX} ${DIR_SAMOA}/bin/${SAMOA_EXE_NAME} ${SAMOA_PARAMS} -lbfreq 100000000 &> ${TMP_FILE_NAME}.log"
+    done
 
-        for rep in {1..${N_REPETITIONS}}
-        do
-            TMP_FILE_NAME="${DIR_RESULT}/results_${current_name}_${gran}gran_${N_NODES}nodes_${tmp_n_threads}thr_${pc}pc_${rep}"
-            python3.6 ../../utils/powermeter/power_client.py -p 0.1 -t -C -o ${TMP_FILE_NAME}_power.log "${MPI_EXEC_CMD} ${MPI_EXPORT_VARS_SLURM} ${CMD_VTUNE_PREFIX} ${DIR_MXM_EXAMPLE}/${MXM_PROG_NAME} ${gran} ${MXM_PARAMS} &> ${TMP_FILE_NAME}.log"
-        done
+    echo "===== Running experiment 5 for ${current_name}, n_threads=${tmp_n_threads} - sam(oa)^2 with CCP and powercap=${pc}W"
+    for rep in {1..${N_REPETITIONS}}
+    do
+        TMP_FILE_NAME="${DIR_RESULT}/results_${current_name}_${N_NODES}nodes_${tmp_n_threads}thr_${pc}pc_ccp_${rep}"
+        python3.6 ../../utils/powermeter/power_client.py -p 0.1 -t -C -o ${TMP_FILE_NAME}_power.log "${MPI_EXEC_CMD} ${MPI_EXPORT_VARS_SLURM},SAMOA_PARAMS ${CMD_VTUNE_PREFIX} ${DIR_SAMOA}/bin/${SAMOA_EXE_NAME} ${SAMOA_PARAMS} -lbfreq ${LB_STEPS} &> ${TMP_FILE_NAME}.log"
     done
 done
