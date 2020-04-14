@@ -32,7 +32,7 @@ export NUM_SECTIONS=16
 export CUR_DMIN=15
 export CUR_DMAX=25
 export NUM_STEPS=150
-export SIM_TIME_SEC=3600
+export SIM_TIME_SEC=3000
 export LB_STEPS=5000
 export SAMOA_PARAMS=" -output_dir ${SAMOA_OUT_DIR} -lbthreshold 0.1 -dmin ${CUR_DMIN} -dmax ${CUR_DMAX} -sections ${NUM_SECTIONS} -tmax ${SIM_TIME_SEC} ${TOHOKU_PARAMS}"
 

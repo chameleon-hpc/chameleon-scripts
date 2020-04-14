@@ -43,35 +43,35 @@ mkdir -p ${SAMOA_OUT_DIR}
 # go back to current directory again
 cd ${CUR_DIR}
 
-export N_NODES=12
+export N_NODES=64
 export N_REPETITIONS=5
 
 # ==================== Experiment 1: MxM Example - Check for manufacturing variations (power capping) ====================
 export IS_CHAMELEON=1
 export MXM_PROG_NAME=mxm_chameleon
-# sbatch --nodes=${N_NODES} --job-name=experiment1_mxm_${N_NODES}nodes_cham --output=sbatch_experiment1_mxm_${N_NODES}nodes_cham.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,MXM_PROG_NAME experiment1.sh
+sbatch --nodes=${N_NODES} --job-name=experiment1_mxm_${N_NODES}nodes_cham --output=sbatch_experiment1_mxm_${N_NODES}nodes_cham.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,MXM_PROG_NAME experiment1.sh
 
 export IS_CHAMELEON=0
 export MXM_PROG_NAME=mxm_tasking
-# sbatch --nodes=${N_NODES} --job-name=experiment1_mxm_${N_NODES}nodes_task --output=sbatch_experiment1_mxm_${N_NODES}nodes_task.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,MXM_PROG_NAME experiment1.sh
+sbatch --nodes=${N_NODES} --job-name=experiment1_mxm_${N_NODES}nodes_task --output=sbatch_experiment1_mxm_${N_NODES}nodes_task.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,MXM_PROG_NAME experiment1.sh
 
 # ==================== Experiment 2: MxM Example - Frequency Manipulation (constant) ====================
 export IS_CHAMELEON=1
 export MXM_PROG_NAME=mxm_chameleon
-#sbatch --nodes=${N_NODES} --job-name=experiment2_mxm_${N_NODES}nodes_cham --output=sbatch_experiment2_mxm_${N_NODES}nodes_cham.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,MXM_PROG_NAME experiment2.sh
+sbatch --nodes=${N_NODES} --job-name=experiment2_mxm_${N_NODES}nodes_cham --output=sbatch_experiment2_mxm_${N_NODES}nodes_cham.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,MXM_PROG_NAME experiment2.sh
 
 export IS_CHAMELEON=0
 export MXM_PROG_NAME=mxm_tasking
-# sbatch --nodes=${N_NODES} --job-name=experiment2_mxm_${N_NODES}nodes_task --output=sbatch_experiment2_mxm_${N_NODES}nodes_task.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,MXM_PROG_NAME experiment2.sh
+sbatch --nodes=${N_NODES} --job-name=experiment2_mxm_${N_NODES}nodes_task --output=sbatch_experiment2_mxm_${N_NODES}nodes_task.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,MXM_PROG_NAME experiment2.sh
 
 # ==================== Experiment 4: MxM Example - Unbalanced ====================
 export IS_CHAMELEON=1
 export MXM_PROG_NAME=mxm_chameleon
-# sbatch --nodes=${N_NODES} --job-name=experiment4_mxm_${N_NODES}nodes_cham --output=sbatch_experiment4_mxm_${N_NODES}nodes_cham.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,MXM_PROG_NAME experiment4.sh
+sbatch --nodes=${N_NODES} --job-name=experiment4_mxm_${N_NODES}nodes_cham --output=sbatch_experiment4_mxm_${N_NODES}nodes_cham.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,MXM_PROG_NAME experiment4.sh
 
 export IS_CHAMELEON=0
 export MXM_PROG_NAME=mxm_tasking
-# sbatch --nodes=${N_NODES} --job-name=experiment4_mxm_${N_NODES}nodes_task --output=sbatch_experiment4_mxm_${N_NODES}nodes_task.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,MXM_PROG_NAME experiment4.sh
+sbatch --nodes=${N_NODES} --job-name=experiment4_mxm_${N_NODES}nodes_task --output=sbatch_experiment4_mxm_${N_NODES}nodes_task.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,MXM_PROG_NAME experiment4.sh
 
 # ==================== Experiment 5: sam(oa)^2 ====================
 export DIR_SAMOA
