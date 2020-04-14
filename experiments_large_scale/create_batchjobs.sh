@@ -82,3 +82,13 @@ sbatch --nodes=${N_NODES} --job-name=experiment5_samoa_${N_NODES}nodes_cham --ou
 export IS_CHAMELEON=0
 export SAMOA_EXE_NAME=samoa_swe_packing
 sbatch --nodes=${N_NODES} --job-name=experiment5_samoa_${N_NODES}nodes_task --output=sbatch_experiment5_samoa_${N_NODES}nodes_task.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,DIR_SAMOA,SAMOA_EXE_NAME,SAMOA_OUT_DIR experiment5.sh
+
+# ==================== Experiment 6: sam(oa)^2 + Power capping ====================
+export DIR_SAMOA
+export IS_CHAMELEON=1
+export SAMOA_EXE_NAME=samoa_swe_chameleon
+sbatch --nodes=${N_NODES} --job-name=experiment6_samoa_${N_NODES}nodes_cham --output=sbatch_experiment6_samoa_${N_NODES}nodes_cham.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,DIR_SAMOA,SAMOA_EXE_NAME,SAMOA_OUT_DIR experiment6.sh
+
+export IS_CHAMELEON=0
+export SAMOA_EXE_NAME=samoa_swe_packing
+sbatch --nodes=${N_NODES} --job-name=experiment6_samoa_${N_NODES}nodes_task --output=sbatch_experiment6_samoa_${N_NODES}nodes_task.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,DIR_SAMOA,SAMOA_EXE_NAME,SAMOA_OUT_DIR experiment6.sh
