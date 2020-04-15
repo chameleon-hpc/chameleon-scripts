@@ -27,7 +27,7 @@ MXM_PROG_NAME=${MXM_PROG_NAME:-main}
 
 TASK_GRANULARITY=(600)
 NUM_TASKS=3200
-ARRAY_POWERCAP=(105 100 95 90 85 80 75 70 65 60 55)
+ARRAY_POWERCAP=(105 95 85 75 65 55)
 
 # # hack because currently vtune is not supported in batch usage
 # module load c_vtune

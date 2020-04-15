@@ -28,7 +28,7 @@ DIR_SAMOA=${DIR_SAMOA:-../../samoa-chameleon}
 SAMOA_EXE_NAME=${SAMOA_EXE_NAME:-samoa_swe_packing}
 SAMOA_OUT_DIR=${SAMOA_OUT_DIR:-.}
 
-ARRAY_POWERCAP=(105 100 95 90 85 80 75 70 65 60 55)
+ARRAY_POWERCAP=(75 65 55)
 
 export TOHOKU_PARAMS="-fbath /work/jk869269/repos/chameleon/samoa_data/tohoku_static/bath.nc -fdispl /work/jk869269/repos/chameleon/samoa_data/tohoku_static/displ.nc"
 export NUM_SECTIONS=16
@@ -46,7 +46,7 @@ export SAMOA_PARAMS=" -output_dir ${SAMOA_OUT_DIR} -lbthreshold 0.1 -dmin ${CUR_
 echo "===== Resetting power caps and CPU frequencies of all machines (${N_NODES} nodes)"
 zsh ./hardware_manipulation/reset_all.sh ${N_NODES}
 
-DIR_RESULT="results_experiment5"
+DIR_RESULT="results_experiment6"
 mkdir -p ${DIR_RESULT}
 
 echo "===== Setting initial env vars"
