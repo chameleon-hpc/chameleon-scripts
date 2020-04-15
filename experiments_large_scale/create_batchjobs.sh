@@ -43,8 +43,8 @@ mkdir -p ${SAMOA_OUT_DIR}
 # go back to current directory again
 cd ${CUR_DIR}
 
-export N_NODES=64
-export N_REPETITIONS=5
+export N_NODES=48
+export N_REPETITIONS=3
 
 # ==================== Experiment 1: MxM Example - Check for manufacturing variations (power capping) ====================
 export IS_CHAMELEON=1
@@ -87,8 +87,8 @@ sbatch --nodes=${N_NODES} --job-name=experiment5_samoa_${N_NODES}nodes_task --ou
 export DIR_SAMOA
 export IS_CHAMELEON=1
 export SAMOA_EXE_NAME=samoa_swe_chameleon
-sbatch --nodes=${N_NODES} --job-name=experiment6_samoa_${N_NODES}nodes_cham --output=sbatch_experiment6_samoa_${N_NODES}nodes_cham.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,DIR_SAMOA,SAMOA_EXE_NAME,SAMOA_OUT_DIR experiment6.sh
+#sbatch --nodes=${N_NODES} --job-name=experiment6_samoa_${N_NODES}nodes_cham --output=sbatch_experiment6_samoa_${N_NODES}nodes_cham.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,DIR_SAMOA,SAMOA_EXE_NAME,SAMOA_OUT_DIR experiment6.sh
 
 export IS_CHAMELEON=0
 export SAMOA_EXE_NAME=samoa_swe_packing
-sbatch --nodes=${N_NODES} --job-name=experiment6_samoa_${N_NODES}nodes_task --output=sbatch_experiment6_samoa_${N_NODES}nodes_task.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,DIR_SAMOA,SAMOA_EXE_NAME,SAMOA_OUT_DIR experiment6.sh
+#sbatch --nodes=${N_NODES} --job-name=experiment6_samoa_${N_NODES}nodes_task --output=sbatch_experiment6_samoa_${N_NODES}nodes_task.%J.txt --export=DIR_CH_INSTALL,CUR_DATE_STR,N_NODES,IS_CHAMELEON,N_REPETITIONS,DIR_SAMOA,SAMOA_EXE_NAME,SAMOA_OUT_DIR experiment6.sh
