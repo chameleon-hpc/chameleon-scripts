@@ -2,7 +2,7 @@
 
 SB_ACCOUNT=jara0001
 SB_PARTITION=c16m
-SB_NUM_NODES=2
+SB_NUM_NODES=4
 SB_TASKS_PER_NODE=1
 SB_CPUS_PER_TASK=24
 SB_EXEC_TIME_PER_RUN=01:00:00
@@ -10,8 +10,8 @@ SB_JOB_NAME_PREFIX=distrubance
 SB_OUTPUT_PREFIX=sbatch
 SB_EXTRA_ARGS=--exclusive
 
-PATH_TO_MAIN_PROG=/work/jk869269/repos/disturbance/chameleon-apps/applications/
-#PATH_TO_MAIN_PROG=~/repos/hpc/chameleon-apps/applications/
+#PATH_TO_MAIN_PROG=/work/jk869269/repos/disturbance/chameleon-apps/applications/
+PATH_TO_MAIN_PROG=~/repos/hpc/chameleon-apps/applications/
 
 export SB_OMP_PLACES=cores
 export SB_OMP_PROC_BIND=close
@@ -62,15 +62,20 @@ export SB_DISTURB_RANKS=0
 export SB_NAME=chameleon_baseline
 #run_sbatch
 
-export SB_DISTURB_RANKS=1
-export SB_DIST_TYPE=compute
-export SB_NAME=chameleon_comp
-run_sbatch
+# export SB_DISTURB_RANKS=1
+# export SB_DIST_TYPE=compute
+# export SB_NAME=chameleon_comp
+# run_sbatch
 
 #export SB_DISTURB_RANKS=1
 #export SB_DIST_TYPE=memory
 #export SB_NAME=chameleon_mem
 #run_sbatch
+
+# export SB_DISTURB_RANKS=1
+# export SB_DIST_TYPE=communication
+# export SB_NAME=chameleon_mem
+# run_sbatch
 
 ##########################################################################
 #tasking
@@ -83,12 +88,19 @@ export SB_DISTURB_RANKS=0
 export SB_NAME=tasking_baseline
 #run_sbatch
 
-export SB_DISTURB_RANKS=1
-export SB_DIST_TYPE=compute
-export SB_NAME=tasking_comp
-run_sbatch
+# export SB_DISTURB_RANKS=1
+# export SB_DIST_TYPE=compute
+# export SB_NAME=tasking_comp
+# run_sbatch
 
 #export SB_DISTURB_RANKS=1
 #export SB_DIST_TYPE=memory
 #export SB_NAME=tasking_mem
 #run_sbatch
+
+
+export SB_OMP_NUM_THREADS=1
+export SB_DISTURB_RANKS=1
+export SB_DIST_TYPE=communication
+export SB_NAME=tasking_com
+run_sbatch
