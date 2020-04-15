@@ -9,11 +9,11 @@ from CChameleonStats import *
 from CChameleonAggregation import *
 from CChameleonPlotFunctions import *
 from CChameleonCSVFunctions import *
-from CCustomFileMetaData_Exp4 import *
+from CCustomFileMetaData_Exp5 import *
 from CUtilProcessing import *
 
 if __name__ == "__main__":
-    source_folder       = "F:\\repos\\chameleon\\chameleon-data\\Test_results_experiment4"
+    source_folder       = "F:\\repos\\chameleon\\chameleon-data\\Test_results_experiment5"
     
     target_folder_data  = os.path.join(source_folder, "result_data")
     target_folder_plot  = os.path.join(source_folder, "result_plots")
@@ -42,7 +42,7 @@ if __name__ == "__main__":
             print(cur_file_path)
 
             # read file and chameleon stats
-            file_meta = CCustomFileMetaData_Exp4(cur_file_path)
+            file_meta = CCustomFileMetaData_Exp5(cur_file_path)
             cur_stats = CChameleonStatsPerRun()
             cur_stats.parseFile(cur_file_path, list_signal_filter_read)
 
@@ -50,10 +50,10 @@ if __name__ == "__main__":
             with open(cur_file_path) as f:
                 # get exec time
                 for line in f:
-                    if "with chameleon took" in line or "with normal tasking took" in line:
-                        tmp_split = line.split(" ")
-                        cur_stats.execution_time = float(tmp_split[-1].strip())
-                        break
+                    if "Phase time" in line:
+                        tmp_split = line.split(":")
+                        tmp_split2 = tmp_split[1].strip().split(" ")
+                        cur_stats.execution_time = float(tmp_split2[0].strip())
             
             # load power measurement values
             CUtilProcessing.parse_power_measurement(cur_file_path, cur_stats)

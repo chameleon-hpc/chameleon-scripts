@@ -28,11 +28,11 @@ if __name__ == "__main__":
     # list_signal_filter_read     = ["_num_executed_tasks_stolen", "_time_task_execution_stolen_sum"]
     list_signal_filter_read     = []
 
-    list_signals                = ["execution_time", "consumption_wh_overall", "consumption_wh_switches", "consumption_perc_switches", "power_draw_overall"]
-    default_vals_group          = [None, 0.0, 0.0, 0.0, 0.0]
-    list_signals_labels         = ["Execution time", "Energy Consumption - Overall", "Energy Consumption - Switches", "Energy Consumption - Percent Switches", "Mean Power Draw -  Overall"]
-    list_y_labels               = ["Time [sec]", "Energy Consumption [Wh]", "Energy Consumption [Wh]", "Share [%]", "Power Draw [W]"]
-    list_y_limit                = [None, None, None, None, None]
+    list_signals                = ["execution_time", "consumption_wh_overall", "consumption_wh_switches", "consumption_perc_switches", "power_draw_overall", "power_draw_switches"]
+    default_vals_group          = [None, 0.0, 0.0, 0.0, 0.0, 0.0]
+    list_signals_labels         = ["Execution time", "Energy Consumption - Overall", "Energy Consumption - Switches", "Energy Consumption - Percent Switches", "Mean Power Draw - Overall", "Mean Power Draw - Switches"]
+    list_y_labels               = ["Time [sec]", "Energy Consumption [Wh]", "Energy Consumption [Wh]", "Share [%]", "Power Draw [W]", "Power Draw [W]"]
+    list_y_limit                = [None, None, None, None, None, None]
     
     list_files = []
     # parse file names to be able to build groups later
