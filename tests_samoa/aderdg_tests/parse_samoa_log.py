@@ -47,6 +47,7 @@ lbfreq=-1
 for line in file:
   m=re.match(phase_time_pattern, line)
   if m:
+    #print (line)
     phase_times.append(float(m.group(1)))
   m=re.match(ranks_pattern, line)
   if m:
@@ -67,8 +68,9 @@ for line in file:
   if m:
     lbfreq = int(m.group(1))
 
-if(len(phase_times)<3):
+if(len(phase_times)<2):
   time = -1
+  print >> sys.stderr, "error, unfinished "+filename
 else:
   time = phase_times[-1]
 
@@ -79,9 +81,16 @@ if 'chameleon' in filename:
 stealing="yes"
 if 'no_stealing' in filename:
   stealing="no"
+else: 
+  chameleon="yes"
 
 tool="no"
 if 'tool' in filename:
   tool="yes"
 
-print tool,stealing,chameleon,ranks,threads,lbfreq,sections,dmin,dmax,time,migration_threshold
+timeCCP="no"
+if 'time_ccp' in filename:
+  timeCCP="yes"
+
+if time!=-1:
+  print tool,stealing,chameleon,timeCCP,ranks,threads,lbfreq,sections,dmin,dmax,time,migration_threshold
