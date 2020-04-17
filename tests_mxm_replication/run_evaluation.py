@@ -12,7 +12,8 @@ from CChameleonCSVFunctions import *
 from CCustomFileMetaData import *
 
 if __name__ == "__main__":
-    source_folder       = "C:\\J.Klinkenberg.Local\\repos\\chameleon\\chameleon-data\\2019-10-31_JPDC_task_granularity_tests\\20191029_201619_results\\2procs_dm\\Test"
+    # source_folder       = "C:\\J.Klinkenberg.Local\\repos\\chameleon\\chameleon-data\\2019-10-31_JPDC_task_granularity_tests\\20191029_201619_results\\2procs_dm\\Test"
+    source_folder       = "/dss/dsshome1/02/di57zoh3/chameleon/chameleon-scripts/tests_mxm_replication/20200224_150956_results/2procs_rep_4"
     
     target_folder_data  = os.path.join(source_folder, "result_data")
     target_folder_plot  = os.path.join(source_folder, "result_plots")
@@ -33,13 +34,14 @@ if __name__ == "__main__":
     list_files = []
     # parse file names to be able to build groups later
     for file in os.listdir(source_folder):
-        if file.endswith(".log"):
+        if file.endswith(".log") and not("150") in file:
             cur_file_path = os.path.join(source_folder, file)
             print(cur_file_path)
 
             # read file and chameleon stats
             file_meta = CCustomFileMetaData(cur_file_path)
             cur_stats = CChameleonStatsPerRun()
+            print (cur_file_path)
             cur_stats.parseFile(cur_file_path, list_signal_filter_read)
 
             # add custom measurements to stats file that can be used later
@@ -64,7 +66,7 @@ if __name__ == "__main__":
             list_files.append(file_meta)
     
     # get unique types
-    unique_types = sorted(list(set([x.type for x in list_files])))
+    unique_types = sorted(list(set([x.percentage for x in list_files])))
     # get unique number of threads
     unique_n_threads = sorted(list(set([x.nr_threads for x in list_files])))
     # get unique number of threads
@@ -78,7 +80,7 @@ if __name__ == "__main__":
         tmp_stat_objs_per_type  = []
 
         for ty in unique_types:
-            tmp_list = [x for x in sub_list if x.type == ty]
+            tmp_list = [x for x in sub_list if x.percentage == ty]
             if tmp_list:
                 arr_types.append(ty)
                 tmp_stat_objs_per_type.append([x for x in tmp_list])
@@ -116,7 +118,7 @@ if __name__ == "__main__":
         tmp_stat_objs_per_type  = []
 
         for ty in unique_types:
-            tmp_list = [x for x in sub_list if x.type == ty]
+            tmp_list = [x for x in sub_list if x.percentage == ty]
             if tmp_list:
                 arr_types.append(ty)
                 tmp_stat_objs_per_type.append([x for x in tmp_list])
