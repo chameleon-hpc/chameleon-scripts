@@ -10,19 +10,23 @@ if [ "${BUILD_CHAM}" = "1" ]; then
 cd ${DIR_CH}
 
 make clean 
-cmake -DCMAKE_INSTALL_PREFIX="~/chameleon/chameleon_lib/intel_1.0_rep_mode_0" -DCMAKE_CXX_FLAGS="-DCHAM_STATS_RECORD -DCHAM_STATS_PRINT -DCHAM_REPLICATION_MODE=0 " cmake .
+cmake -DCMAKE_INSTALL_PREFIX="~/chameleon/chameleon-lib/intel_1.0_rep_mode_0" -DCMAKE_CXX_FLAGS="-DCHAM_STATS_RECORD -DCHAM_STATS_PRINT -DCHAM_REPLICATION_MODE=0 " cmake .
 make install
 
 make clean 
-cmake -DCMAKE_INSTALL_PREFIX="~/chameleon/chameleon_lib/intel_1.0_rep_mode_1" -DCMAKE_CXX_FLAGS="-DCHAM_STATS_RECORD -DCHAM_STATS_PRINT -DCHAM_REPLICATION_MODE=1 " cmake .
+cmake -DCMAKE_INSTALL_PREFIX="~/chameleon/chameleon-lib/intel_1.0_rep_mode_1" -DCMAKE_CXX_FLAGS="-DCHAM_STATS_RECORD -DCHAM_STATS_PRINT -DCHAM_REPLICATION_MODE=1 " cmake .
 make install
 
 make clean 
-cmake -DCMAKE_INSTALL_PREFIX="~/chameleon/chameleon_lib/intel_1.0_rep_mode_2" -DCMAKE_CXX_FLAGS="-DCHAM_STATS_RECORD -DCHAM_STATS_PRINT -DCHAM_REPLICATION_MODE=2 " cmake .
+cmake -DCMAKE_INSTALL_PREFIX="~/chameleon/chameleon-lib/intel_1.0_rep_mode_2" -DCMAKE_CXX_FLAGS="-DCHAM_STATS_RECORD -DCHAM_STATS_PRINT -DCHAM_REPLICATION_MODE=2 " cmake .
 make install
 
 make clean 
-cmake -DCMAKE_INSTALL_PREFIX="~/chameleon/chameleon_lib/intel_no_communication_thread" -DCMAKE_CXX_FLAGS="-DCHAM_STATS_RECORD -DCHAM_STATS_PRINT -DENABLE_COMM_THREAD=0 " cmake .
+cmake -DCMAKE_INSTALL_PREFIX="~/chameleon/chameleon-lib/intel_no_communication_thread" -DCMAKE_CXX_FLAGS="-DCHAM_STATS_RECORD -DCHAM_STATS_PRINT -DENABLE_COMM_THREAD=0 " cmake .
+make install
+
+make clean
+cmake -DCMAKE_INSTALL_PREFIX="~/chameleon/chameleon-lib/intel_tool" -DCMAKE_CXX_FLAGS="-DCHAM_STATS_RECORD -DCHAM_STATS_PRINT -DCHAMELEON_TOOL_SUPPORT=1 -DCHAM_STATS_PER_SYNC_INTERVAL -DCHAM_REPLICATION_MODE=0 " cmake .
 make install
 
 cd ${CUR_DIR}
@@ -83,10 +87,10 @@ export SIM_TIME_SEC=3600
 export NREPS=1
 export SAMOA_BIN="/home/ps659535/chameleon/samoa_chameleon/bin/samoa_swe_chameleon"
 export SAMOA_PARAMS=" -lbfreq 1000000 -dmin ${CUR_DMIN} -dmax ${CUR_DMAX} -sections ${NUM_SECTIONS} -tmax ${SIM_TIME_SEC} ${TOHOKU_PARAMS}"
-export MODE=(-1)
+export MODE=(3)
 export PROCS=(1 2 4 8 16 32)
 
-export EXP_SUFFIX="_chameleon_strong"
+export EXP_SUFFIX="_chameleon_tool_strong"
 
 export EXPORTS="SAMOA_BIN,SAMOA_PARAMS,NREPS,REP_MODE,CUR_DATE_STR,NPROCS,EXP_SUFFIX"
 
