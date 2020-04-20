@@ -13,7 +13,14 @@ from CCustomFileMetaData_Exp2 import *
 from CUtilProcessing import *
 
 if __name__ == "__main__":
-    source_folder       = "F:\\repos\\chameleon\\chameleon-data\\Test_results_experiment2"
+    if len(sys.argv) < 2:
+        print("Error: Not enough arguments.")
+        print("Usage: python .\\run_evaluation_exp2 <folder_path_output_files>")
+        exit(1)
+    source_folder       = sys.argv[1]
+    if not os.path.exists(source_folder):
+        print("Error: Folder path " + source_folder + " does not exist")
+        exit(2)
     
     target_folder_data  = os.path.join(source_folder, "result_data")
     target_folder_plot  = os.path.join(source_folder, "result_plots")
@@ -110,34 +117,35 @@ if __name__ == "__main__":
         for ns in unique_nr_slow_nodes:
             cur_list = [x for x in cur_list0 if x.nr_slow_nodes == ns]
 
-            arr_data_plot           = [[] for x in list_signals]
-            arr_types               = []
-            tmp_stat_objs_per_type  = []
-            
-            for ty in unique_types:
-                tmp_list = [x for x in cur_list if x.type == ty]
-                if tmp_list:
-                    arr_types.append(ty + " - " + str(tmp_list[0].nr_threads) + "t")
-                    tmp_stat_objs_per_type.append([x for x in tmp_list])
-                    tmp_data_plot = [[] for x in list_signals]
+            if cur_list:
+                arr_data_plot           = [[] for x in list_signals]
+                arr_types               = []
+                tmp_stat_objs_per_type  = []
+                
+                for ty in unique_types:
+                    tmp_list = [x for x in cur_list if x.type == ty]
+                    if tmp_list:
+                        arr_types.append(ty + " - " + str(tmp_list[0].nr_threads) + "t")
+                        tmp_stat_objs_per_type.append([x for x in tmp_list])
+                        tmp_data_plot = [[] for x in list_signals]
 
-                    for freq in unique_freq_slow:
-                        sub_list    = [x for x in tmp_list if x.freq_slow == freq]
-                        cur_data_list = aggregate_chameleon_statistics( [x.stats for x in sub_list], 
-                                                                    list_signals, 
-                                                                    aggregation_metric=EnumAggregationMetric.SUM,
-                                                                    aggregation_for_run=EnumAggregationTypeRun.SUM,
-                                                                    aggegration_for_group=EnumAggregationTypeGroup.AVG,
-                                                                    default_vals_group=default_vals_group)
-                        for idx_sig in range(len(cur_data_list)):
-                            tmp_data_plot[idx_sig].append(cur_data_list[idx_sig])
+                        for freq in unique_freq_slow:
+                            sub_list    = [x for x in tmp_list if x.freq_slow == freq]
+                            cur_data_list = aggregate_chameleon_statistics( [x.stats for x in sub_list], 
+                                                                        list_signals, 
+                                                                        aggregation_metric=EnumAggregationMetric.SUM,
+                                                                        aggregation_for_run=EnumAggregationTypeRun.SUM,
+                                                                        aggegration_for_group=EnumAggregationTypeGroup.AVG,
+                                                                        default_vals_group=default_vals_group)
+                            for idx_sig in range(len(cur_data_list)):
+                                tmp_data_plot[idx_sig].append(cur_data_list[idx_sig])
 
-                    for idx_sig in range(len(tmp_data_plot)):
-                        arr_data_plot[idx_sig].append(tmp_data_plot[idx_sig])
+                        for idx_sig in range(len(tmp_data_plot)):
+                            arr_data_plot[idx_sig].append(tmp_data_plot[idx_sig])
 
-            # plot signals
-            for idx_sig in range(len(list_signals)):
-                tmp_target_file_name = "plot_nodes_" + str(nn) + "_" + "nrslow_" + str(ns) + "_" + list_signals[idx_sig] + ".png"
-                tmp_target_file_path = os.path.join(target_folder_plot, tmp_target_file_name)
-                plot_data_normal(tmp_target_file_path, [x/1e6 for x in unique_freq_slow], arr_types, arr_data_plot[idx_sig], list_signals_labels[idx_sig] + " - " + str(nn) + " Nodes (Nr Slow Nodes: " + str(ns) + ")", "Freq. of slow nodes [GHz]", list_y_labels[idx_sig], enforced_y_limit=list_y_limit[idx_sig])
+                # plot signals
+                for idx_sig in range(len(list_signals)):
+                    tmp_target_file_name = "plot_nodes_" + str(nn) + "_" + "nrslow_" + str(ns) + "_" + list_signals[idx_sig] + ".png"
+                    tmp_target_file_path = os.path.join(target_folder_plot, tmp_target_file_name)
+                    plot_data_normal(tmp_target_file_path, [x/1e6 for x in unique_freq_slow], arr_types, arr_data_plot[idx_sig], list_signals_labels[idx_sig] + " - " + str(nn) + " Nodes (Nr Slow Nodes: " + str(ns) + ")", "Freq. of slow nodes [GHz]", list_y_labels[idx_sig], enforced_y_limit=list_y_limit[idx_sig])
 
