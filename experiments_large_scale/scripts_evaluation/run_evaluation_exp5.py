@@ -13,8 +13,15 @@ from CCustomFileMetaData_Exp5 import *
 from CUtilProcessing import *
 
 if __name__ == "__main__":
-    source_folder       = "F:\\repos\\chameleon\\chameleon-data\\Test_results_experiment5"
-    
+    if len(sys.argv) < 2:
+        print("Error: Not enough arguments.")
+        print("Usage: python .\\run_evaluation_exp5 <folder_path_output_files>")
+        exit(1)
+    source_folder       = sys.argv[1]
+    if not os.path.exists(source_folder):
+        print("Error: Folder path " + source_folder + " does not exist")
+        exit(2)
+
     target_folder_data  = os.path.join(source_folder, "result_data")
     target_folder_plot  = os.path.join(source_folder, "result_plots")
 
