@@ -21,6 +21,9 @@ cmake -DCMAKE_INSTALL_PREFIX=${DIR_CH_INSTALL} -DCMAKE_BUILD_TYPE=Release ${CUR_
 make -j8
 make install
 
+# go back to current directory again
+cd ${CUR_DIR}
+
 # set env vars to use lib
 export LD_LIBRARY_PATH="${DIR_CH_INSTALL}/lib:${LD_LIBRARY_PATH}"
 export LIBRARY_PATH="${DIR_CH_INSTALL}/lib:${LIBRARY_PATH}"
