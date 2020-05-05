@@ -39,7 +39,14 @@ def plot_data_normal(   target_file_path,
     ax.set_title(text_title)
     if enforced_y_limit is not None:
         ax.set_ylim(bottom=enforced_y_limit)
-
+        # get max
+        cur_max = -1000000
+        for tmp_arr in arr_arr_data:
+            tmp_max = max(tmp_arr)
+            if tmp_max > cur_max:
+                cur_max = tmp_max
+        ax.set_ylim(top=cur_max*1.2)
+        
     if save_fig:
         fig.savefig(target_file_path, dpi=None, facecolor='w', edgecolor='w', 
             format="png", transparent=False, bbox_inches='tight', pad_inches=0, metadata=None)

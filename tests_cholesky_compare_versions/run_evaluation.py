@@ -12,7 +12,16 @@ from CChameleonCSVFunctions import *
 from CCustomFileMetaData import *
 
 if __name__ == "__main__":
-    source_folder       = "F:\\repos\\chameleon\\chameleon-scripts\\tests_cholesky_compare_versions\\20200320_001333_results\\4procs_dm"
+    if len(sys.argv) < 2:
+        print("Error: Not enough arguments.")
+        print("Usage: python .\\run_evaluation_exp1 <folder_path_output_files>")
+        exit(1)
+    source_folder = sys.argv[1]
+    if not os.path.exists(source_folder):
+        print("Error: Folder path " + source_folder + " does not exist")
+        exit(2)
+
+    # source_folder = "F:\\repos\\chameleon\\chameleon-scripts\\tests_cholesky_compare_versions\\20200429_105804_results\\2procs_dm"
     
     target_folder_data  = os.path.join(source_folder, "result_data")
     target_folder_plot  = os.path.join(source_folder, "result_plots")
