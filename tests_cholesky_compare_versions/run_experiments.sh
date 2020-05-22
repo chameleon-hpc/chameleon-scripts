@@ -6,9 +6,7 @@
 
 # =============== Load desired modules
 source ~/.zshrc
-source env_ch_intel.sh
-
-export TAG_NBITS_TASK_ID=24
+ulimit -c unlimited
 
 # # hack because currently vtune is not supported in batch usage
 # module load c_vtune
@@ -24,7 +22,7 @@ EXPORT_SETTINGS_SLURM=${EXPORT_SETTINGS_SLURM:-"--export=PATH,CPLUS_INCLUDE_PATH
 export MPI_EXEC_CMD="${MPIEXEC} ${FLAGS_MPI_BATCH} ${EXPORT_SETTINGS_SLURM} ${CMD_VTUNE_PREFIX} "
 
 # === Cholesky Settings
-#M_SIZES=(16384 24576 32768 49152 65536)
+M_SIZES=(16384 24576 32768 49152 65536)
 B_SIZES=(128 256 512 1024)
 B_CHECK=0
 FULL_N_THREADS=(24)
@@ -44,11 +42,12 @@ mkdir -p ${DIR_RESULT}
 cd ${DIR_CHOLESKY}
 
 echo "Setting initial env vars"
+export TAG_NBITS_TASK_ID=24
 export MIN_REL_LOAD_IMBALANCE_BEFORE_MIGRATION=0.1
 export MAX_TASKS_PER_RANK_TO_MIGRATE_AT_ONCE=1
 export PERCENTAGE_DIFF_TASKS_TO_MIGRATE=0.3
 
-for target in intel chameleon
+for target in ompss intel chameleon-intel
 do
     # load default modules
     module purge
@@ -79,7 +78,7 @@ do
                         tmp_n_threads=${n_thr}
                     else
                         # use one thread less with chameleon
-                        tmp_n_threads=$((n_thr-1))    
+                        tmp_n_threads=$((n_thr-1))
                     fi
                     export OMP_NUM_THREADS=${tmp_n_threads}
                     export MIN_LOCAL_TASKS_IN_QUEUE_BEFORE_MIGRATION=${tmp_n_threads}
