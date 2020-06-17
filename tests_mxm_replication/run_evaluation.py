@@ -13,7 +13,9 @@ from CCustomFileMetaData import *
 
 if __name__ == "__main__":
     # source_folder       = "C:\\J.Klinkenberg.Local\\repos\\chameleon\\chameleon-data\\2019-10-31_JPDC_task_granularity_tests\\20191029_201619_results\\2procs_dm\\Test"
-    source_folder       = "/dss/dsshome1/02/di57zoh3/chameleon/chameleon-scripts/tests_mxm_replication/20200224_150956_results/2procs_rep_4"
+    #source_folder       = "/dss/dsshome1/02/di57zoh3/chameleon/chameleon-scripts/tests_mxm_replication/20200224_150956_results/2procs_rep_4"
+    source_folder       = "/dss/dsshome1/02/di57zoh3/chameleon/chameleon-scripts/tests_mxm_replication/20200229_152918_results_100_4/2procs_rep_4"
+    #source_folder       = "/dss/dsshome1/02/di57zoh3/chameleon/chameleon-scripts/tests_mxm_replication/20200228_133013_results_1000_4/2procs_rep_4"
     
     target_folder_data  = os.path.join(source_folder, "result_data")
     target_folder_plot  = os.path.join(source_folder, "result_plots")
@@ -34,7 +36,7 @@ if __name__ == "__main__":
     list_files = []
     # parse file names to be able to build groups later
     for file in os.listdir(source_folder):
-        if file.endswith(".log") and not("150") in file:
+        if file.endswith(".log")  and not("300") in file:
             cur_file_path = os.path.join(source_folder, file)
             print(cur_file_path)
 
@@ -161,7 +163,7 @@ if __name__ == "__main__":
                 for sig in list_signals:
                     writer.writerow([str(sig)])
                     for cur_type in arr_types:
-                        cur_list_stats  = [x.stats for x in sub_list if x.type == cur_type]
+                        cur_list_stats  = [x.stats for x in sub_list if x.percentage == cur_type]
                         tmp_vals        = aggregate_chameleon_statistics(cur_list_stats, [sig], aggegration_for_group=EnumAggregationTypeGroup.ALL)
                         tmp_vals        = tmp_vals[0] # only need first return value here
                         writer.writerow([cur_type] + tmp_vals)

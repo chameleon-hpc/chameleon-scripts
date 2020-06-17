@@ -27,19 +27,21 @@ module load chameleon/intel_rep_4
 
 #export MAX_PERCENTAGE_REPLICATED_TASKS=0.0
 export MAX_PERCENTAGE_REPLICATED_TASKS=0.0
-export MIN_ABS_LOAD_IMBALANCE_BEFORE_MIGRATION=22.000000
-export MAX_TASKS_PER_RANK_TO_ACTIVATE_AT_ONCE=200
-export PERCENTAGE_DIFF_TASKS_TO_MIGRATE=0.0
+export MIN_ABS_LOAD_IMBALANCE_BEFORE_MIGRATION=2.000000
+export MAX_TASKS_PER_RANK_TO_ACTIVATE_AT_ONCE=0
+export PERCENTAGE_DIFF_TASKS_TO_MIGRATE=0.5
 
 ulimit -s unlimited
 
 mkdir -p output
-export OMP_NUM_THREADS=11
+export OMP_NUM_THREADS=2
 #export OMP_NUM_THREADS=1
 
-export VT_LOGFILE_NAME="main_05"
+export VT_LOGFILE_NAME="main_00_rep0"
 
-mpiexec ./wrapper_sudden_dist.sh 1.2 0 0  "/dss/dsshome1/02/di57zoh3/chameleon/chameleon-apps/applications/matrix_example/main" "100 100 100" 
+ldd /dss/dsshome1/02/di57zoh3/chameleon/chameleon-apps/applications/matrix_example/main
+
+mpiexec ./wrapper_sudden_dist.sh 1.2 0 0  "/dss/dsshome1/02/di57zoh3/chameleon/chameleon-apps/applications/matrix_example/main" "150 100 100" 
 
 echo "Done"
 

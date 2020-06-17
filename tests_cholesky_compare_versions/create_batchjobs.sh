@@ -7,7 +7,7 @@ SUB_FOLDERS=(pure-parallel singlecom-deps)
 
 # Build versions
 cd ${DIR_CHOLESKY}
-for target in intel chameleon
+for target in ompss intel chameleon-intel
 do
     # load default modules
     module purge

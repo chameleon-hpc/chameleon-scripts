@@ -26,7 +26,7 @@ if [ ${BUILD} ]
 then
 # Build regular version (chunk)
 rm -rf ${DIR_CH_REP4_INSTALL}  && mkdir -p ${DIR_CH_REP4_INSTALL}/include && mkdir -p ${DIR_CH_REP4_INSTALL}/lib && cd ${DIR_CH}
-INSTALL_DIR=${DIR_CH_REP4_INSTALL} CUSTOM_COMPILE_FLAGS="-DCHAM_STATS_RECORD -DCHAM_STATS_PRINT -DCHAM_REPLICATION_MODE=4" make release
+INSTALL_DIR=${DIR_CH_REP4_INSTALL} CUSTOM_COMPILE_FLAGS="-DCHAM_STATS_RECORD -DCHAM_STATS_PRINT -DCHAMELEON_TOOL_SUPPORT -DCHAM_REPLICATION_MODE=4" make release
 cd ${CUR_DIR}
 
 rm -rf ${DIR_CH_REP3_INSTALL}  && mkdir -p ${DIR_CH_REP3_INSTALL}/include && mkdir -p ${DIR_CH_REP3_INSTALL}/lib && cd ${DIR_CH}
@@ -70,6 +70,6 @@ ITERATIVE_VERSION=1 NUM_ITERATIONS=100 make -C ${DIR_MXM_EXAMPLE}
 
 # 2 node job - distributed memory
 
-export REP_MODE=0
+export REP_MODE=4
 
 sbatch --nodes=2 --ntasks-per-node=1 --cpus-per-task=48 --job-name=mxm_2n_rep --error=mxm_2n_rep.%J.err --output=mxm_2n_rep.%J.txt --export=REP_MODE,DIR_CH_REP0_INSTALL,DIR_CH_REP2_INSTALL,DIR_CH_REP3_INSTALL,DIR_CH_REP4_INSTALL,CUR_DATE_STR,N_PROCS run_experiments.sh
