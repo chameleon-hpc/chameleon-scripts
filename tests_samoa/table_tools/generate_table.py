@@ -40,6 +40,7 @@ def accumulateResults(results):
     accResult.ranks = unique.ranks
     accResult.threads = unique.threads
     accResult.lbfreq = unique.lbfreq
+    accResult.lbtime = unique.lbtime
     accResult.sections = unique.sections
     accResult.dmin = unique.dmin
     accResult.dmax = unique.dmax

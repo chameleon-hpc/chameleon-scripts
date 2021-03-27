@@ -20,13 +20,14 @@ class CResultAcc:
     self.replication_factor = -1
     self.avg_imbalance = -1
     self.avg_cell_throughput = -1
+    self.lbtime = -1
 
   def toString(self):
-    return self.chameleon+"\t"+str(self.ranks)+"\t"+str(self.threads)+"\t"+str(self.lbfreq)+"\t"+str(self.sections)+"\t"+str(self.dmin)\
+    return self.chameleon+"\t"+str(self.ranks)+"\t"+str(self.threads)+"\t"+str(self.lbfreq)+"\t"+str(self.lbtime)+"\t"+str(self.sections)+"\t"+str(self.dmin)\
            +"\t"+str(self.dmax)+"\t"+str(self.order)+"\t"+str(self.noise)+"\t"+str(self.replication_factor)+"\t"+str(self.min_time)+"\t"+str(self.max_time)+"\t"+str(self.mean_time)+"\t"+ str(self.std_dev)+"\t"+str(self.avg_imbalance)+"\t"+str(self.avg_cell_throughput)
 
   def toStringHeader(self):
-    return "chameleon\tranks\tthreads\tlbfreq\tsections\tdmin\tdmax\torder\tnoise\treplication_factor\tmin_time\tmax_time\tmean_time\tstd_dev\tavg_imbalance\tavg_cell_throughput"
+    return "chameleon\tranks\tthreads\tlbfreq\tlbtime\tsections\tdmin\tdmax\torder\tnoise\treplication_factor\tmin_time\tmax_time\tmean_time\tstd_dev\tavg_imbalance\tavg_cell_throughput"
 
 class CResult:
   def __init__(self):
@@ -44,19 +45,20 @@ class CResult:
     self.replication_factor = -1
     self.imbalance = -1
     self.cell_throughput = -1
+    self.lbtime = -1
 
   def printRes(self):
-    print (self.chameleon,"\t", self.ranks,"\t", self.threads, "\t", self.lbfreq, "\t", self.sections, "\t", self.dmin,\
+    print (self.chameleon,"\t", self.ranks,"\t", self.threads, "\t", self.lbfreq, "\t", self.lbtime, "\t", self.sections, "\t", self.dmin,\
     "\t", self.dmax, "\t", self.order, "\t", self.noise, "\t", self.replication_factor, "\t", self.time, "\t", self.imbalance, "\t", self.cell_throughput)
 
   def printHeader(self):
-    print ("chameleon\tranks\tthreads\tlbfreq\tsections\tdmin\tdmax\torder\tnoise\treplication_factor\trun\ttime\timbalance\tcell_throughput")
+    print ("chameleon\tranks\tthreads\tlbfreq\tlbtime\tsections\tdmin\tdmax\torder\tnoise\treplication_factor\trun\ttime\timbalance\tcell_throughput")
 
   def toStringHeader(self):
-    return "chameleon\tranks\tthreads\tlbfreq\tsections\tdmin\tdmax\torder\tnoise\treplication_factor\trun\ttime\timbalance\tcell_throughput"
+    return "chameleon\tranks\tthreads\tlbfreq\tlbtime\tsections\tdmin\tdmax\torder\tnoise\treplication_factor\trun\ttime\timbalance\tcell_throughput"
 
   def toString(self):
-    return self.chameleon+"\t"+str(self.ranks)+"\t"+str(self.threads)+"\t"+str(self.lbfreq)+"\t"+str(self.sections)+"\t"+str(self.dmin)\
+    return self.chameleon+"\t"+str(self.ranks)+"\t"+str(self.threads)+"\t"+str(self.lbfreq)+"\t"+str(self.lbtime)+"\t"+str(self.sections)+"\t"+str(self.dmin)\
         +"\t"+str(self.dmax)+"\t"+str(self.order)+"\t"+str(self.noise)+"\t"+str(self.replication_factor)+"\t"+str(self.run)+"\t"+str(self.time)+"\t"+str(self.imbalance)\
         +"\t"+str(self.cell_throughput)
 
@@ -70,10 +72,11 @@ class CResult:
        and self.dmax==other.dmax \
        and self.order==other.order \
        and self.replication_factor==other.replication_factor \
-       and self.noise==other.noise
+       and self.noise==other.noise \
+       and self.lbtime==other.lbtime
 
   def __hash__(self):
-    return hash((self.chameleon,self.ranks,self.threads,self.sections,self.lbfreq,self.dmin,self.dmax,self.order,self.replication_factor,self.noise))
+    return hash((self.chameleon,self.ranks,self.threads,self.sections,self.lbfreq,self.lbtime,self.dmin,self.dmax,self.order,self.replication_factor,self.noise))
 
   def parseResultFromFile(self,filename,filename_err):
     file=open(filename, 'r')
@@ -103,6 +106,7 @@ class CResult:
     min_max_pattern = re.compile(".*min depth: ([0-9]+), max depth: ([0-9]+)")
     order_pattern = re.compile(".*Patches: Yes, order: ([0-9]+)")
     lbfreq_pattern = re.compile(".* frequency: ([0-9]+)")
+    lbtime_pattern = re.compile(".*timed load estimate:.*(Yes|No)")
     cell_throughput_pattern = re.compile(".*Cell update throughput solver: *([0-9]+\.[0-9]+)")
 
     threads=-1
@@ -115,6 +119,7 @@ class CResult:
     throughput=-1
 
     chameleon="no"
+    lbtime="No"
 
     if "intel_rep" in filename:
       index =filename.find("intel_rep")
@@ -167,6 +172,9 @@ class CResult:
       m=re.match(lbfreq_pattern, line)
       if m:
         lbfreq = int(m.group(1))
+      m=re.match(lbtime_pattern, line)
+      if m:
+        lbtime = m.group(1)
       m=re.match(cell_throughput_pattern,line)
       if m:
         throughput = float(m.group(1))
@@ -181,6 +189,7 @@ class CResult:
     self.threads = threads
     self.sections = sections
     self.lbfreq = lbfreq
+    self.lbtime = lbtime
     self.dmin = dmin
     self.dmax = dmax
     self.time = time
