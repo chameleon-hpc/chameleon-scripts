@@ -4,7 +4,7 @@ import csv
 
 string_keys=['chameleon','tool']
 int_keys=['dmin','dmax','lbfreq','ranks','threads','min_abs_threshold','sections']
-float_keys=['time']
+float_keys=['replication_factor','noise','min_time','max_time','mean_time','avg_imbalance','avg_cell_throughput','std_dev']
 
 def convert_val(key,val):
  if key in string_keys:
@@ -41,8 +41,9 @@ def readIntoDict(file,cols,filter=""):
  result=[]
 
  with open(file,mode='r') as csv_file:
-    csv_reader = csv.DictReader(csv_file, delimiter=" ")
+    csv_reader = csv.DictReader(csv_file, delimiter="\t")
     for row in csv_reader:
+      print (row)
       for key in row:
         row[key]=convert_val(key,row[key])
 
@@ -50,8 +51,11 @@ def readIntoDict(file,cols,filter=""):
       if len(filter)>0:
         for f in filter:          
           filteredCol=f.split("=")[0]
+          print (f)
           value=f.split("=")[1]
           value=convert_val(filteredCol,value)
+          print (filteredCol, value)
+          print (row)
           if(row[filteredCol]!=value):
             fulfillConds=0
             break
