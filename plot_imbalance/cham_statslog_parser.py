@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import imageio
+#import imageio
 import sys
 import os
 import subprocess
@@ -13,7 +13,7 @@ NUM_RANKS = 4
 NUM_ITERATIONS = 20
 NUM_OMPTHREADS = 23
 SAMOA_SECTIONS = 16
-torch.manual_seed(1)    # reproducible
+#torch.manual_seed(1)    # reproducible
 
 
 """Task definition
@@ -55,7 +55,7 @@ def parse_stats_iter_runtime(filename, num_ranks):
     # getting total_load/iter
     for line in file:
         # just get the line with the content
-        if "_time_task_execution_local_sum" in line:
+        if "_time_task_execution_overall_sum" in line:
             data_per_line = line.split("\t")
             get_rank = (data_per_line[0]).split(" ")[1]
             rank = int(re.findall(r'\d+', get_rank)[0])
@@ -73,7 +73,7 @@ def parse_stats_iter_runtime(filename, num_ranks):
 Input is a list of runtime-data per rank. Use them to plot
 a line chart for easily to compare the load imbalance.
 """
-def plot_runtime_by_iters(stats_data, output_folder):
+def plot_runtime_by_iters(stats_data, output_folder, filename):
     # for the chart information
     plt.xlabel("Iterations")
     plt.ylabel("Total_Load (in seconds)")
@@ -111,12 +111,12 @@ def plot_runtime_by_iters(stats_data, output_folder):
 
     
     # plt.yscale('log')
-    plt.grid(True)
+    #plt.grid(True)
     # plt.legend(loc='best', shadow=True, ncol=5, prop={'size': 5})
-    # plt.show()
+    plt.show()
 
     # save the figure
-    fig_filename = "runtime_per_iter_" + str(num_ranks) + "_ranks_from_chamstats_logs" + ".pdf"
+    #fig_filename = "runtime_per_iter_" + str(num_ranks) + "_ranks_from_chamstats_logs" + ".pdf"
     plt.savefig(os.path.join(output_folder, fig_filename), bbox_inches='tight')
 
 
@@ -133,6 +133,11 @@ if __name__ == "__main__":
     # num ranks
     num_ranks = int(sys.argv[2])
 
+    fig_filename = "runtime_per_iter_" + str(num_ranks) + "_ranks_from_chamstats_logs" + ".pdf"
+    
+    if(len(sys.argv)>2):
+      fig_filename = sys.argv[3]
+    
     # read and parse values from the input
     stats_data = parse_stats_iter_runtime(cham_stats_file, num_ranks)
 
@@ -160,4 +165,4 @@ if __name__ == "__main__":
     
     # plot the data
     output_folder = "./"
-    plot_runtime_by_iters(stats_data, output_folder)
+    plot_runtime_by_iters(stats_data, output_folder,fig_filename)

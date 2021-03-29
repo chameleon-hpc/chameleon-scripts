@@ -35,7 +35,6 @@ def accumulateResults(results):
       continue
    
     accResult = CResultAcc()
-
     accResult.chameleon = unique.chameleon 
     accResult.ranks = unique.ranks
     accResult.threads = unique.threads

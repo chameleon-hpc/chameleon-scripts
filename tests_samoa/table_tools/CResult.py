@@ -106,7 +106,7 @@ class CResult:
     min_max_pattern = re.compile(".*min depth: ([0-9]+), max depth: ([0-9]+)")
     order_pattern = re.compile(".*Patches: Yes, order: ([0-9]+)")
     lbfreq_pattern = re.compile(".* frequency: ([0-9]+)")
-    lbtime_pattern = re.compile(".*timed load estimate:.*(Yes|No)")
+    lbtime_pattern = re.compile(".*timed load estimate:.*(Yes|No), split")
     cell_throughput_pattern = re.compile(".*Cell update throughput solver: *([0-9]+\.[0-9]+)")
 
     threads=-1
@@ -175,6 +175,7 @@ class CResult:
       m=re.match(lbtime_pattern, line)
       if m:
         lbtime = m.group(1)
+        #print(lbtime)
       m=re.match(cell_throughput_pattern,line)
       if m:
         throughput = float(m.group(1))
