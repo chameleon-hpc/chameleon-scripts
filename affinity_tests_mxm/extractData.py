@@ -20,6 +20,7 @@ find_string = [
     ["CHAM_AFF_ALWAYS_CHECK_PHYSICAL", "always check physical"],
     ["SLURM_JOB_NUM_NODES", "slurm nodes"],
     ["SLURM_NTASKS_PER_NODE", "slurm tasks p. node"],
+    ["AUTOMATIC_NUMA_BALANCING", "NUMA balancing"],
     ["Computations with chameleon took", "time"]
     ]
 
