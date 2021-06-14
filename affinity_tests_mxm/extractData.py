@@ -4,10 +4,10 @@ import os
 import re
 
 # name of the new csv file (overwrites existing file)
-filename = 'results/preTesting.csv'
+filename = 'results/varyTaskstratMapmode.csv'
 # name of the directory where the .txt files from the slurm job are
 # has to be in the same dir as this .py script
-outputs_dir = 'outputs/preTesting'
+outputs_dir = 'outputs/vary_TaskStrat_MapMode'
 
 find_string = [
     ["CHAM_AFF_TASK_SELECTION_STRAT", "task sel. strat"],
@@ -21,6 +21,7 @@ find_string = [
     ["SLURM_JOB_NUM_NODES", "slurm nodes"],
     ["SLURM_NTASKS_PER_NODE", "slurm tasks p. node"],
     ["AUTOMATIC_NUMA_BALANCING", "NUMA balancing"],
+    ["MXM_PARAMS", "mxmParams"],
     ["Computations with chameleon took", "time"]
     ]
 
