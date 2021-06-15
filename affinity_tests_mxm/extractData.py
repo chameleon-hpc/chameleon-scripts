@@ -21,6 +21,12 @@ find_string = [
     ["SLURM_JOB_NUM_NODES", "SlurmNodes"],
     ["SLURM_NTASKS_PER_NODE", "SlurmTasksPerNode"],
     ["AUTOMATIC_NUMA_BALANCING", "NumaBalancing"],
+    ["Task Domain Hitrate", "DomainHitrate"],
+    ["Task gtid Hitrate", "GtidHitrate"],
+    ["The domain changed", "DomainChanges"],
+    ["The domain stayed the same", "DomainNotChanges"],
+    ["The gtid changed", "GtidChanges"],
+    ["The gtid stayed the same", "GtidNotChanges"],
     ["MXM_PARAMS", "MatrixSize,MatrixNumTasks,MatrixDistribution"],
     ["Computations with chameleon took", "Time"]
     ]
@@ -50,8 +56,8 @@ for read_file in os.listdir(outputs_path):
                         # Split up the Matrix parameters
                         start = line.find(find_string[string_idx][0])
                         end = start + len(find_string[string_idx][0])
-                        res = line[end:].strip('=\n\r ')
-                        res_split = map(int, res.split())
+                        res = line[end:].strip('%=\n\r ')
+                        res_split = map(int, res.split(" "))
                         matrix_size = res_split[0]
                         matrix_task_dist = res_split[1:]
                         matrix_num_tasks = sum(matrix_task_dist)
@@ -66,11 +72,12 @@ for read_file in os.listdir(outputs_path):
                         break
                     else:
                         # Get the value of the string 
-                        # (everything after the string without [spaces, new lines, =])
+                        # (the first element after the string without [spaces, new lines, =])
                         start = line.find(find_string[string_idx][0])
                         end = start + len(find_string[string_idx][0])
-                        res = line[end:].strip('=\n\r ')
-                        csv_file.write(res)
+                        res = line[end:].strip('%=\n\r ')
+                        res_split = res.split(" ")
+                        csv_file.write(res_split[0])
                         if string_idx < len(find_string)-1:
                             csv_file.write(",")
                         found = True
