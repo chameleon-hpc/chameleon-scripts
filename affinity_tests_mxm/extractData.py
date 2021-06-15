@@ -4,25 +4,25 @@ import os
 import re
 
 # name of the new csv file (overwrites existing file)
-filename = 'results/varyTaskstratMapmode.csv'
+filename = 'varyTaskstratMapmode.csv'
 # name of the directory where the .txt files from the slurm job are
 # has to be in the same dir as this .py script
 outputs_dir = 'outputs/vary_TaskStrat_MapMode'
 
 find_string = [
-    ["CHAM_AFF_TASK_SELECTION_STRAT", "task sel. strat"],
-    ["CHAM_AFF_PAGE_SELECTION_STRAT", "page sel. strat."],
-    ["CHAM_AFF_PAGE_WEIGHTING_STRAT", "page weight. strat."],
-    ["CHAM_AFF_CONSIDER_TYPES", "consider types",],
-    ["CHAM_AFF_PAGE_SELECTION_N", "page n"],
-    ["CHAM_AFF_TASK_SELECTION_N", "task n"],
-    ["CHAM_AFF_MAP_MODE", "map mode"],
-    ["CHAM_AFF_ALWAYS_CHECK_PHYSICAL", "always check physical"],
-    ["SLURM_JOB_NUM_NODES", "slurm nodes"],
-    ["SLURM_NTASKS_PER_NODE", "slurm tasks p. node"],
-    ["AUTOMATIC_NUMA_BALANCING", "NUMA balancing"],
-    ["MXM_PARAMS", "mxmParams"],
-    ["Computations with chameleon took", "time"]
+    ["CHAM_AFF_TASK_SELECTION_STRAT", "TaskSelectionStrat"],
+    ["CHAM_AFF_PAGE_SELECTION_STRAT", "PageSelectionStrat"],
+    ["CHAM_AFF_PAGE_WEIGHTING_STRAT", "PageWeightStrat"],
+    ["CHAM_AFF_CONSIDER_TYPES", "ConsiderTypes",],
+    ["CHAM_AFF_PAGE_SELECTION_N", "PageN"],
+    ["CHAM_AFF_TASK_SELECTION_N", "TaskN"],
+    ["CHAM_AFF_MAP_MODE", "MapMode"],
+    ["CHAM_AFF_ALWAYS_CHECK_PHYSICAL", "CheckPhysical"],
+    ["SLURM_JOB_NUM_NODES", "SlurmNodes"],
+    ["SLURM_NTASKS_PER_NODE", "SlurmTasksPerNode"],
+    ["AUTOMATIC_NUMA_BALANCING", "NumaBalancing"],
+    ["MXM_PARAMS", "MatrixSize,MatrixNumTasks,MatrixDistribution"],
+    ["Computations with chameleon took", "Time"]
     ]
 
 path_to_script = os.path.dirname(os.path.abspath(__file__))
@@ -46,16 +46,35 @@ for read_file in os.listdir(outputs_path):
                 param_found = re.findall(find_string[string_idx][0], line)
                 if len(param_found) == 0: continue
                 else:
-                    # Get the value of the string 
-                    # (everything after the string without [spaces, new lines, =])
-                    start = line.find(find_string[string_idx][0])
-                    end = start + len(find_string[string_idx][0])
-                    res = line[end:].strip('=\n\r ')
-                    csv_file.write(res)
-                    if string_idx < len(find_string)-1:
-                        csv_file.write(",")
-                    found = True
-                    break
+                    if param_found[0]=="MXM_PARAMS":
+                        # Split up the Matrix parameters
+                        start = line.find(find_string[string_idx][0])
+                        end = start + len(find_string[string_idx][0])
+                        res = line[end:].strip('=\n\r ')
+                        res_split = map(int, res.split())
+                        matrix_size = res_split[0]
+                        matrix_task_dist = res_split[1:]
+                        matrix_num_tasks = sum(matrix_task_dist)
+                        matrix_task_dist_str = ""
+                        for i in range(len(matrix_task_dist)):
+                            matrix_task_dist_str += str(matrix_task_dist[i])+" "
+                        matrix_task_dist_str = matrix_task_dist_str.rstrip()
+                        csv_file.write(str(matrix_size)+","+str(matrix_num_tasks)+","+matrix_task_dist_str)
+                        if string_idx < len(find_string)-1:
+                            csv_file.write(",")
+                        found = True
+                        break
+                    else:
+                        # Get the value of the string 
+                        # (everything after the string without [spaces, new lines, =])
+                        start = line.find(find_string[string_idx][0])
+                        end = start + len(find_string[string_idx][0])
+                        res = line[end:].strip('=\n\r ')
+                        csv_file.write(res)
+                        if string_idx < len(find_string)-1:
+                            csv_file.write(",")
+                        found = True
+                        break
             if not found:
                 # Parameter not in the file
                 csv_file.write("-1,")
