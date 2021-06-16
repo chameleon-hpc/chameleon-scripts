@@ -84,7 +84,27 @@ for read_file in os.listdir(outputs_path):
                         break
             if not found:
                 # Parameter not in the file
-                csv_file.write("-1,")
+                if find_string[string_idx][1]=="Time":
+                    # non chameleon version, find other time
+                    other_time_string = "Computations with normal tasking took"
+                    for line in lines:
+                        line = line.rstrip()
+                        param_found = re.findall(other_time_string, line)
+                        if len(param_found) == 0: continue
+                        else:
+                            # Get the value of the string 
+                            # (the first element after the string without [spaces, new lines, =])
+                            start = line.find(other_time_string)
+                            end = start + len(other_time_string)
+                            res = line[end:].strip('%=\n\r ')
+                            res_split = res.split(" ")
+                            csv_file.write(res_split[0])
+                            if string_idx < len(find_string)-1:
+                                csv_file.write(",")
+                            found = True
+                            break
+                if not found:
+                    csv_file.write("-1,")
     csv_file.write("\n")
 
 csv_file.close()
