@@ -20,6 +20,7 @@ find_string = [
     ["CHAM_AFF_ALWAYS_CHECK_PHYSICAL", "CheckPhysical"],
     ["SLURM_JOB_NUM_NODES", "SlurmNodes"],
     ["SLURM_NTASKS_PER_NODE", "SlurmTasksPerNode"],
+    ["OMP_NUM_THREADS", "OmpNumThreads"],
     ["AUTOMATIC_NUMA_BALANCING", "NumaBalancing"],
     ["Task Domain Hitrate", "DomainHitrate"],
     ["Task gtid Hitrate", "GtidHitrate"],
