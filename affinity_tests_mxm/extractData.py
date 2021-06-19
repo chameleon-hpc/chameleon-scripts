@@ -2,12 +2,17 @@
 
 import os
 import re
+import numpy as np
+#import statistics as st
+
+test_name = 'output_20210618_111043'
 
 # name of the new csv file (overwrites existing file)
-filename = 'varyTaskstratMapmode.csv'
+filename = test_name + '.csv'
 # name of the directory where the .txt files from the slurm job are
 # has to be in the same dir as this .py script
-outputs_dir = 'outputs/vary_TaskStrat_MapMode'
+outputs_dir = 'outputs/' + test_name
+logs_dir = outputs_dir + '/logs'
 
 find_string = [
     ["CHAM_AFF_TASK_SELECTION_STRAT", "TaskSelectionStrat"],
@@ -30,13 +35,23 @@ find_string = [
     ["The gtid stayed the same", "GtidNotChanges"],
     ["MXM_PARAMS", "MatrixSize,MatrixNumTasks,MatrixDistribution"],
     ["Computations with chameleon took", "TimeChameleon"],
-    ["Computations with normal tasking took", "TimeTasking"]
+    ["-", "TCUQ"], # Time Chameleon Upper Quartile
+    ["-", "TCLQ"], # Time Chameleon Lower Quartile
+    ["-", "TCUW"], # Time Chameleon Upper Whisker
+    ["-", "TCLW"], # Time Chameleon Lower Whisker
+    ["Computations with normal tasking took", "TimeTasking"],
+    ["-", "TTUQ"], # Time Tasking Upper Quartile
+    ["-", "TTLQ"], # Time Tasking Lower Quartile
+    ["-", "TTUW"], # Time Tasking Upper Whisker
+    ["-", "TTLW"], # Time Tasking Lower Whisker
     ]
 
 path_to_script = os.path.dirname(os.path.abspath(__file__))
-csv_file = open(os.path.join(path_to_script, filename), 'w')
+csv_path = path_to_script + "/results/" + filename
+csv_file = open(csv_path, 'w')
 
 outputs_path = os.path.join(path_to_script, outputs_dir)
+logs_path = os.path.join(path_to_script, logs_dir)
 
 for i in range(len(find_string)):
     csv_file.write(find_string[i][1])
@@ -44,48 +59,146 @@ for i in range(len(find_string)):
         csv_file.write(",")
 csv_file.write("\n")
 
-for read_file in os.listdir(outputs_path):
-    with open(os.path.join(outputs_path, read_file), 'r') as f:
-        lines = f.readlines()
-        for string_idx in range(len(find_string)):
-            found = False
+####################################################
+############### Function definitions ###############
+####################################################
+def getTimeStatisticsOfDir(cur_log_dir_path, find_this_string):
+    i = 0
+    #times = [0.0]*len(os.listdir(cur_log_dir_path))
+    times = np.zeros(len(os.listdir(cur_log_dir_path)))
+    for read_file in os.listdir(cur_log_dir_path):
+        found = False
+        with open(os.path.join(cur_log_dir_path, read_file), 'r') as f:
+            lines = f.readlines()
             for line in lines:
                 line = line.rstrip()
-                param_found = re.findall(find_string[string_idx][0], line)
+                param_found = re.findall(find_this_string, line)
                 if len(param_found) == 0: continue
                 else:
-                    if param_found[0]=="MXM_PARAMS":
-                        # Split up the Matrix parameters
-                        start = line.find(find_string[string_idx][0])
-                        end = start + len(find_string[string_idx][0])
-                        res = line[end:].strip('%=\n\r ')
-                        res_split = map(int, res.split(" "))
-                        matrix_size = res_split[0]
-                        matrix_task_dist = res_split[1:]
-                        matrix_num_tasks = sum(matrix_task_dist)
-                        matrix_task_dist_str = ""
-                        for i in range(len(matrix_task_dist)):
-                            matrix_task_dist_str += str(matrix_task_dist[i])+" "
-                        matrix_task_dist_str = matrix_task_dist_str.rstrip()
-                        csv_file.write(str(matrix_size)+","+str(matrix_num_tasks)+","+matrix_task_dist_str)
-                        if string_idx < len(find_string)-1:
-                            csv_file.write(",")
-                        found = True
-                        break
-                    else:
-                        # Get the value of the string 
-                        # (the first element after the string without [spaces, new lines, =])
-                        start = line.find(find_string[string_idx][0])
-                        end = start + len(find_string[string_idx][0])
-                        res = line[end:].strip('%=\n\r ')
-                        res_split = res.split(" ")
-                        csv_file.write(res_split[0])
-                        if string_idx < len(find_string)-1:
-                            csv_file.write(",")
-                        found = True
-                        break
+                    # Get the value of the string 
+                    # (the first element after the string without [spaces, new lines, =])
+                    start = line.find(find_this_string)
+                    end = start + len(find_this_string)
+                    res = line[end:].strip('%=\n\r ')
+                    res_split = res.split(" ")
+                    times[i] = float(res_split[0])
+                    found = True
+                    break
             if not found:
-                csv_file.write("-1,")
+                times[i]=-1
+            i += 1
+    #times_median = st.median(times)
+    times_median = np.median(times)
+    uq = np.percentile(times, 75)
+    lq = np.percentile(times, 25)
+    iqr = uq - lq
+    uw = times[times<=uq+1.5*iqr].max()
+    lw = times[times>=lq-1.5*iqr].min()
+    csv_file.write(str(times_median)+","+str(uq)+","+str(lq)+","+str(uw)+","+str(lw))
+
+def getParametersOfDir(cur_log_dir_path):
+    # get parameters (all except the time) from some file
+    first_file = os.listdir(cur_log_dir_path)[0]
+    with open(os.path.join(cur_log_dir_path, first_file), 'r') as f:
+        lines = f.readlines()
+        for string_idx in range(len(find_string)):
+            # skip part that will be automatically calculated e.g. when calculating time
+            if(find_string[string_idx][0] == "-"):
+                continue
+            found = False
+            if(find_string[string_idx][1].startswith('Time')):
+                # has to iterate over all runs to get the median,... of the times
+                getTimeStatisticsOfDir(cur_log_dir_path, find_string[string_idx][0])
+            else:
+                for line in lines:
+                    line = line.rstrip()
+                    param_found = re.findall(find_string[string_idx][0], line)
+                    if len(param_found) == 0: continue
+                    else:
+                        if param_found[0]=="MXM_PARAMS":
+                            # Split up the Matrix parameters
+                            start = line.find(find_string[string_idx][0])
+                            end = start + len(find_string[string_idx][0])
+                            res = line[end:].strip('%=\n\r ')
+                            res_split = map(int, res.split(" "))
+                            matrix_size = res_split[0]
+                            matrix_task_dist = res_split[1:]
+                            matrix_num_tasks = sum(matrix_task_dist)
+                            matrix_task_dist_str = ""
+                            for i in range(len(matrix_task_dist)):
+                                matrix_task_dist_str += str(matrix_task_dist[i])+" "
+                            matrix_task_dist_str = matrix_task_dist_str.rstrip()
+                            csv_file.write(str(matrix_size)+","+str(matrix_num_tasks)+","+matrix_task_dist_str)
+                            found = True
+                            break
+                        else:
+                            # Get the value of the string 
+                            # (the first element after the string without [spaces, new lines, =])
+                            start = line.find(find_string[string_idx][0])
+                            end = start + len(find_string[string_idx][0])
+                            res = line[end:].strip('%=\n\r ')
+                            res_split = res.split(" ")
+                            csv_file.write(res_split[0])
+                            found = True
+                            break
+                if not found:
+                    csv_file.write("-1")
+            if string_idx < len(find_string)-1:
+                csv_file.write(",")
+    
+####################################################
+####################################################
+####################################################
+
+for cur_log_dir in os.listdir(logs_path):
+    cur_log_dir_path = os.path.join(logs_path, cur_log_dir)
+    getParametersOfDir(cur_log_dir_path)
     csv_file.write("\n")
+    
+
+
+# for read_file in os.listdir(outputs_path):
+#     with open(os.path.join(outputs_path, read_file), 'r') as f:
+#         lines = f.readlines()
+#         for string_idx in range(len(find_string)):
+#             found = False
+#             for line in lines:
+#                 line = line.rstrip()
+#                 param_found = re.findall(find_string[string_idx][0], line)
+#                 if len(param_found) == 0: continue
+#                 else:
+#                     if param_found[0]=="MXM_PARAMS":
+#                         # Split up the Matrix parameters
+#                         start = line.find(find_string[string_idx][0])
+#                         end = start + len(find_string[string_idx][0])
+#                         res = line[end:].strip('%=\n\r ')
+#                         res_split = map(int, res.split(" "))
+#                         matrix_size = res_split[0]
+#                         matrix_task_dist = res_split[1:]
+#                         matrix_num_tasks = sum(matrix_task_dist)
+#                         matrix_task_dist_str = ""
+#                         for i in range(len(matrix_task_dist)):
+#                             matrix_task_dist_str += str(matrix_task_dist[i])+" "
+#                         matrix_task_dist_str = matrix_task_dist_str.rstrip()
+#                         csv_file.write(str(matrix_size)+","+str(matrix_num_tasks)+","+matrix_task_dist_str)
+#                         if string_idx < len(find_string)-1:
+#                             csv_file.write(",")
+#                         found = True
+#                         break
+#                     else:
+#                         # Get the value of the string 
+#                         # (the first element after the string without [spaces, new lines, =])
+#                         start = line.find(find_string[string_idx][0])
+#                         end = start + len(find_string[string_idx][0])
+#                         res = line[end:].strip('%=\n\r ')
+#                         res_split = res.split(" ")
+#                         csv_file.write(res_split[0])
+#                         if string_idx < len(find_string)-1:
+#                             csv_file.write(",")
+#                         found = True
+#                         break
+#             if not found:
+#                 csv_file.write("-1,")
+#     csv_file.write("\n")
 
 csv_file.close()
