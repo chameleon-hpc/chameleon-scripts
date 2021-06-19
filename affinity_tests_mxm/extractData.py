@@ -102,6 +102,7 @@ def getPerNodeStatisticsOfDir(cur_log_dir_path, find_this_string):
     for read_file in os.listdir(cur_log_dir_path):
         found = False
         found_counter = 0
+        stats[i] = 0.0
         with open(os.path.join(cur_log_dir_path, read_file), 'r') as f:
             lines = f.readlines()
             for line in lines:
@@ -115,7 +116,7 @@ def getPerNodeStatisticsOfDir(cur_log_dir_path, find_this_string):
                     end = start + len(find_this_string)
                     res = line[end:].strip('%=\n\r ')
                     res_split = res.split(" ")
-                    stats[i] = float(res_split[0])
+                    stats[i] += float(res_split[0])
                     found = True
                     found_counter += 1
                     continue # multiple values of stat per file
@@ -177,8 +178,7 @@ def getParametersOfDir(cur_log_dir_path):
                             break
                 if not found:
                     csv_file.write("-1")
-            if string_idx < len(find_string)-1:
-                csv_file.write(",")
+            csv_file.write(",")
     
 ####################################################
 ####################################################
@@ -187,6 +187,10 @@ def getParametersOfDir(cur_log_dir_path):
 for cur_log_dir in os.listdir(logs_path):
     cur_log_dir_path = os.path.join(logs_path, cur_log_dir)
     getParametersOfDir(cur_log_dir_path)
+    # delete last character of line (which is a ",")
+    csv_file.seek(-1,os.SEEK_END)
+    csv_file.truncate()
+
     csv_file.write("\n")
     
 
