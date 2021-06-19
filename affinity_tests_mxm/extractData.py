@@ -27,12 +27,12 @@ find_string = [
     ["SLURM_NTASKS_PER_NODE", "SlurmTasksPerNode"],
     ["OMP_NUM_THREADS", "OmpNumThreads"],
     ["AUTOMATIC_NUMA_BALANCING", "NumaBalancing"],
-    ["Task Domain Hitrate", "DomainHitrate"],
-    ["Task gtid Hitrate", "GtidHitrate"],
-    ["The domain changed", "DomainChanges"],
-    ["The domain stayed the same", "DomainNotChanges"],
-    ["The gtid changed", "GtidChanges"],
-    ["The gtid stayed the same", "GtidNotChanges"],
+    ["Task Domain Hitrate", "StatDomainHitrate"], #All those "Stat" values get calculated per node
+    ["Task gtid Hitrate", "StatGtidHitrate"],
+    ["The domain changed", "StatDomainChanges"],
+    ["The domain stayed the same", "StatDomainNotChanges"],
+    ["The gtid changed", "StatGtidChanges"],
+    ["The gtid stayed the same", "StatGtidNotChanges"],
     ["MXM_PARAMS", "MatrixSize,MatrixNumTasks,MatrixDistribution"],
     ["Computations with chameleon took", "TimeChameleon"],
     ["-", "TCUQ"], # Time Chameleon Upper Quartile
@@ -96,6 +96,37 @@ def getTimeStatisticsOfDir(cur_log_dir_path, find_this_string):
     lw = times[times>=lq-1.5*iqr].min()
     csv_file.write(str(times_median)+","+str(uq)+","+str(lq)+","+str(uw)+","+str(lw))
 
+def getPerNodeStatisticsOfDir(cur_log_dir_path, find_this_string):
+    i = 0
+    stats = np.zeros(len(os.listdir(cur_log_dir_path)))
+    for read_file in os.listdir(cur_log_dir_path):
+        found = False
+        found_counter = 0
+        with open(os.path.join(cur_log_dir_path, read_file), 'r') as f:
+            lines = f.readlines()
+            for line in lines:
+                line = line.rstrip()
+                param_found = re.findall(find_this_string, line)
+                if len(param_found) == 0: continue
+                else:
+                    # Get the value of the string 
+                    # (the first element after the string without [spaces, new lines, =])
+                    start = line.find(find_this_string)
+                    end = start + len(find_this_string)
+                    res = line[end:].strip('%=\n\r ')
+                    res_split = res.split(" ")
+                    stats[i] = float(res_split[0])
+                    found = True
+                    found_counter += 1
+                    continue # multiple values of stat per file
+            if not found:
+                stats[i]=-1
+            else:
+                stats[i] = stats[i]/found_counter # average of values per file
+            i += 1
+    stats_average = np.average(stats)
+    csv_file.write(str(stats_average))
+
 def getParametersOfDir(cur_log_dir_path):
     # get parameters (all except the time) from some file
     first_file = os.listdir(cur_log_dir_path)[0]
@@ -109,6 +140,9 @@ def getParametersOfDir(cur_log_dir_path):
             if(find_string[string_idx][1].startswith('Time')):
                 # has to iterate over all runs to get the median,... of the times
                 getTimeStatisticsOfDir(cur_log_dir_path, find_string[string_idx][0])
+            elif(find_string[string_idx][1].startswith('Stat')):
+                # the Stat values get calculated per node, i.e. occur multiple times per log file
+                getPerNodeStatisticsOfDir(cur_log_dir_path, find_string[string_idx][0])
             else:
                 for line in lines:
                     line = line.rstrip()
