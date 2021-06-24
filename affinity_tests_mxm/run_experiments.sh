@@ -1,36 +1,38 @@
 #!/usr/local_rwth/bin/zsh
-#SBATCH --time=00:15:00
+#SBATCH --time=06:00:00
 #SBATCH --exclusive
-#SBATCH --partition=c18m
+#SBATCH --account=thes0986
+##SBATCH --partition=c18m
 
 
-###############################
-# Loading some default values #
-###############################
-export CHAM_AFF_TASK_SELECTION_STRAT=3
+#########################################################
+#           Loading some default values                 #
+#########################################################
+export CHAM_AFF_TASK_SELECTION_STRAT=1
 export CHAM_AFF_PAGE_SELECTION_STRAT=8
 export CHAM_AFF_PAGE_WEIGHTING_STRAT=2
 export CHAM_AFF_CONSIDER_TYPES=1
 export CHAM_AFF_PAGE_SELECTION_N=3
 export CHAM_AFF_TASK_SELECTION_N=3
-export CHAM_AFF_MAP_MODE=0
+export CHAM_AFF_MAP_MODE=3
 export CHAM_AFF_ALWAYS_CHECK_PHYSICAL=1
-export AUTOMATIC_NUMA_BALANCING=1
+export AUTOMATIC_NUMA_BALANCING=0
 export OMP_NUM_THREADS=47
 export PROG="mxm_chameleon"
 export CHAMELEON_VERSION="chameleon/intel"
-export MXM_PARAMS="600 1200 1200 1200 1200"
+export OMP_PLACES=cores 
+export OMP_PROC_BIND=close
 
-N_RUNS=5
-
-cd /home/ka387454/repos/chameleon-apps/applications/matrix_example
-module use -a /home/ka387454/.modules
-module load $CHAMELEON_VERSION
+N_RUNS=20
 
 LOG_DIR=${OUT_DIR}"/logs"
 mkdir ${LOG_DIR}
 
 export_vars="CHAMELEON_VERSION,MXM_PARAMS,OMP_NUM_THREADS,CHAM_AFF_TASK_SELECTION_STRAT,CHAM_AFF_PAGE_SELECTION_STRAT,CHAM_AFF_PAGE_WEIGHTING_STRAT,CHAM_AFF_CONSIDER_TYPES,CHAM_AFF_PAGE_SELECTION_N,CHAM_AFF_TASK_SELECTION_N,CHAM_AFF_MAP_MODE,CHAM_AFF_ALWAYS_CHECK_PHYSICAL,NO_NUMA_BALANCING,AUTOMATIC_NUMA_BALANCING,PROG"
+
+cd /home/ka387454/repos/chameleon-apps/applications/matrix_example
+module use -a /home/ka387454/.modules
+module load $CHAMELEON_VERSION
 
 function run_experiment()
 {
@@ -47,8 +49,7 @@ env
 echo ""
 echo "${MPIEXEC} ${FLAGS_MPI_BATCH}"
 
-OMP_PLACES=cores OMP_PROC_BIND=close I_MPI_DEBUG=5 \
-KMP_AFFINITY=verbose $MPIEXEC $FLAGS_MPI_BATCH \
+I_MPI_DEBUG=5 KMP_AFFINITY=verbose $MPIEXEC $FLAGS_MPI_BATCH \
 --export=PATH,CPLUS_INCLUDE_PATH,C_INCLUDE_PATH,CPATH,INCLUDE,\
 LD_LIBRARY_PATH,LIBRARY_PATH,I_MPI_DEBUG,I_MPI_TMI_NBITS_RANK,\
 OMP_NUM_THREADS,OMP_PLACES,OMP_PROC_BIND,KMP_AFFINITY,\
@@ -62,29 +63,121 @@ ${NO_NUMA_BALANCING} \
 }
 
 #########################################################
-#   Test with varying Task selection strategy and mode  #
+#   Task selection strategy and mode                    #
 #########################################################
-for VAR1 in 0 1 2 3
-do
-    export CHAM_AFF_MAP_MODE=${VAR1}
-    for VAR2 in {0..4}
-    do
-    export CHAM_AFF_TASK_SELECTION_STRAT=${VAR2}
-    VARIATION_DIR=${LOG_DIR}"/"${VAR1}"_"${VAR2}
-    mkdir ${VARIATION_DIR}
-        for RUN in {1..${N_RUNS}}
-        do
-            eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
-            # print some information to check the progression of the job
-            squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
-            echo "Finished"${VAR1}"_"${VAR2}"_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
-        done
-    done
-done
+# for VAR1 in 0 1 2 3
+# do
+#     export CHAM_AFF_MAP_MODE=${VAR1}
+#     for VAR2 in {0..4}
+#     do
+#     export CHAM_AFF_TASK_SELECTION_STRAT=${VAR2}
+#     VARIATION_DIR=${LOG_DIR}"/"${VAR1}"_"${VAR2}
+#     mkdir ${VARIATION_DIR}
+#         for RUN in {1..${N_RUNS}}
+#         do
+#             eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
+#             # print some information to check the progression of the job
+#             squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
+#             echo "Finished"${VAR1}"_"${VAR2}"_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
+#         done
+#     done
+# done
+
+#########################################################
+#   quick test:      vary consider types                #
+#########################################################
+# export CHAM_AFF_TASK_SELECTION_STRAT=1
+# export CHAM_AFF_MAP_MODE=3
+# for VAR1 in 0 1
+# do
+#     export CHAM_AFF_CONSIDER_TYPES=${VAR1}
+#     VARIATION_DIR=${LOG_DIR}"/"${VAR1}
+#     mkdir ${VARIATION_DIR}
+#     for RUN in {1..${N_RUNS}}
+#     do
+#         eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
+#         # print some information to check the progression of the job
+#         squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
+#         echo "Finished"${VAR1}"_"${VAR2}"_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
+#     done
+# done
+
+#########################################################
+#   Task Selection Strats with variable N               #
+#########################################################
+# export CHAM_AFF_MAP_MODE=3
+# for VAR1 in 2 3 4
+# do  
+#     export CHAM_AFF_TASK_SELECTION_STRAT=${VAR1}
+#     for VAR2 in  3 5 7 9
+#     do
+#         export CHAM_AFF_TASK_SELECTION_N=${VAR2}
+#         VARIATION_DIR=${LOG_DIR}"/"${VAR1}"_"${VAR2}
+#         mkdir ${VARIATION_DIR}
+#         for RUN in {1..${N_RUNS}}
+#         do
+#             eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
+#             # print some information to check the progression of the job
+#             squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
+#             echo "Finished"${VAR1}"_"${VAR2}"_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
+#         done
+#     done
+# done
+
+#########################################################
+#       Page Selection Strats and Map Mode              #
+#########################################################
+# for VAR1 in 0 1 2 3 4 5 6 7 8
+# do  
+#     export CHAM_AFF_PAGE_SELECTION_STRAT=${VAR1}
+#     for VAR2 in  0 1 2 3
+#     do
+#         export CHAM_AFF_MAP_MODE=${VAR2}
+#         VARIATION_DIR=${LOG_DIR}"/"${VAR1}"_"${VAR2}
+#         mkdir ${VARIATION_DIR}
+#         for RUN in {1..${N_RUNS}}
+#         do
+#             eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
+#             # print some information to check the progression of the job
+#             squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
+#             echo "Finished"${VAR1}"_"${VAR2}"_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
+#         done
+#     done
+# done
+
+#########################################################
+#   Page Selection Strats with variable N               #
+#########################################################
+# for VAR1 in 1 2 6 7
+# do  
+#     export CHAM_AFF_PAGE_SELECTION_STRAT=${VAR1}
+#     for VAR2 in  3 5 7 9
+#     do
+#         export CHAM_AFF_PAGE_SELECTION_N=${VAR2}
+#         VARIATION_DIR=${LOG_DIR}"/"${VAR1}"_"${VAR2}
+#         mkdir ${VARIATION_DIR}
+#         for RUN in {1..${N_RUNS}}
+#         do
+#             eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
+#             # print some information to check the progression of the job
+#             squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
+#             echo "Finished"${VAR1}"_"${VAR2}"_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
+#         done
+#     done
+# done
 
 ##############################
 # Chameleon without affinity #
 ##############################
+export CHAM_AFF_TASK_SELECTION_STRAT=-1
+export CHAM_AFF_PAGE_SELECTION_STRAT=-1
+export CHAM_AFF_PAGE_WEIGHTING_STRAT=-1
+export CHAM_AFF_CONSIDER_TYPES=-1
+export CHAM_AFF_PAGE_SELECTION_N=-1
+export CHAM_AFF_TASK_SELECTION_N=-1
+export CHAM_AFF_MAP_MODE=-1
+export CHAM_AFF_ALWAYS_CHECK_PHYSICAL=-1
+module unload chameleon/intel
 export CHAMELEON_VERSION="chameleon/intel_no_affinity"
 module load $CHAMELEON_VERSION
 VARIATION_DIR=${LOG_DIR}"/cham_no_affinity"
@@ -100,11 +193,20 @@ done
 ##############################
 # Tasking only, no chameleon #
 ##############################
+export CHAM_AFF_TASK_SELECTION_STRAT=-1
+export CHAM_AFF_PAGE_SELECTION_STRAT=-1
+export CHAM_AFF_PAGE_WEIGHTING_STRAT=-1
+export CHAM_AFF_CONSIDER_TYPES=-1
+export CHAM_AFF_PAGE_SELECTION_N=-1
+export CHAM_AFF_TASK_SELECTION_N=-1
+export CHAM_AFF_MAP_MODE=-1
+export CHAM_AFF_ALWAYS_CHECK_PHYSICAL=-1
+module unload chameleon/intel
 export CHAMELEON_VERSION="chameleon/intel_no_affinity" # Need to load chameleon because of prints in the matrix example
 module load $CHAMELEON_VERSION
 VARIATION_DIR=${LOG_DIR}"/no_chameleon"
 mkdir ${VARIATION_DIR}
-export PROG=mxm_tasking
+export PROG="mxm_tasking"
 export OMP_NUM_THREADS=48
 for RUN in {1..${N_RUNS}}
 do

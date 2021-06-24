@@ -5,7 +5,7 @@ import re
 import numpy as np
 #import statistics as st
 
-test_name = 'output_20210618_111043'
+test_name = 'taskN'
 
 # name of the new csv file (overwrites existing file)
 filename = test_name + '.csv'
@@ -34,6 +34,8 @@ find_string = [
     ["The gtid changed", "StatGtidChanges"],
     ["The gtid stayed the same", "StatGtidNotChanges"],
     ["MXM_PARAMS", "MatrixSize,MatrixNumTasks,MatrixDistribution"],
+    ["CHAMELEON_VERSION", "ChameleonVersion"],
+    ["PROG", "Program"],
     ["Computations with chameleon took", "TimeChameleon"],
     ["-", "TCUQ"], # Time Chameleon Upper Quartile
     ["-", "TCLQ"], # Time Chameleon Lower Quartile

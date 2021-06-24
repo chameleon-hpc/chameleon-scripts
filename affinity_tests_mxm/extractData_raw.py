@@ -5,7 +5,7 @@ import re
 import numpy as np
 #import statistics as st
 
-test_name = 'output_20210618_111043'
+test_name = 'output_20210623_142829'
 
 # name of the new csv file (overwrites existing file)
 filename = test_name + '_raw.csv'
@@ -34,6 +34,9 @@ find_string = [
     ["The gtid changed", "StatGtidChanges"],
     ["The gtid stayed the same", "StatGtidNotChanges"],
     ["MXM_PARAMS", "MatrixSize,MatrixNumTasks,MatrixDistribution"],
+    ["CHAMELEON_VERSION", "ChameleonVersion"],
+    ["PROG", "Program"],
+    ["Computations with chameleon took", "Time"],
     ["Computations with chameleon took", "TimeChameleon"],
     ["Computations with normal tasking took", "TimeTasking"],
     ]
@@ -165,7 +168,26 @@ def getParametersOfDir(cur_log_dir_path):
                                 found = True
                                 break
                     if not found:
-                        csv_file.write("-1")
+                        # Parameter not in the file
+                        if find_string[string_idx][1]=="Time":
+                            # non chameleon version, find other time
+                            other_time_string = "Computations with normal tasking took"
+                            for line in lines:
+                                line = line.rstrip()
+                                param_found = re.findall(other_time_string, line)
+                                if len(param_found) == 0: continue
+                                else:
+                                    # Get the value of the string 
+                                    # (the first element after the string without [spaces, new lines, =])
+                                    start = line.find(other_time_string)
+                                    end = start + len(other_time_string)
+                                    res = line[end:].strip('%=\n\r ')
+                                    res_split = res.split(" ")
+                                    csv_file.write(res_split[0])
+                                    found = True
+                                    break
+                        if not found:
+                            csv_file.write("-1")
                 csv_file.write(",")
         # delete last character of line (which is a ",")
         csv_file.seek(-1,os.SEEK_END)

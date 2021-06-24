@@ -1,0 +1,3 @@
+TaskSelectionStrat,PageSelectionStrat,PageWeightStrat,ConsiderTypes,PageN,TaskN,MapMode,CheckPhysical,SlurmNodes,SlurmTasksPerNode,OmpNumThreads,NumaBalancing,StatDomainHitrate,StatGtidHitrate,StatDomainChanges,StatDomainNotChanges,StatGtidChanges,StatGtidNotChanges,MatrixSize,MatrixNumTasks,MatrixDistribution,ChameleonVersion,Program,TimeChameleon,TCUQ,TCLQ,TCUW,TCLW,TimeTasking,TTUQ,TTLQ,TTUW,TTLW
+1,8,2,0,3,3,3,1,2,1,47,0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,600,2400,1200 1200,chameleon/intel,mxm_chameleon,14.97368,15.04847,14.80101,15.23869,14.69954,-1.0,-1.0,-1.0,-1.0,-1.0
+1,8,2,1,3,3,3,1,2,1,47,0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,600,2400,1200 1200,chameleon/intel,mxm_chameleon,13.410925,13.554,13.3755475,13.74928,13.17786,-1.0,-1.0,-1.0,-1.0,-1.0
