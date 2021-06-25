@@ -1,0 +1,9 @@
+TaskSelectionStrat,PageSelectionStrat,PageWeightStrat,ConsiderTypes,PageN,TaskN,MapMode,CheckPhysical,SlurmNodes,SlurmTasksPerNode,OmpNumThreads,NumaBalancing,StatDomainHitrate,StatGtidHitrate,StatDomainChanges,StatDomainNotChanges,StatGtidChanges,StatGtidNotChanges,MatrixSize,MatrixNumTasks,MatrixDistribution,ChameleonVersion,Program,TimeChameleon,TCUQ,TCLQ,TCUW,TCLW,TimeTasking,TTUQ,TTLQ,TTUW,TTLW
+1,2,1,0,16,3,3,1,2,1,47,0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,600,2400,1200 1200,chameleon/intel,mxm_chameleon,12.057545,12.4847025,11.75994,12.90113,11.52494,-1.0,-1.0,-1.0,-1.0,-1.0
+1,2,0,0,16,3,3,1,2,1,47,0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,600,2400,1200 1200,chameleon/intel,mxm_chameleon,13.394385,13.53223,13.2822925,13.78476,13.05957,-1.0,-1.0,-1.0,-1.0,-1.0
+1,2,1,1,16,3,3,1,2,1,47,0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,600,2400,1200 1200,chameleon/intel,mxm_chameleon,11.4392,11.50757,11.3648525,11.7107,11.23908,-1.0,-1.0,-1.0,-1.0,-1.0
+1,2,2,0,16,3,3,1,2,1,47,0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,600,2400,1200 1200,chameleon/intel,mxm_chameleon,12.12758,12.411005,11.8434025,12.89595,11.54143,-1.0,-1.0,-1.0,-1.0,-1.0
+1,2,0,1,16,3,3,1,2,1,47,0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,600,2400,1200 1200,chameleon/intel,mxm_chameleon,13.52858,13.59137,13.472655,13.66377,13.41092,-1.0,-1.0,-1.0,-1.0,-1.0
+1,2,2,1,16,3,3,1,2,1,47,0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,600,2400,1200 1200,chameleon/intel,mxm_chameleon,11.420025,11.529245,11.36098,11.74691,11.20142,-1.0,-1.0,-1.0,-1.0,-1.0
+-1,-1,-1,-1,-1,-1,-1,-1,2,1,47,0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,600,2400,1200 1200,chameleon/intel_no_affinity,mxm_chameleon,19.170975,19.2398125,18.95998,19.37897,18.83329,-1.0,-1.0,-1.0,-1.0,-1.0
+-1,-1,-1,-1,-1,-1,-1,-1,2,1,48,0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,600,2400,1200 1200,chameleon/intel_no_affinity,mxm_tasking,-1.0,-1.0,-1.0,-1.0,-1.0,13.742955,13.880015,13.6230625,14.17856,13.33469

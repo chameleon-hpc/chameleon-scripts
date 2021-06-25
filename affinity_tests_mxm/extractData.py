@@ -5,7 +5,7 @@ import re
 import numpy as np
 #import statistics as st
 
-test_name = 'taskN'
+test_name = 'pageWeighting_ConsiderTypes'
 
 # name of the new csv file (overwrites existing file)
 filename = test_name + '.csv'
