@@ -39,6 +39,7 @@ find_string = [
     ["Computations with chameleon took", "Time"],
     ["Computations with chameleon took", "TimeChameleon"],
     ["Computations with normal tasking took", "TimeTasking"],
+    ["SOME_INDEX", "SomeIndex"],    # Index for simpler Plotting
     ]
 
 path_to_script = os.path.dirname(os.path.abspath(__file__))

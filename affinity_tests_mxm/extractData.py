@@ -5,7 +5,7 @@ import re
 import numpy as np
 #import statistics as st
 
-test_name = 'pageWeighting_ConsiderTypes'
+test_name = 'nodes'
 
 # name of the new csv file (overwrites existing file)
 filename = test_name + '.csv'
@@ -46,6 +46,8 @@ find_string = [
     ["-", "TTLQ"], # Time Tasking Lower Quartile
     ["-", "TTUW"], # Time Tasking Upper Whisker
     ["-", "TTLW"], # Time Tasking Lower Whisker
+    ["N_RUNS", "NRuns"], # Number of repetitions per scenario
+    ["SOME_INDEX", "SomeIndex"],    # Index for simpler Plotting
     ]
 
 path_to_script = os.path.dirname(os.path.abspath(__file__))
