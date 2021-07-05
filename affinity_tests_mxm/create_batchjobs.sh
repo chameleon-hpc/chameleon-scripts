@@ -1,9 +1,9 @@
 #!/usr/local_rwth/bin/zsh
 
 export CUR_DATE_STR=${CUR_DATE_STR:-"$(date +"%Y%m%d_%H%M%S")"}
-export OUT_DIR="/home/ka387454/repos/chameleon-scripts/affinity_tests_mxm/outputs/output_"${CUR_DATE_STR}
-# export OUT_DIR="/home/ka387454/repos/chameleon-scripts/affinity_tests_mxm/outputs/nodes"
-mkdir ${OUT_DIR}
+# export OUT_DIR="/home/ka387454/repos/chameleon-scripts/affinity_tests_mxm/outputs/output_"${CUR_DATE_STR}
+export OUT_DIR="/home/ka387454/repos/chameleon-scripts/affinity_tests_mxm/outputs/stats_mapMode_CheckPhy_NoNuma_1Node_PageChangeCheck"
+mkdir -p ${OUT_DIR}
 
 
 export_vars="OUT_DIR,CUR_DATE_STR,MXM_PARAMS,CPUS_PER_TASK,MXM_SIZE,MXM_DISTRIBUTION,PROCS_PER_NODE,SOME_INDEX,NODES"
@@ -11,42 +11,52 @@ export_vars="OUT_DIR,CUR_DATE_STR,MXM_PARAMS,CPUS_PER_TASK,MXM_SIZE,MXM_DISTRIBU
 #########################################################
 #           Compile Chameleon Versions                  #
 #########################################################
-# cd /home/ka387454/repos/chameleon/src
-# export INSTALL_DIR=~/install/chameleon/intel_affinity_debug
-# make aff_debug
+cd /home/ka387454/repos/chameleon/src
+export INSTALL_DIR=~/install/chameleon/intel_affinity_debug
+make aff_debug
 
-# export INSTALL_DIR=~/install/chameleon/intel_no_affinity
-# CUSTOM_COMPILE_FLAGS="-DUSE_TASK_AFFINITY=0" make
+export INSTALL_DIR=~/install/chameleon/intel_no_affinity
+CUSTOM_COMPILE_FLAGS="-DUSE_TASK_AFFINITY=0" make
 
-# export INSTALL_DIR=~/install/chameleon/intel
-# make
-# cd -
+export INSTALL_DIR=~/install/chameleon/intel
+make
+cd -
 
 #########################################################
 #           Compile Matrix Example Versions             #
 #########################################################
-# export CHAMELEON_VERSION="chameleon/intel"
+export CHAMELEON_VERSION="chameleon/intel"
 
-# cd /home/ka387454/repos/chameleon-apps/applications/matrix_example
-# module use -a /home/ka387454/.modules
-# module load $CHAMELEON_VERSION
+cd /home/ka387454/repos/chameleon-apps/applications/matrix_example
+module use -a /home/ka387454/.modules
+module load $CHAMELEON_VERSION
 
-# export COMPILE_CHAMELEON=1
-# export COMPILE_TASKING=0
-# export PROG="mxm_chameleon"
-# make
+export COMPILE_CHAMELEON=1
+export COMPILE_TASKING=0
+export PROG="mxm_chameleon"
+make
 
-# export COMPILE_CHAMELEON=0
-# export COMPILE_TASKING=1
-# export PROG="mxm_tasking"
-# make
+export COMPILE_CHAMELEON=0
+export COMPILE_TASKING=1
+export PROG="mxm_tasking"
+make
 
-# cd -
+cd -
 
 #########################################################
 #                       Tests                           #
 #########################################################
 
+###################### 1 Node ###########################
+export MXM_SIZE=600
+export MXM_DISTRIBUTION="1200"
+export CPUS_PER_TASK=48
+sbatch --nodes=1 --ntasks-per-node=1 --cpus-per-task=${CPUS_PER_TASK} --job-name=mxm_affinity_testing \
+--output=${OUT_DIR}/slurmOutput.txt \
+--export=${export_vars} \
+run_experiments.sh
+
+###################### 2 Nodes ##########################
 # export MXM_SIZE=600
 # export MXM_DISTRIBUTION="1200 1200"
 # export CPUS_PER_TASK=48
@@ -80,29 +90,29 @@ export_vars="OUT_DIR,CUR_DATE_STR,MXM_PARAMS,CPUS_PER_TASK,MXM_SIZE,MXM_DISTRIBU
 #########################################################
 #                Vary Number of Slurm Nodes             #
 #########################################################
-export MXM_SIZE=600
-tasks=1200
-export PROCS_PER_NODE=1
-export CPUS_PER_TASK=48
-export SOME_INDEX=0
-for NODES in 1 2 4 8 16 32
-do
-    export NODES
-    export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
-    # echo ${SOME_INDEX}
-    MXM_DISTRIBUTION=""
-    if [ "${NODES}" -gt "1" ]
-    then
-        for x in {1..$((${NODES}-1))}
-        do
-            MXM_DISTRIBUTION=${MXM_DISTRIBUTION}${tasks}" "
-        done
-    fi
-    MXM_DISTRIBUTION=${MXM_DISTRIBUTION}${tasks}
-    export MXM_DISTRIBUTION
-    # echo ${MXM_DISTRIBUTION}
-    sbatch --nodes=${NODES} --ntasks-per-node=${PROCS_PER_NODE} --cpus-per-task=${CPUS_PER_TASK} --job-name=mxm_affinity_testing \
-    --output=${OUT_DIR}/slurmOutput_${NODES}.txt \
-    --export=${export_vars} \
-    run_experiments.sh
-done
+# export MXM_SIZE=600
+# tasks=1200
+# export PROCS_PER_NODE=1
+# export CPUS_PER_TASK=48
+# export SOME_INDEX=0
+# for NODES in 1 2 4 8 16 32
+# do
+#     export NODES
+#     export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
+#     # echo ${SOME_INDEX}
+#     MXM_DISTRIBUTION=""
+#     if [ "${NODES}" -gt "1" ]
+#     then
+#         for x in {1..$((${NODES}-1))}
+#         do
+#             MXM_DISTRIBUTION=${MXM_DISTRIBUTION}${tasks}" "
+#         done
+#     fi
+#     MXM_DISTRIBUTION=${MXM_DISTRIBUTION}${tasks}
+#     export MXM_DISTRIBUTION
+#     # echo ${MXM_DISTRIBUTION}
+#     sbatch --nodes=${NODES} --ntasks-per-node=${PROCS_PER_NODE} --cpus-per-task=${CPUS_PER_TASK} --job-name=mxm_affinity_testing \
+#     --output=${OUT_DIR}/slurmOutput_${NODES}.txt \
+#     --export=${export_vars} \
+#     run_experiments.sh
+# done

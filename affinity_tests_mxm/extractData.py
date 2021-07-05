@@ -5,7 +5,7 @@ import re
 import numpy as np
 #import statistics as st
 
-test_name = 'nodes'
+test_name = 'stats_mapMode_CheckPhy_NoNuma_1Node'
 
 # name of the new csv file (overwrites existing file)
 filename = test_name + '.csv'
