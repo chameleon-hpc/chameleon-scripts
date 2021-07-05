@@ -1,0 +1,6 @@
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          21946404      c18m mxm_affi ka387454  R       0:19      1 ncm0145
+Finished 0_2_R1
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          21946404      c18m mxm_affi ka387454  R       0:22      1 ncm0145
+Finished 1_2_R1
