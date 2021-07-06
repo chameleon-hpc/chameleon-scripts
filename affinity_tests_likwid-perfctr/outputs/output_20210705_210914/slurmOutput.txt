@@ -1,3 +1,0 @@
-Loading Chameleon module version intel
-Unloading Chameleon module version intel
-Loading Chameleon module version intel_affinity_debug

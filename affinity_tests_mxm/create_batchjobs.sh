@@ -1,8 +1,9 @@
 #!/usr/local_rwth/bin/zsh
 
 export CUR_DATE_STR=${CUR_DATE_STR:-"$(date +"%Y%m%d_%H%M%S")"}
-# export OUT_DIR="/home/ka387454/repos/chameleon-scripts/affinity_tests_mxm/outputs/output_"${CUR_DATE_STR}
-export OUT_DIR="/home/ka387454/repos/chameleon-scripts/affinity_tests_mxm/outputs/stats_mapMode_CheckPhy_NoNuma_1Node_PageChangeCheck"
+CUR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )" # get path of current script
+export OUT_DIR="${CUR_DIR}/outputs/output_"${CUR_DATE_STR}
+export OUT_DIR="${CUR_DIR}/outputs/stats_mapMode_CheckPhy_NoNuma_1Node_PageChangeCheck"
 mkdir -p ${OUT_DIR}
 
 
@@ -27,8 +28,8 @@ cd -
 #########################################################
 export CHAMELEON_VERSION="chameleon/intel"
 
-cd /home/ka387454/repos/chameleon-apps/applications/matrix_example
-module use -a /home/ka387454/.modules
+cd ${CUR_DIR}/../../chameleon-apps/applications/matrix_example
+source ~/.zshrc
 module load $CHAMELEON_VERSION
 
 export COMPILE_CHAMELEON=1
@@ -41,7 +42,7 @@ export COMPILE_TASKING=1
 export PROG="mxm_tasking"
 make
 
-cd -
+cd ${CUR_DIR}
 
 #########################################################
 #                       Tests                           #

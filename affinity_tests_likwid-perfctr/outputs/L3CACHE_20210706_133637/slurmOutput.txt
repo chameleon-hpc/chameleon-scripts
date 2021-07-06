@@ -1,0 +1,7 @@
+Loading Chameleon module version intel_affinity_debug
+ncm0727.hpc.itc.rwth-aachen.de
+Currently Loaded Modulefiles:
+ 1) DEVELOP                         3) intelmpi/2018                  
+ 2) intel/19.0                      4) chameleon/intel_affinity_debug 
+             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
+          21956778      c18m mxm_affi ka387454  R       0:55      1 ncm0727

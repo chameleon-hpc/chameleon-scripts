@@ -1,5 +1,5 @@
 #!/usr/local_rwth/bin/zsh
-#SBATCH --time=01:00:00
+#SBATCH --time=00:05:00
 #SBATCH --exclusive
 #SBATCH --partition=c18m
 #SBATCH --account=thes0986
@@ -22,8 +22,8 @@ export AUTOMATIC_NUMA_BALANCING=0           # start with "no_numa_balancing"
 export SOME_INDEX=0
 export OMP_NUM_THREADS=$((${CPUS_PER_TASK}-1))  # chameleon communication thread
 export PROG="mxm_chameleon"
-export CHAMELEON_VERSION="chameleon/intel"
-# export CHAMELEON_VERSION="chameleon/intel_affinity_debug"
+# export CHAMELEON_VERSION="chameleon/intel"
+export CHAMELEON_VERSION="chameleon/intel_affinity_debug"
 export OMP_PLACES=cores 
 export OMP_PROC_BIND=close
 export DIR_MXM_EXAMPLE=${CUR_DIR}/../../chameleon-apps/applications/matrix_example
@@ -112,10 +112,10 @@ do
             # print some information to check the progression of the job
             # squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
             echo "Finished "${VAR1}"_"${VAR2}"_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
-            exit
+            # exit
         done
     done
 done
 
 # get the total runtime of the job
-# squeue -u ka387454
+squeue -u ka387454
