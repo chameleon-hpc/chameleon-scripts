@@ -16,21 +16,20 @@ export_vars="OUT_DIR,CUR_DATE_STR,MXM_PARAMS,CPUS_PER_TASK,MXM_SIZE,MXM_DISTRIBU
 #########################################################
 #           Compile Chameleon Versions                  #
 #########################################################
-# cd /home/ka387454/repos/chameleon/src
-# export INSTALL_DIR=~/install/chameleon/intel_affinity_debug
-# make aff_debug
+cd ${CUR_DIR}/../../chameleon/src
+export INSTALL_DIR=~/install/chameleon/intel_affinity_debug
+make aff_debug
 
-# export INSTALL_DIR=~/install/chameleon/intel_no_affinity
-# CUSTOM_COMPILE_FLAGS="-DUSE_TASK_AFFINITY=0" make
+export INSTALL_DIR=~/install/chameleon/intel_no_affinity
+CUSTOM_COMPILE_FLAGS="-DUSE_TASK_AFFINITY=0" make
 
-# export INSTALL_DIR=~/install/chameleon/intel
-# make
-# cd -
+export INSTALL_DIR=~/install/chameleon/intel
+make
+cd -
 
 #########################################################
 #           Compile Matrix Example Versions             #
 #########################################################
-export USE_LIKWID=1 # use Likwid Marker
 module load likwid
 
 export CHAMELEON_VERSION="chameleon/intel"
@@ -38,8 +37,6 @@ export CHAMELEON_VERSION="chameleon/intel"
 cd ${CUR_DIR}/../../chameleon-apps/applications/matrix_example
 source ~/.zshrc
 module load $CHAMELEON_VERSION
-
-# export USE_LIKWID=0
 
 export COMPILE_CHAMELEON=1
 export COMPILE_TASKING=0

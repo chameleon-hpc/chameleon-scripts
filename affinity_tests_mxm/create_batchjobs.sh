@@ -7,7 +7,7 @@ export OUT_DIR="${CUR_DIR}/outputs/stats_mapMode_CheckPhy_NoNuma_1Node_PageChang
 mkdir -p ${OUT_DIR}
 
 
-export_vars="OUT_DIR,CUR_DATE_STR,MXM_PARAMS,CPUS_PER_TASK,MXM_SIZE,MXM_DISTRIBUTION,PROCS_PER_NODE,SOME_INDEX,NODES"
+MY_EXPORTS="OUT_DIR,CUR_DATE_STR,MXM_PARAMS,CPUS_PER_TASK,MXM_SIZE,MXM_DISTRIBUTION,PROCS_PER_NODE,SOME_INDEX,NODES"
 
 #########################################################
 #           Compile Chameleon Versions                  #
@@ -54,7 +54,7 @@ export MXM_DISTRIBUTION="1200"
 export CPUS_PER_TASK=48
 sbatch --nodes=1 --ntasks-per-node=1 --cpus-per-task=${CPUS_PER_TASK} --job-name=mxm_affinity_testing \
 --output=${OUT_DIR}/slurmOutput.txt \
---export=${export_vars} \
+--export=${MY_EXPORTS} \
 run_experiments.sh
 
 ###################### 2 Nodes ##########################
@@ -63,7 +63,7 @@ run_experiments.sh
 # export CPUS_PER_TASK=48
 # sbatch --nodes=2 --ntasks-per-node=1 --cpus-per-task=${CPUS_PER_TASK} --job-name=mxm_affinity_testing \
 # --output=${OUT_DIR}/slurmOutput.txt \
-# --export=${export_vars} \
+# --export=${MY_EXPORTS} \
 # run_experiments.sh
 
 
@@ -84,7 +84,7 @@ run_experiments.sh
 #     export CPUS_PER_TASK="$((48/${PPN}))"
 #     sbatch --nodes=2 --ntasks-per-node=${PPN} --cpus-per-task=${CPUS_PER_TASK} --job-name=mxm_affinity_testing \
 #     --output=${OUT_DIR}/slurmOutput_${PPN}.txt \
-#     --export=${export_vars} \
+#     --export=${MY_EXPORTS} \
 #     run_experiments.sh
 # done
 
@@ -114,6 +114,6 @@ run_experiments.sh
 #     # echo ${MXM_DISTRIBUTION}
 #     sbatch --nodes=${NODES} --ntasks-per-node=${PROCS_PER_NODE} --cpus-per-task=${CPUS_PER_TASK} --job-name=mxm_affinity_testing \
 #     --output=${OUT_DIR}/slurmOutput_${NODES}.txt \
-#     --export=${export_vars} \
+#     --export=${MY_EXPORTS} \
 #     run_experiments.sh
 # done

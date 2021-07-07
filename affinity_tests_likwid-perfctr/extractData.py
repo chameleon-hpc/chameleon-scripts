@@ -47,7 +47,10 @@ find_string = [
     ["-", "TTUW"], # Time Tasking Upper Whisker
     ["-", "TTLW"], # Time Tasking Lower Whisker
     ["N_RUNS", "NRuns"], # Number of repetitions per scenario
+    ["L2 miss ratio STAT", "Likwid_L2MissRatio"],
     ["L3 miss ratio STAT", "Likwid_L3MissRatio"],
+    ["Runtime \(RDTSC\) \[s\] STAT", "Likwid_Runtime"], # don't know what time this is, seems to be not usefull for me
+    ["Clock \[MHz\] STAT", "Likwid_Clock"], # probably not usefull for me
     ["SOME_INDEX", "SomeIndex"],    # Index for simpler Plotting
     ]
 

@@ -1,7 +1,7 @@
 #!/usr/local_rwth/bin/zsh
 if [ "${RUN_LIKWID}" = "1" ]; then
     module load likwid
-    LIKW_EXT="likwid-perfctr -o ${TMP_NAME_RUN}_hwc_R${PMI_RANK}.csv -O -f -c N:0-$((OMP_NUM_THREADS-1)) -g L3CACHE"
+    LIKW_EXT="likwid-perfctr -o ${TMP_NAME_RUN}_hwc_R${PMI_RANK}.csv -O -f -c N:0-$((OMP_NUM_THREADS-1)) -g L3CACHE -m"
 fi
 
 # remember current cpuset for process

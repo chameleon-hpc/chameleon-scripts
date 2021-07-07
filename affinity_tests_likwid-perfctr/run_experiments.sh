@@ -1,5 +1,5 @@
 #!/usr/local_rwth/bin/zsh
-#SBATCH --time=00:05:00
+#SBATCH --time=06:00:00
 #SBATCH --exclusive
 #SBATCH --partition=c18m
 #SBATCH --account=thes0986
@@ -120,8 +120,9 @@ I_MPI_DEBUG=5 ${MPIEXEC} ${FLAGS_MPI_BATCH} --export=${OLD_EXPORTS}${MY_EXPORTS}
 #########################################################
 # ALWAYS_CHECK_PHYSICAL and Map Mode with/out numa bal. #
 #########################################################
-N_RUNS=1
+# N_RUNS=10
 export AUTOMATIC_NUMA_BALANCING=0
+# export CHAM_AFF_TASK_SELECTION_STRAT=5 # ALL_LINEAR_FAKE
 for VAR1 in {0..1}
 do  
     export CHAM_AFF_ALWAYS_CHECK_PHYSICAL=${VAR1}
