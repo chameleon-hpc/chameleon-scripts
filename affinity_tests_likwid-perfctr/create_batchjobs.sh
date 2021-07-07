@@ -30,21 +30,26 @@ export_vars="OUT_DIR,CUR_DATE_STR,MXM_PARAMS,CPUS_PER_TASK,MXM_SIZE,MXM_DISTRIBU
 #########################################################
 #           Compile Matrix Example Versions             #
 #########################################################
-# export CHAMELEON_VERSION="chameleon/intel"
+export USE_LIKWID=1 # use Likwid Marker
+module load likwid
 
-# cd ${CUR_DIR}/../../chameleon-apps/applications/matrix_example
-# source ~/.zshrc
-# module load $CHAMELEON_VERSION
+export CHAMELEON_VERSION="chameleon/intel"
 
-# export COMPILE_CHAMELEON=1
-# export COMPILE_TASKING=0
-# export PROG="mxm_chameleon"
-# make
+cd ${CUR_DIR}/../../chameleon-apps/applications/matrix_example
+source ~/.zshrc
+module load $CHAMELEON_VERSION
 
-# export COMPILE_CHAMELEON=0
-# export COMPILE_TASKING=1
-# export PROG="mxm_tasking"
-# make
+# export USE_LIKWID=0
+
+export COMPILE_CHAMELEON=1
+export COMPILE_TASKING=0
+export PROG="mxm_chameleon"
+make likwid
+
+export COMPILE_CHAMELEON=0
+export COMPILE_TASKING=1
+export PROG="mxm_tasking"
+make likwid
 
 cd ${CUR_DIR}
 

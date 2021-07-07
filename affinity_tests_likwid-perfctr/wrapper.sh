@@ -8,10 +8,6 @@ fi
 CUR_CPUSET=$(cut -d':' -f2 <<< $(taskset -c -p $(echo $$)) | xargs)
 # echo "${PMI_RANK}: CUR_CPUSET = ${CUR_CPUSET}"
 
-# printing env needed for extracting data with python script
-module list
-env
-
 if [ "${RUN_LIKWID}" = "1" ]; then
     echo "Command executed for rank ${PMI_RANK}: ${LIKW_EXT} taskset -c ${CUR_CPUSET} ${DIR_MXM_EXAMPLE}/${PROG} ${MXM_PARAMS}"
     ${NO_NUMA_BALANCING} ${LIKW_EXT} taskset -c ${CUR_CPUSET} ${DIR_MXM_EXAMPLE}/${PROG} ${MXM_PARAMS}

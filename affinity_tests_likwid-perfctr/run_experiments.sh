@@ -93,6 +93,31 @@ RUN_LIKWID=${RUN_LIKWID:-1}
 # done
 
 #########################################################
+#                   Functions                           #
+#########################################################
+function run_experiment()
+{
+# split PARAMS without having to change the extractData.py script...
+export MXM_PARAMS="${MXM_SIZE} ${MXM_DISTRIBUTION}"
+
+if [ "$AUTOMATIC_NUMA_BALANCING" -eq "1" ]
+then NO_NUMA_BALANCING=""
+else NO_NUMA_BALANCING="no_numa_balancing"
+fi
+
+# printing env needed for extracting data with python script
+hostname
+module list
+env
+
+echo ""
+echo "${MPIEXEC} ${FLAGS_MPI_BATCH}"
+
+I_MPI_DEBUG=5 ${MPIEXEC} ${FLAGS_MPI_BATCH} --export=${OLD_EXPORTS}${MY_EXPORTS} ${CUR_DIR}/wrapper.sh
+
+}
+
+#########################################################
 # ALWAYS_CHECK_PHYSICAL and Map Mode with/out numa bal. #
 #########################################################
 N_RUNS=1
@@ -108,9 +133,9 @@ do
         for RUN in {1..${N_RUNS}}
         do
             export TMP_NAME_RUN=${VARIATION_DIR}/R${RUN}
-            I_MPI_DEBUG=5 ${MPIEXEC} ${FLAGS_MPI_BATCH} --export=${OLD_EXPORTS}${MY_EXPORTS} ${CUR_DIR}/wrapper.sh >>& ${VARIATION_DIR}/R${RUN}.log
+            eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
             # print some information to check the progression of the job
-            # squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
+            squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
             echo "Finished "${VAR1}"_"${VAR2}"_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
             # exit
         done

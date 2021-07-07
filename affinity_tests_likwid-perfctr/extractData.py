@@ -5,7 +5,7 @@ import re
 import numpy as np
 #import statistics as st
 
-test_name = 'L3CACHE_20210706_133637'
+test_name = 'L3CACHE_20210707_084024'
 
 # name of the new csv file (overwrites existing file)
 filename = test_name + '.csv'

@@ -1,4 +1,5 @@
 affinity_tests_mxm/outputs/
+affinity_tests_likwid-perfctr/outputs/
 affinity_tests_mxm/testingZSH/
 /.vscode
 __pycache__
