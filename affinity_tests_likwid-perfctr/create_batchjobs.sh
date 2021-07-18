@@ -18,7 +18,8 @@ export_vars="OUT_DIR,CUR_DATE_STR,MXM_PARAMS,CPUS_PER_TASK,MXM_SIZE,MXM_DISTRIBU
 #########################################################
 cd ${CUR_DIR}/../../chameleon/src
 export INSTALL_DIR=~/install/chameleon/intel_affinity_debug
-make aff_debug
+# make aff_debug
+make aff_no_commthread
 
 export INSTALL_DIR=~/install/chameleon/intel_no_affinity
 CUSTOM_COMPILE_FLAGS="-DUSE_TASK_AFFINITY=0" make

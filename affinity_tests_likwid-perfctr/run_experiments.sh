@@ -20,14 +20,19 @@ export CHAM_AFF_MAP_MODE=3                  # COMBINED_MODE
 export CHAM_AFF_ALWAYS_CHECK_PHYSICAL=1     # recheck every time
 export AUTOMATIC_NUMA_BALANCING=0           # start with "no_numa_balancing"
 export SOME_INDEX=0
-export OMP_NUM_THREADS=$((${CPUS_PER_TASK}-1))  # chameleon communication thread
+# export OMP_NUM_THREADS=$((${CPUS_PER_TASK}-1))  # chameleon communication thread
+# export OMP_PLACES=cores 
+# export OMP_PROC_BIND=close
 export PROG="mxm_chameleon"
 # export CHAMELEON_VERSION="chameleon/intel"
 export CHAMELEON_VERSION="chameleon/intel_affinity_debug"
-export OMP_PLACES=cores 
-export OMP_PROC_BIND=close
 export DIR_MXM_EXAMPLE=${CUR_DIR}/../../chameleon-apps/applications/matrix_example
 export N_RUNS=20
+
+# Use only one NUMA domain
+export OMP_PLACES=`numactl -H | grep cpus | awk '(NF>3) {for (i = 4; i <= NF; i++) printf "%d,", $i}' | sed 's/.$//'`
+export OMP_PROC_BIND=close
+export OMP_NUM_THREADS=48
 
 # split PARAMS without having to change the extractData.py script...
 export MXM_PARAMS="${MXM_SIZE} ${MXM_DISTRIBUTION}"
@@ -120,7 +125,7 @@ I_MPI_DEBUG=5 ${MPIEXEC} ${FLAGS_MPI_BATCH} --export=${OLD_EXPORTS}${MY_EXPORTS}
 #########################################################
 # ALWAYS_CHECK_PHYSICAL and Map Mode with/out numa bal. #
 #########################################################
-# N_RUNS=10
+N_RUNS=10
 export AUTOMATIC_NUMA_BALANCING=0
 # export CHAM_AFF_TASK_SELECTION_STRAT=5 # ALL_LINEAR_FAKE
 for VAR1 in {0..1}
