@@ -24,7 +24,7 @@ export CHAMELEON_VERSION="chameleon/intel"
 export OMP_PLACES=cores 
 export OMP_PROC_BIND=close
 
-export N_RUNS=1
+export N_RUNS=20
 
 LOG_DIR=${OUT_DIR}"/logs"
 mkdir -p ${LOG_DIR}
@@ -113,11 +113,11 @@ mkdir -p ${LOG_DIR}
 export CHAM_AFF_PAGE_SELECTION_STRAT=8      # Middle-Page
 export SOME_INDEX=-1
 
-for VAR1 in 0 #1 2 3
+for VAR1 in 0 1 2 3
 do
     export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
     export CHAM_AFF_MAP_MODE=${VAR1}
-    for VAR2 in 0 # {0..4}
+    for VAR2 in {0..4}
     do
     export CHAM_AFF_TASK_SELECTION_STRAT=${VAR2}
     VARIATION_DIR=${LOG_DIR}"/"${VAR1}"_"${VAR2}
@@ -138,18 +138,14 @@ done
 LOG_DIR=${OUT_DIR}"/../TaskSelStrat_VaryN_"${CUR_DATE_STR}"/logs"
 mkdir -p ${LOG_DIR}
 
-export CHAM_AFF_PAGE_SELECTION_STRAT=8
-export CHAM_AFF_PAGE_WEIGHTING_STRAT=2      # BY_SIZE
-export CHAM_AFF_CONSIDER_TYPES=1            # ONLY TO
-export CHAM_AFF_MAP_MODE=3                  # COMBINED_MODE
-export CHAM_AFF_ALWAYS_CHECK_PHYSICAL=1     # recheck every time
+export CHAM_AFF_PAGE_SELECTION_STRAT=8      # Middle-Page
 export SOME_INDEX=-1
 
-for VAR1 in 2 #3 4
+for VAR1 in 2 3 4
 do  
     export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
     export CHAM_AFF_TASK_SELECTION_STRAT=${VAR1}
-    for VAR2 in  1 #3 5 7 9
+    for VAR2 in  1 3 5 7 9
     do
         export CHAM_AFF_TASK_SELECTION_N=${VAR2}
         VARIATION_DIR=${LOG_DIR}"/"${VAR1}"_"${VAR2}

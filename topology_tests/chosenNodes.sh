@@ -1,0 +1,1 @@
+export CHOOSE_NODES_FAILED=0
