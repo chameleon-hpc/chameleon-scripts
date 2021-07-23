@@ -67,9 +67,7 @@ cd ${CUR_DIR}
 #                   Choose nodes                        #
 #########################################################
 # x,y,... = x nodes under one leaf switch, x and y have to be on different leaf switches
-WANTED_NODES="1,1"
-# FREE_NODES=$(eval sinfo | grep c18m | grep idle)
-# echo $FREE_NODES
+WANTED_NODES="3,3,3"
 python chooseNodes.py ${WANTED_NODES}
 source ${CUR_DIR}/chosenNodes.sh
 if [ "${CHOOSE_NODES_FAILED}" -eq "1" ]
@@ -77,7 +75,7 @@ then
     echo "Failed to choose requested nodes!\n"
     exit 1 
 fi
-# echo $NODELIST
+echo "NODELIST= $NODELIST \n"
 
 
 #########################################################
