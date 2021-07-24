@@ -16,7 +16,7 @@ MY_EXPORTS="OUT_DIR,CUR_DATE_STR,MXM_PARAMS,CPUS_PER_TASK,MXM_SIZE,MXM_DISTRIBUT
 #########################################################
 #           Compile Chameleon Versions                  #
 #########################################################
-# cd ${CUR_DIR}/../../chameleon/src
+cd ${CUR_DIR}/../../chameleon/src
 
 # export INSTALL_DIR=~/install/chameleon/intel_affinity_debug
 # make aff_debug
@@ -30,7 +30,7 @@ MY_EXPORTS="OUT_DIR,CUR_DATE_STR,MXM_PARAMS,CPUS_PER_TASK,MXM_SIZE,MXM_DISTRIBUT
 # export INSTALL_DIR=~/install/chameleon/intel
 # make
 
-# cd ${CUR_DIR}
+cd ${CUR_DIR}
 
 #########################################################
 #           Compile Chameleon Tools                     #

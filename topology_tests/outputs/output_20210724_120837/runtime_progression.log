@@ -1,3 +1,0 @@
-             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
-          22425665      c18m mxm_affi ka387454  R       0:24      2 ncm[0632,0638]
-Finished3_1_R1

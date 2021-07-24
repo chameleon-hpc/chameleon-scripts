@@ -1,4 +1,0 @@
-Loading Chameleon module version intel_tool
-cp: ‘/home/ka387454/repos/chameleon-scripts/topology_tests/outputs/output_20210724_174410/logs’ and ‘/home/ka387454/repos/chameleon-scripts/topology_tests/outputs/output_20210724_174410/../output_20210724_174410/logs’ are the same file
-             JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
-          22428950      c18m mxm_affi ka387454  R       0:31      2 ncm[0700,0708]
