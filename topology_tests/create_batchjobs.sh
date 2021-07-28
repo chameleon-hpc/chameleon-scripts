@@ -4,7 +4,6 @@ export CUR_DATE_STR=${CUR_DATE_STR:-"$(date +"%Y%m%d_%H%M%S")"}
 export CUR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )" # get path of current script
 export OUT_DIR="${CUR_DIR}/outputs/output_"${CUR_DATE_STR}
 # export OUT_DIR="${CUR_DIR}/outputs/stats_mapMode_CheckPhy_NoNuma_1Node_PageChangeCheck"
-mkdir -p ${OUT_DIR}
 
 TOOL_DIR=${CUR_DIR}/../../chameleon-apps/tools/tool_topo
 # TOOL_DIR=${CUR_DIR}/../../chameleon-apps/tools/tool_sample
@@ -16,7 +15,7 @@ MY_EXPORTS="OUT_DIR,CUR_DATE_STR,MXM_PARAMS,CPUS_PER_TASK,MXM_SIZE,MXM_DISTRIBUT
 #########################################################
 #           Compile Chameleon Versions                  #
 #########################################################
-cd ${CUR_DIR}/../../chameleon/src
+# cd ${CUR_DIR}/../../chameleon/src
 
 # export INSTALL_DIR=~/install/chameleon/intel_affinity_debug
 # make aff_debug
@@ -30,7 +29,7 @@ cd ${CUR_DIR}/../../chameleon/src
 # export INSTALL_DIR=~/install/chameleon/intel
 # make
 
-cd ${CUR_DIR}
+# cd ${CUR_DIR}
 
 #########################################################
 #           Compile Chameleon Tools                     #
@@ -69,21 +68,26 @@ cd ${CUR_DIR}
 #########################################################
 #                   Choose nodes                        #
 #########################################################
-# x,y,... = x nodes under one leaf switch, x and y have to be on different leaf switches
-# WANTED_NODES="1,1"
-# python chooseNodes.py ${WANTED_NODES}
-# source ${CUR_DIR}/chosenNodes.sh
-# if [ "${CHOOSE_NODES_FAILED}" -eq "1" ]
-# then 
-#     echo "Failed to choose requested nodes!\n"
-#     exit 1 
-# fi
-# echo "NODELIST= $NODELIST \n"
+function chooseNodes()
+{
+    # x,y,... = x nodes under one leaf switch, x and y have to be on different leaf switches
+    # WANTED_NODES="1,1"
+    echo "Wanted nodes: ${WANTED_NODES}\n"
+    python chooseNodes.py ${WANTED_NODES}
+    source ${CUR_DIR}/chosenNodes.sh
+    if [ "${CHOOSE_NODES_FAILED}" -eq "1" ]
+    then 
+        echo "Failed to choose requested nodes!\n"
+        exit 1 
+    fi
+    echo "NODELIST= $NODELIST \n"
+}
 
 
 #########################################################
 #                       Tests                           #
 #########################################################
+mkdir -p ${OUT_DIR}
 
 ###################### 1 Node ###########################
 # export MXM_SIZE=600
@@ -111,10 +115,30 @@ cd ${CUR_DIR}
 # --export=${MY_EXPORTS} \
 # run_experiments.sh
 
+# export MXM_SIZE=600
+# export MXM_DISTRIBUTION="1200 1200"
+# export CPUS_PER_TASK=48
+# sbatch --nodes=2 --ntasks-per-node=1 --cpus-per-task=${CPUS_PER_TASK} --job-name=mxm_affinity_testing \
+# --output=${OUT_DIR}/slurmOutput.txt \
+# --export=${MY_EXPORTS} \
+# run_experiments.sh
+
+###################### 4 Nodes ##########################
+export WANTED_NODES="2,1,1"
+chooseNodes
 export MXM_SIZE=600
-export MXM_DISTRIBUTION="1200 1200"
+export MXM_DISTRIBUTION="300 300 300 300"
 export CPUS_PER_TASK=48
-sbatch --nodes=2 --ntasks-per-node=1 --cpus-per-task=${CPUS_PER_TASK} --job-name=mxm_affinity_testing \
+sbatch --nodes=4 --nodelist=${NODELIST} --ntasks-per-node=1 --cpus-per-task=${CPUS_PER_TASK} --job-name=mxm_affinity_testing \
 --output=${OUT_DIR}/slurmOutput.txt \
 --export=${MY_EXPORTS} \
 run_experiments.sh
+
+################# 1 node, many ranks #####################
+# export MXM_SIZE=300
+# export MXM_DISTRIBUTION="300 300 300 300 300 300 300 300"
+# export CPUS_PER_TASK=6
+# sbatch --nodes=1 --ntasks-per-node=8 --cpus-per-task=${CPUS_PER_TASK} --job-name=mxm_affinity_testing \
+# --output=${OUT_DIR}/slurmOutput.txt \
+# --export=${MY_EXPORTS} \
+# run_experiments.sh

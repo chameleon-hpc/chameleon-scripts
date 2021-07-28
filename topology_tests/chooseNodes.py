@@ -14,6 +14,9 @@ topo_path = path_to_script + "/mapping_switches_nodes.log"
 topo_file = open(topo_path, 'r')
 topo_lines = topo_file.readlines()
 
+# write nodes to ignore here (e.g. when SLURM repeatedly says node x unavailable)
+blacklist = ["ncm0113"]
+
 def abort():
     out_file.write("export CHOOSE_NODES_FAILED=1\n")
     topo_file.close()
@@ -68,13 +71,16 @@ while i < len(free_nodes):
                 cur_id = cur_id + 1
     i = i+2
 
-print("List of currently idling nodes: "+str(free_node_list)+"\n")
+print("Currently idling nodes: "+str(len(free_node_list))+"\n")
+# print("List of currently idling nodes: "+str(free_node_list)+"\n")
 
 #########################################################
 #                   Choose nodes                        #
 #########################################################
-def checkSameRack(node1, node2): # return 1 if in the same rack, 0 if not, -1 if not in topo file
+def checkSameRack(node1, node2): # return 1 if in the same rack, 0 if not, -1 if not in topo file or blacklisted
     # topo_lines = topo_file.readlines()
+    if (node1 in blacklist or node2 in blacklist):
+        return -1
     linenumber = 0
     linenumber_n1 = -1
     linenumber_n2 = -1
