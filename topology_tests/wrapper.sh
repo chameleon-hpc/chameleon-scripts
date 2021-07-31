@@ -17,5 +17,5 @@ CUR_CPUSET=$(cut -d':' -f2 <<< $(taskset -c -p $(echo $$)) | xargs)
 #     ${NO_NUMA_BALANCING} ${LIKW_EXT} taskset -c ${CUR_CPUSET} ${DIR_MXM_EXAMPLE}/${PROG} ${MXM_PARAMS}
 # else
 #     echo "Command executed for rank ${PMI_RANK}: ${LIKW_EXT} ${DIR_MXM_EXAMPLE}/${PROG} ${MXM_PARAMS}"
-    ${NO_NUMA_BALANCING} ${DIR_MXM_EXAMPLE}/${PROG} ${MXM_PARAMS}
+    ${NO_NUMA_BALANCING} ${DIR_APPLICATION}/${PROG} ${MXM_PARAMS}
 # fi

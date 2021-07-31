@@ -2,5 +2,6 @@ affinity_tests_mxm/outputs/
 affinity_tests_likwid-perfctr/outputs/
 affinity_tests_mxm/testingZSH/
 topology_tests/outputs/
+topology_tests_pingpong/outputs/
 /.vscode
 __pycache__

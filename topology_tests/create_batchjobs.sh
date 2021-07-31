@@ -2,32 +2,43 @@
 
 export CUR_DATE_STR=${CUR_DATE_STR:-"$(date +"%Y%m%d_%H%M%S")"}
 export CUR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )" # get path of current script
-export OUT_DIR="${CUR_DIR}/outputs/output_"${CUR_DATE_STR}
-# export OUT_DIR="${CUR_DIR}/outputs/stats_mapMode_CheckPhy_NoNuma_1Node_PageChangeCheck"
+# export OUT_DIR="${CUR_DIR}/outputs/output_"${CUR_DATE_STR}
+export OUT_DIR="${CUR_DIR}/outputs/TopoMigrationCompare_S600_O1_"${CUR_DATE_STR}
+
 
 TOOL_DIR=${CUR_DIR}/../../chameleon-apps/tools/tool_topo
 # TOOL_DIR=${CUR_DIR}/../../chameleon-apps/tools/tool_sample
 export CHAMELEON_TOOL_LIBRARIES="${TOOL_DIR}/tool.so"
 
+export DIR_APPLICATION=${CUR_DIR}/../../chameleon-apps/applications/matrix_example
 
-MY_EXPORTS="OUT_DIR,CUR_DATE_STR,MXM_PARAMS,CPUS_PER_TASK,MXM_SIZE,MXM_DISTRIBUTION,PROCS_PER_NODE,SOME_INDEX,NODES,CUR_DIR,CHAMELEON_TOOL_LIBRARIES,CHAMELEON_VERSION"
+
+MY_EXPORTS="OUT_DIR,CUR_DATE_STR,MXM_PARAMS,CPUS_PER_TASK,MXM_SIZE,MXM_DISTRIBUTION,PROCS_PER_NODE,SOME_INDEX,NODES,CUR_DIR,CHAMELEON_TOOL_LIBRARIES,CHAMELEON_VERSION,DIR_APPLICATION"
 
 #########################################################
 #           Compile Chameleon Versions                  #
 #########################################################
 # cd ${CUR_DIR}/../../chameleon/src
 
+# # Chameleon with my affinity extension
+# export INSTALL_DIR=~/install/chameleon/intel
+# make
+
+# # chameleon with my affinity extension and keeping track of statistics
 # export INSTALL_DIR=~/install/chameleon/intel_affinity_debug
 # make aff_debug
 
-# export INSTALL_DIR=~/install/chameleon/intel_no_affinity
-# make vanilla
-
+# # Chameleon with my topology aware task migration tool and affinity extension
 # export INSTALL_DIR=~/install/chameleon/intel_tool
 # make tool
 
-# export INSTALL_DIR=~/install/chameleon/intel
-# make
+# # Chameleon with affinity extension but without comm thread
+# export INSTALL_DIR=~/install/chameleon/intel_aff_no_commthread
+# make aff_no_commthread
+
+# # Chameleon without any of my modifications
+# export INSTALL_DIR=~/install/chameleon/intel_no_affinity
+# make vanilla
 
 # cd ${CUR_DIR}
 
@@ -98,14 +109,6 @@ mkdir -p ${OUT_DIR}
 # --export=${MY_EXPORTS} \
 # run_experiments.sh
 
-# export MXM_SIZE=600
-# export MXM_DISTRIBUTION="1200"
-# export CPUS_PER_TASK=48
-# sbatch --nodes=1 --ntasks-per-node=1 --cpus-per-task=${CPUS_PER_TASK} --job-name=mxm_affinity_testing \
-# --output=${OUT_DIR}/slurmOutput.txt \
-# --export=${MY_EXPORTS} \
-# run_experiments.sh
-
 ###################### 2 Nodes ##########################
 # export MXM_SIZE=600
 # export MXM_DISTRIBUTION="1200 1200"
@@ -115,21 +118,38 @@ mkdir -p ${OUT_DIR}
 # --export=${MY_EXPORTS} \
 # run_experiments.sh
 
+###################### 4 Nodes ##########################
+# export WANTED_NODES="2,1,1"
+# chooseNodes
 # export MXM_SIZE=600
-# export MXM_DISTRIBUTION="1200 1200"
+# export MXM_DISTRIBUTION="300 300 300 300"
 # export CPUS_PER_TASK=48
-# sbatch --nodes=2 --ntasks-per-node=1 --cpus-per-task=${CPUS_PER_TASK} --job-name=mxm_affinity_testing \
+# sbatch --nodes=4 --nodelist=${NODELIST} --ntasks-per-node=1 --cpus-per-task=${CPUS_PER_TASK} --job-name=mxm_affinity_testing \
 # --output=${OUT_DIR}/slurmOutput.txt \
 # --export=${MY_EXPORTS} \
 # run_experiments.sh
 
 ###################### 4 Nodes ##########################
-export WANTED_NODES="2,1,1"
+export WANTED_NODES="3,3"
 chooseNodes
 export MXM_SIZE=600
-export MXM_DISTRIBUTION="300 300 300 300"
-export CPUS_PER_TASK=48
-sbatch --nodes=4 --nodelist=${NODELIST} --ntasks-per-node=1 --cpus-per-task=${CPUS_PER_TASK} --job-name=mxm_affinity_testing \
+export MXM_DISTRIBUTION=\
+"2000 1000 500 0 "\
+"2000 1000 500 0 "\
+"2000 1000 500 0 "\
+"2000 1000 500 0 "\
+"2000 1000 500 0 "\
+"2000 1000 500 0"
+# export MXM_SIZE=90
+# export MXM_DISTRIBUTION=\
+# "20000 10000 5000 0 "\
+# "20000 10000 5000 0 "\
+# "20000 10000 5000 0 "\
+# "20000 10000 5000 0 "\
+# "20000 10000 5000 0 "\
+# "20000 10000 5000 0"
+export CPUS_PER_TASK=12
+sbatch --nodes=6 --nodelist=${NODELIST} --ntasks-per-node=4 --cpus-per-task=${CPUS_PER_TASK} --job-name=mxm_topo_testing \
 --output=${OUT_DIR}/slurmOutput.txt \
 --export=${MY_EXPORTS} \
 run_experiments.sh
