@@ -15,7 +15,12 @@ topo_file = open(topo_path, 'r')
 topo_lines = topo_file.readlines()
 
 # write nodes to ignore here (e.g. when SLURM repeatedly says node x unavailable)
-blacklist = ["ncm0113"]
+if "NODELIST" in os.environ:
+    blacklist = os.environ['NODELIST'].split(",") # add all nodes from previous jobs automatically to blacklist
+else:
+    blacklist =[]
+blacklist.append("ncm0113")
+print(blacklist)
 
 def abort():
     out_file.write("export CHOOSE_NODES_FAILED=1\n")
@@ -205,7 +210,7 @@ for wanted_nodes_permutation in itertools.permutations(wanted_nodes):
             rack += 1
         else: # couldn't find enough nodes in free nodes, try searching with another rack permutation
             free_node_list = free_node_list_backup
-            rack_representing_nodes = []
+            rack_representing_nodes = ["-1"] * len(wanted_nodes)
             chosen_nodes = []
             print("Permutation unsuccessful.")
             break
