@@ -20,7 +20,7 @@ if "NODELIST" in os.environ:
 else:
     blacklist =[]
 blacklist.append("ncm0113")
-print(blacklist)
+print("Blacklist:"+str(blacklist))
 
 def abort():
     out_file.write("export CHOOSE_NODES_FAILED=1\n")

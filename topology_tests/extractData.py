@@ -5,7 +5,7 @@ import re
 import numpy as np
 #import statistics as st
 
-test_name = 'TopoMigrationCompare_S600_O1_20210731_143351'
+test_name = 'Topo_Ultimate_20210802_151504'
 
 # name of the new csv file (overwrites existing file)
 filename = test_name + '.csv'
@@ -37,6 +37,7 @@ find_string = [
     ["MXM_PARAMS", "MatrixSize,MatrixNumTasks,MatrixDistribution"],
     ["CHAMELEON_VERSION", "ChameleonVersion"],
     ["PROG", "Program"],
+    ["NODELIST","Nodelist"],
     # runtime
     ["Computations with chameleon took", "TimeChameleon"],
     ["-", "TCUQ"], # Time Chameleon Upper Quartile
@@ -57,6 +58,8 @@ find_string = [
     # ["L3 miss ratio STAT", "Likwid_L3MissRatio"],
     # ["Runtime \(RDTSC\) \[s\] STAT", "Likwid_Runtime"], # don't know what time this is, seems to be not usefull for me
     # ["Clock \[MHz\] STAT", "Likwid_Clock"], # probably not usefull for me
+    ["VARIATION_NAME","VariationName"],
+    ["GROUP_INDEX","Group"],  # Another Index for Plotting
     ["SOME_INDEX", "SomeIndex"],    # Index for simpler Plotting
     ]
 
@@ -239,6 +242,7 @@ def getParametersOfDir(cur_log_dir_path):
                             end = re.search(find_string[string_idx][0],line).span()[1]
                             res = line[end:].replace('\t',' ').strip('%=\n\r\t ')
                             res_split = res.split(" ")
+                            res_split[0]=res_split[0].replace(",","_")
                             csv_file.write(res_split[0])
                             found = True
                             break
