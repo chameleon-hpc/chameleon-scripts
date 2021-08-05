@@ -31,6 +31,12 @@ echo "===== DEBUG Output ====="
 # ============================================================
 # ===== Building targets
 # ============================================================
+# Notes: ADER-DG-opt branch needs different set of parameters 
+# than master branch
+#   - Uses swe_dg_order instead of swe_patch_order
+#   - add dg_limiter=${DG_LIMITER}
+# ============================================================
+
 # remeber previous directory
 CUR_DIR=$(pwd)
 # switch to samoa directory
