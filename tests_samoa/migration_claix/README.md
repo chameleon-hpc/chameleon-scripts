@@ -13,7 +13,7 @@ export ASAGI_DIR="/work/jk869269/repos/hpc-projects/chameleon/ASAGI_install"
 export SAMOA_DIR="/work/jk869269/repos/hpc-projects/chameleon/samoa-chameleon"
 
 # build various scenarios
-zsh samoa_chameleon_build_clx18.sh
+zsh samoa_chameleon_build.sh
 ```
 
 ## Run Samoa Experiments (Example)
