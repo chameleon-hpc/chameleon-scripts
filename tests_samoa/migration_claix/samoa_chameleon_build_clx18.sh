@@ -11,7 +11,8 @@ export DG_LIMITER=${DG_LIMITER:-"unlimited"}
 # 0: no chameleon
 # 1: chameleon version
 # 2: no chameleon but same packing methods required to run chameleon (fair comparison)
-CHAMELEON_VALUES=(0 1 2)
+#CHAMELEON_VALUES=(0 1 2)
+CHAMELEON_VALUES=(1)
 
 # ============================================================
 # ===== Loading Modules
@@ -39,9 +40,9 @@ for cur_ch in "${CHAMELEON_VALUES[@]}"
 do
     # standard builds # boundary=file?
     EXE_NAME="samoa_swe_radial_chameleon_${cur_ch}"
-    scons machine=host asagi=off target=release scenario=swe swe_patch_order=${SAMOA_PATCH_ORDER} swe_scenario=radial_dam_break chameleon=${cur_ch} flux_solver=aug_riemann assertions=on compiler=intel exe=${EXE_NAME} -j8
+    #scons machine=host asagi=off target=release scenario=swe swe_patch_order=${SAMOA_PATCH_ORDER} swe_scenario=radial_dam_break chameleon=${cur_ch} flux_solver=aug_riemann assertions=on compiler=intel exe=${EXE_NAME} -j8
     EXE_NAME="samoa_swe_oscillating_chameleon_${cur_ch}"
-    scons machine=host asagi=off target=release scenario=swe swe_patch_order=${SAMOA_PATCH_ORDER} swe_scenario=oscillating_lake chameleon=${cur_ch} flux_solver=aug_riemann assertions=on compiler=intel exe=${EXE_NAME} -j8
+    #scons machine=host asagi=off target=release scenario=swe swe_patch_order=${SAMOA_PATCH_ORDER} swe_scenario=oscillating_lake chameleon=${cur_ch} flux_solver=aug_riemann assertions=on compiler=intel exe=${EXE_NAME} -j8
     EXE_NAME="samoa_swe_asagi_chameleon_${cur_ch}"
     scons machine=host asagi=on  target=release scenario=swe swe_patch_order=${SAMOA_PATCH_ORDER}                               chameleon=${cur_ch} flux_solver=aug_riemann assertions=on compiler=intel exe=${EXE_NAME} asagi_dir=${ASAGI_DIR} -j8
 done

@@ -4,9 +4,11 @@
 #SBATCH --time=02:30:00
 #SBATCH --nodes=2
 #SBATCH --ntasks-per-node=2
-#SBATCH --cpus-per-task=24
-#SBATCH --partition=c18m
+#SBATCH --cpus-per-task=12
 #SBATCH --hwctr=likwid
+##SBATCH --partition=c18m
+#SBATCH --partition=c16m
+#SBATCH --account=XXXX
 
 # ============================================================
 # ===== Loading Modules
@@ -27,13 +29,13 @@ export RUN_ASAGI=${RUN_ASAGI:-1}
 export RUN_TRACE=${RUN_TRACE:-0}
 
 # ===== Simulation Settings =====
-export NUM_SECTIONS=${NUM_SECTIONS:-20}
+export NUM_SECTIONS=${NUM_SECTIONS:-25}
 export DMIN=${DMIN:-17}
 export DMAX=${DMAX:-24}
 export NUM_STEPS=${NUM_STEPS:-100}
-export SIM_TIME_SEC=${SIM_TIME_SEC:-3600}
+export SIM_TIME_SEC=${SIM_TIME_SEC:-120}
 export SIM_LIMIT="-nmax ${NUM_STEPS}"
-# export SIM_LIMIT="-tmax ${SIM_TIME_SEC}"
+#export SIM_LIMIT="-tmax ${SIM_TIME_SEC}"
 export ASAGI_PARAMS="${ASAGI_PARAMS:-"-fbath /path/to/bath.nc -fdispl /path/to/displ.nc"}"
 # export ASAGI_PARAMS=""
 
@@ -45,13 +47,14 @@ export OMP_PLACES=cores
 export OMP_PROC_BIND=close
 export ORIG_OMP_NUM_THREADS=${ORIG_OMP_NUM_THREADS:-4}
 export CUR_MPI_CMD="${MPIEXEC} ${FLAGS_MPI_BATCH} --export=${ENVS_FOR_EXPORT}"
-export MIN_ABS_LOAD_IMBALANCE_BEFORE_MIGRATION=$((ORIG_OMP_NUM_THREADS))
+export MIN_ABS_LOAD_IMBALANCE_BEFORE_MIGRATION=$((ORIG_OMP_NUM_THREADS*1.3))
 # export CUR_MPI_CMD="mpiexec.hydra -n 2 -genvall"
 
 # 0: no chameleon
 # 1: chameleon version
 # 2: no chameleon but same packing methods required to run chameleon (fair comparison)
-CHAMELEON_VALUES=(0 1 2)
+# CHAMELEON_VALUES=(0 1 2)
+CHAMELEON_VALUES=(1)
 
 # time steps after which CCP will happen
 LB_FREQ=(1000000)
