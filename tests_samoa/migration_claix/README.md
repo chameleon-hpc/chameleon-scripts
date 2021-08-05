@@ -3,7 +3,7 @@
 ## Prerequisites
 
 * In order to run realistic scenarios based on measurements you need ASAGI (https://github.com/TUM-I5/ASAGI)
-* Build and install ASAGI to a user directory of your choice
+* Build and install ASAGI to a user directory of your choice using CMake
 
 ## Build Samoa Experiments (Example)
 
