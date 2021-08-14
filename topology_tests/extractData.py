@@ -5,7 +5,7 @@ import re
 import numpy as np
 #import statistics as st
 
-test_name = 'Topo_Ultimate_20210802_151504'
+test_name = 'NoAff_Topo_2PPN_S90_20210814_112836'
 
 # name of the new csv file (overwrites existing file)
 filename = test_name + '.csv'
@@ -44,11 +44,11 @@ find_string = [
     ["-", "TCLQ"], # Time Chameleon Lower Quartile
     ["-", "TCUW"], # Time Chameleon Upper Whisker
     ["-", "TCLW"], # Time Chameleon Lower Whisker
-    ["Computations with normal tasking took", "TimeTasking"],
-    ["-", "TTUQ"], # Time Tasking Upper Quartile
-    ["-", "TTLQ"], # Time Tasking Lower Quartile
-    ["-", "TTUW"], # Time Tasking Upper Whisker
-    ["-", "TTLW"], # Time Tasking Lower Whisker
+    # ["Computations with normal tasking took", "TimeTasking"],
+    # ["-", "TTUQ"], # Time Tasking Upper Quartile
+    # ["-", "TTLQ"], # Time Tasking Lower Quartile
+    # ["-", "TTUW"], # Time Tasking Upper Whisker
+    # ["-", "TTLW"], # Time Tasking Lower Whisker
     # topology settings
     ["TOPO_MIGRATION_STRAT","TopoStrat"],
     ["MIGRATION_OFFLOAD_TO_SINGLE_RANK","TopoOffloadSingle"],

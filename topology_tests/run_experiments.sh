@@ -1,5 +1,5 @@
 #!/usr/local_rwth/bin/zsh
-#SBATCH --time=01:00:00
+#SBATCH --time=06:00:00
 #SBATCH --exclusive
 #SBATCH --account=thes0986
 ##SBATCH --partition=c18m
@@ -9,7 +9,8 @@
 #       Loading the hopefully best values               #
 #########################################################
 # affinity
-export CHAM_AFF_TASK_SELECTION_STRAT=1      # ALL_LINEAR
+# export CHAM_AFF_TASK_SELECTION_STRAT=1      # ALL_LINEAR
+export CHAM_AFF_TASK_SELECTION_STRAT=0      # None
 export CHAM_AFF_PAGE_SELECTION_STRAT=2      # EVERY_NTH
 export CHAM_AFF_PAGE_WEIGHTING_STRAT=2      # BY_SIZE
 export CHAM_AFF_CONSIDER_TYPES=1            # ONLY TO
@@ -31,7 +32,7 @@ export CHAMELEON_VERSION="chameleon/intel_tool"
 export OMP_PLACES=cores 
 export OMP_PROC_BIND=close
 
-export N_RUNS=5
+export N_RUNS=10
 
 LOG_DIR=${OUT_DIR}"/logs"
 mkdir -p ${LOG_DIR}
@@ -84,57 +85,78 @@ I_MPI_DEBUG=5 ${MPIEXEC} ${FLAGS_MPI_BATCH} --export=${OLD_EXPORTS}${MY_EXPORTS}
 #                   Testing                             #
 #########################################################
 # SOME_INDEX identifies bars in one GROUP_INDEX
-# GROUP_INDEX identifies different GROUP_INDEXs of bars (e.g. 4PPN_S600_OLS0_O1)
+# GROUP_INDEX identifies different GROUP_INDEXs of bars (e.g. 4PPN_S600_OLS0_OS1)
 # 4PPN := 4 Procs Per Node
 # S600 := Matrix Size 600
 # OLS0 := Ordered List Select = 0
-# OS1 := "Only 1" Offload to only a single rank
+# OS1 := "Offload Single 1" Offload to only a single rank
 
 function setMatrixDistribution(){
 if [ "$PROCS_PER_NODE" -eq "4" ] && [ "$MXM_SIZE" -eq "600" ]
 then 
 export MXM_DISTRIBUTION=\
-"1500 1000 500 0 "\
-"1500 1000 500 0 "\
-"1500 1000 500 0 "\
-"1500 1000 500 0 "\
-"1500 1000 500 0 "\
-"1500 1000 500 0"
+"800 400 200 0 "\
+"800 400 200 0 "\
+"800 400 200 0 "\
+"800 400 200 0 "\
+"800 400 200 0 "\
+"800 400 200 0"
 fi
 if [ "$PROCS_PER_NODE" -eq "2" ] && [ "$MXM_SIZE" -eq "600" ]
 then 
 export MXM_DISTRIBUTION=\
-"1500 0 "\
-"1500 0 "\
-"1500 0 "\
-"1500 0 "\
-"1500 0 "\
-"1500 0"
+"1400 0 "\
+"1400 0 "\
+"1400 0 "\
+"1400 0 "\
+"1400 0 "\
+"1400 0"
 fi
 if [ "$PROCS_PER_NODE" -eq "4" ] && [ "$MXM_SIZE" -eq "90" ]
 then 
 export MXM_DISTRIBUTION=\
-"20000 10000 5000 0 "\
-"20000 10000 5000 0 "\
-"20000 10000 5000 0 "\
-"20000 10000 5000 0 "\
-"20000 10000 5000 0 "\
-"20000 10000 5000 0"
+"40000 20000 5535 0 "\
+"40000 20000 5535 0 "\
+"40000 20000 5535 0 "\
+"40000 20000 5535 0 "\
+"40000 20000 5535 0 "\
+"40000 20000 5535 0"
 fi
 if [ "$PROCS_PER_NODE" -eq "2" ] && [ "$MXM_SIZE" -eq "90" ]
 then 
 export MXM_DISTRIBUTION=\
-"20000 0 "\
-"20000 0 "\
-"20000 0 "\
-"20000 0 "\
-"20000 0 "\
-"20000 0"
+"65535 0 "\
+"65535 0 "\
+"65535 0 "\
+"65535 0 "\
+"65535 0 "\
+"65535 0"
 fi
+# if [ "$PROCS_PER_NODE" -eq "4" ] && [ "$MXM_SIZE" -eq "90" ]
+# then 
+# export MXM_DISTRIBUTION=\
+# "20000 10000 5000 0 "\
+# "20000 10000 5000 0 "\
+# "20000 10000 5000 0 "\
+# "20000 10000 5000 0 "\
+# "20000 10000 5000 0 "\
+# "20000 10000 5000 0"
+# fi
+# if [ "$PROCS_PER_NODE" -eq "2" ] && [ "$MXM_SIZE" -eq "90" ]
+# then 
+# export MXM_DISTRIBUTION=\
+# "35000 0 "\
+# "35000 0 "\
+# "35000 0 "\
+# "35000 0 "\
+# "35000 0 "\
+# "35000 0"
+# fi
 }
 
 for var_size in 90 600
 do
+
 export MXM_SIZE=${var_size}
 setMatrixDistribution
 echo ${MXM_DISTRIBUTION}
@@ -153,6 +175,16 @@ export MIGRATION_OFFLOAD_TO_SINGLE_RANK=${var_offload_single}
 
 export GROUP_INDEX=$(($GROUP_INDEX+1))    # for plotting
 export SOME_INDEX=-1
+
+# ! Only test one Matrix Size:
+if [ "$var_size" -eq "90" ]
+then continue
+fi
+
+# ! Only test OLS:
+if [ "$var_ols" -eq "0" ]
+then continue
+fi
 
 ################ Topology Optimized #####################
 module unload ${CHAMELEON_VERSION}
@@ -212,6 +244,11 @@ done
 done # offload single loop
 done # OLS loop
 
+# ! Only test one Matrix Size:
+if [ "$var_size" -eq "90" ]
+then continue
+fi
+
 ########### Chameleon not topology aware ###############
 module unload ${CHAMELEON_VERSION}
 export CHAMELEON_VERSION="chameleon/intel"
@@ -230,7 +267,7 @@ do
     echo "Finished_ChameleonNoTopo_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
 done
 
-############ No Migration at all ########################
+########### No Migration at all ########################
 # module unload ${CHAMELEON_VERSION}
 # export CHAMELEON_VERSION="chameleon/intel_aff_no_commthread"
 # module load ${CHAMELEON_VERSION}
@@ -249,6 +286,35 @@ done
 # done
 
 done # MxM Size loop
+
+
+########################! Tracing ########################
+# cd ${CUR_DIR}/Tracing/${OUT_DIR_NAME}
+# export N_RUNS=1
+# module load intelitac
+# module unload ${CHAMELEON_VERSION}
+# export CHAMELEON_VERSION="chameleon/intel_tool"
+# module load ${CHAMELEON_VERSION}
+# export TOPO_MIGRATION_STRAT=3 # 1=nearest, 2=4Hops, 3=2Hops
+# export MXM_SIZE=600
+# setMatrixDistribution
+# echo ${MXM_DISTRIBUTION}
+# export TOPO_ORDERED_LIST_SELECT=1
+# export MIGRATION_OFFLOAD_TO_SINGLE_RANK=0
+
+# export GROUP_INDEX=5    # for plotting
+# export SOME_INDEX=2
+
+# export VARIATION_NAME="${PROCS_PER_NODE}PPN_S${MXM_SIZE}_OLS${TOPO_ORDERED_LIST_SELECT}_OS${MIGRATION_OFFLOAD_TO_SINGLE_RANK}_Topology2Hops"
+# VARIATION_DIR=${LOG_DIR}"/${VARIATION_NAME}"
+# mkdir ${VARIATION_DIR}
+# for RUN in {1..${N_RUNS}}
+# do
+#     eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
+#     # print some information to check the progression of the job
+#     squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
+#     echo "Finished_TopologyNearest_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
+# done
 
 # copy comparison logs to all executed test directories (copy no chameleon,... to test dirs)
 # find "${OUT_DIR}/../" -maxdepth 1 -iname "*${CUR_DATE_STR}" -type d -exec cp -r -n -- ${OUT_DIR}/logs '{}' ';'

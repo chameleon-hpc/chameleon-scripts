@@ -1,0 +1,5 @@
+VariationName,TimeChameleon,R0_initTasks,R0_TotalEffectiveThroughput,R0_TaskMigrationRate,R0_TaskProcessingRate,R0_NumExecutedTasksOverall,R0_NumMigrationDecisionsPerformed,R0_NumMigrationsDone,R0_NumTasksOffloaded,R0_TimeTaskwaitSum,R0_TimeTaskwaitIdlingSum,R1_initTasks,R1_TaskProcessingRate,R1_NumExecutedTasksOverall,R1_TimeTaskwaitSum,R1_TimeTaskwaitIdlingSum,Group,SomeIndex
+2PPN_S600_OLS1_OS0_TopologyNearest,25.731165,1400.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,0.0,-1.0,-1.0,-1.0,-1.0,5,0
+2PPN_S600_OLS1_OS0_Topology2Hops,32.41363,1400.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,0.0,-1.0,-1.0,-1.0,-1.0,5,2
+2PPN_S600_OLS1_OS0_TopologyDistant,30.92624,1400.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,0.0,-1.0,-1.0,-1.0,-1.0,5,1
+2PPN_S600_ChameleonNoTopo,24.743365,1400.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,0.0,-1.0,-1.0,-1.0,-1.0,5,3
