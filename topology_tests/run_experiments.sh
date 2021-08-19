@@ -154,158 +154,46 @@ fi
 # fi
 }
 
-for var_size in 90 600
-do
-
-export MXM_SIZE=${var_size}
-setMatrixDistribution
-echo ${MXM_DISTRIBUTION}
-
-for var_ols in 0 1
-do
-export TOPO_ORDERED_LIST_SELECT=${var_ols}
-
-for var_offload_single in 0 1
-do
-# ordered list select only offloads to max 1 rank, hence offload single is unnecessary
-if [ "$var_ols" -eq "1" ] && [ "$var_offload_single" -eq "1" ]
-then break
-fi
-export MIGRATION_OFFLOAD_TO_SINGLE_RANK=${var_offload_single}
-
-export GROUP_INDEX=$(($GROUP_INDEX+1))    # for plotting
-export SOME_INDEX=-1
-
-# ! Only test one Matrix Size:
-if [ "$var_size" -eq "90" ]
-then continue
-fi
-
-# ! Only test OLS:
-if [ "$var_ols" -eq "0" ]
-then continue
-fi
-
-################ Topology Optimized #####################
-module unload ${CHAMELEON_VERSION}
-export CHAMELEON_VERSION="chameleon/intel_tool"
-module load ${CHAMELEON_VERSION}
-export TOPO_MIGRATION_STRAT=1 # topology aware nearest
-
-export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
-export VARIATION_NAME="${PROCS_PER_NODE}PPN_S${MXM_SIZE}_OLS${TOPO_ORDERED_LIST_SELECT}_OS${MIGRATION_OFFLOAD_TO_SINGLE_RANK}_TopologyNearest"
-VARIATION_DIR=${LOG_DIR}"/${VARIATION_NAME}"
-mkdir ${VARIATION_DIR}
-for RUN in {1..${N_RUNS}}
-do
-    eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
-    # print some information to check the progression of the job
-    squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
-    echo "Finished_TopologyNearest_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
-done
-
-################ Topology Worst Case ###################
-module unload ${CHAMELEON_VERSION}
-export CHAMELEON_VERSION="chameleon/intel_tool"
-module load ${CHAMELEON_VERSION}
-export TOPO_MIGRATION_STRAT=2 # topology aware most distant
-
-export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
-export VARIATION_NAME="${PROCS_PER_NODE}PPN_S${MXM_SIZE}_OLS${TOPO_ORDERED_LIST_SELECT}_OS${MIGRATION_OFFLOAD_TO_SINGLE_RANK}_TopologyDistant"
-VARIATION_DIR=${LOG_DIR}"/${VARIATION_NAME}"
-mkdir ${VARIATION_DIR}
-for RUN in {1..${N_RUNS}}
-do
-    eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
-    # print some information to check the progression of the job
-    squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
-    echo "Finished_TopologyDistant_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
-done
-
-################ topology aware migration with priority [over 1 switch > over 3 switches > same node] ################
-module unload ${CHAMELEON_VERSION}
-export CHAMELEON_VERSION="chameleon/intel_tool"
-module load ${CHAMELEON_VERSION}
-export TOPO_MIGRATION_STRAT=3
-
-export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
-export VARIATION_NAME="${PROCS_PER_NODE}PPN_S${MXM_SIZE}_OLS${TOPO_ORDERED_LIST_SELECT}_OS${MIGRATION_OFFLOAD_TO_SINGLE_RANK}_Topology2Hops"
-VARIATION_DIR=${LOG_DIR}"/${VARIATION_NAME}"
-mkdir ${VARIATION_DIR}
-for RUN in {1..${N_RUNS}}
-do
-    eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
-    # print some information to check the progression of the job
-    squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
-    echo "Finished_Topology2Hops_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
-done
-
-
-done # offload single loop
-done # OLS loop
-
-# ! Only test one Matrix Size:
-if [ "$var_size" -eq "90" ]
-then continue
-fi
-
-########### Chameleon not topology aware ###############
-module unload ${CHAMELEON_VERSION}
-export CHAMELEON_VERSION="chameleon/intel"
-module load ${CHAMELEON_VERSION}
-export TOPO_MIGRATION_STRAT=0
-
-export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
-export VARIATION_NAME="${PROCS_PER_NODE}PPN_S${MXM_SIZE}_ChameleonNoTopo"
-VARIATION_DIR=${LOG_DIR}"/${VARIATION_NAME}"
-mkdir ${VARIATION_DIR}
-for RUN in {1..${N_RUNS}}
-do
-    eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
-    # print some information to check the progression of the job
-    squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
-    echo "Finished_ChameleonNoTopo_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
-done
-
-########### No Migration at all ########################
-# module unload ${CHAMELEON_VERSION}
-# export CHAMELEON_VERSION="chameleon/intel_aff_no_commthread"
-# module load ${CHAMELEON_VERSION}
-# export TOPO_MIGRATION_STRAT=-1 # topology aware most distant
-
-# export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
-# export VARIATION_NAME="${PROCS_PER_NODE}PPN_S${MXM_SIZE}_NoCommThread"
-# VARIATION_DIR=${LOG_DIR}"/${VARIATION_NAME}"
-# mkdir ${VARIATION_DIR}
-# for RUN in {1..${N_RUNS}}
+# for var_size in 90 600
 # do
-#     eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
-#     # print some information to check the progression of the job
-#     squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
-#     echo "Finished_NoCommThread_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
-# done
 
-done # MxM Size loop
+# export MXM_SIZE=${var_size}
+# setMatrixDistribution
+# echo ${MXM_DISTRIBUTION}
 
+# for var_ols in 0 1
+# do
+# export TOPO_ORDERED_LIST_SELECT=${var_ols}
 
-########################! Tracing ########################
-# cd ${CUR_DIR}/Tracing/${OUT_DIR_NAME}
-# export N_RUNS=1
-# module load intelitac
+# for var_offload_single in 0 1
+# do
+# # ordered list select only offloads to max 1 rank, hence offload single is unnecessary
+# if [ "$var_ols" -eq "1" ] && [ "$var_offload_single" -eq "1" ]
+# then break
+# fi
+# export MIGRATION_OFFLOAD_TO_SINGLE_RANK=${var_offload_single}
+
+# export GROUP_INDEX=$(($GROUP_INDEX+1))    # for plotting
+# export SOME_INDEX=-1
+
+# # ! Only test one Matrix Size:
+# if [ "$var_size" -eq "90" ]
+# then continue
+# fi
+
+# # ! Only test OLS:
+# if [ "$var_ols" -eq "0" ]
+# then continue
+# fi
+
+# ################ Topology Optimized #####################
 # module unload ${CHAMELEON_VERSION}
 # export CHAMELEON_VERSION="chameleon/intel_tool"
 # module load ${CHAMELEON_VERSION}
-# export TOPO_MIGRATION_STRAT=3 # 1=nearest, 2=4Hops, 3=2Hops
-# export MXM_SIZE=600
-# setMatrixDistribution
-# echo ${MXM_DISTRIBUTION}
-# export TOPO_ORDERED_LIST_SELECT=1
-# export MIGRATION_OFFLOAD_TO_SINGLE_RANK=0
+# export TOPO_MIGRATION_STRAT=1 # topology aware nearest
 
-# export GROUP_INDEX=5    # for plotting
-# export SOME_INDEX=2
-
-# export VARIATION_NAME="${PROCS_PER_NODE}PPN_S${MXM_SIZE}_OLS${TOPO_ORDERED_LIST_SELECT}_OS${MIGRATION_OFFLOAD_TO_SINGLE_RANK}_Topology2Hops"
+# export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
+# export VARIATION_NAME="${PROCS_PER_NODE}PPN_S${MXM_SIZE}_OLS${TOPO_ORDERED_LIST_SELECT}_OS${MIGRATION_OFFLOAD_TO_SINGLE_RANK}_TopologyNearest"
 # VARIATION_DIR=${LOG_DIR}"/${VARIATION_NAME}"
 # mkdir ${VARIATION_DIR}
 # for RUN in {1..${N_RUNS}}
@@ -315,6 +203,118 @@ done # MxM Size loop
 #     squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
 #     echo "Finished_TopologyNearest_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
 # done
+
+# ################ Topology Worst Case ###################
+# module unload ${CHAMELEON_VERSION}
+# export CHAMELEON_VERSION="chameleon/intel_tool"
+# module load ${CHAMELEON_VERSION}
+# export TOPO_MIGRATION_STRAT=2 # topology aware most distant
+
+# export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
+# export VARIATION_NAME="${PROCS_PER_NODE}PPN_S${MXM_SIZE}_OLS${TOPO_ORDERED_LIST_SELECT}_OS${MIGRATION_OFFLOAD_TO_SINGLE_RANK}_TopologyDistant"
+# VARIATION_DIR=${LOG_DIR}"/${VARIATION_NAME}"
+# mkdir ${VARIATION_DIR}
+# for RUN in {1..${N_RUNS}}
+# do
+#     eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
+#     # print some information to check the progression of the job
+#     squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
+#     echo "Finished_TopologyDistant_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
+# done
+
+# ################ topology aware migration with priority [over 1 switch > over 3 switches > same node] ################
+# module unload ${CHAMELEON_VERSION}
+# export CHAMELEON_VERSION="chameleon/intel_tool"
+# module load ${CHAMELEON_VERSION}
+# export TOPO_MIGRATION_STRAT=3
+
+# export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
+# export VARIATION_NAME="${PROCS_PER_NODE}PPN_S${MXM_SIZE}_OLS${TOPO_ORDERED_LIST_SELECT}_OS${MIGRATION_OFFLOAD_TO_SINGLE_RANK}_Topology2Hops"
+# VARIATION_DIR=${LOG_DIR}"/${VARIATION_NAME}"
+# mkdir ${VARIATION_DIR}
+# for RUN in {1..${N_RUNS}}
+# do
+#     eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
+#     # print some information to check the progression of the job
+#     squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
+#     echo "Finished_Topology2Hops_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
+# done
+
+
+# done # offload single loop
+# done # OLS loop
+
+# # ! Only test one Matrix Size:
+# if [ "$var_size" -eq "90" ]
+# then continue
+# fi
+
+# ########### Chameleon not topology aware ###############
+# module unload ${CHAMELEON_VERSION}
+# export CHAMELEON_VERSION="chameleon/intel"
+# module load ${CHAMELEON_VERSION}
+# export TOPO_MIGRATION_STRAT=0
+
+# export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
+# export VARIATION_NAME="${PROCS_PER_NODE}PPN_S${MXM_SIZE}_ChameleonNoTopo"
+# VARIATION_DIR=${LOG_DIR}"/${VARIATION_NAME}"
+# mkdir ${VARIATION_DIR}
+# for RUN in {1..${N_RUNS}}
+# do
+#     eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
+#     # print some information to check the progression of the job
+#     squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
+#     echo "Finished_ChameleonNoTopo_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
+# done
+
+# ########### No Migration at all ########################
+# # module unload ${CHAMELEON_VERSION}
+# # export CHAMELEON_VERSION="chameleon/intel_aff_no_commthread"
+# # module load ${CHAMELEON_VERSION}
+# # export TOPO_MIGRATION_STRAT=-1 # topology aware most distant
+
+# # export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
+# # export VARIATION_NAME="${PROCS_PER_NODE}PPN_S${MXM_SIZE}_NoCommThread"
+# # VARIATION_DIR=${LOG_DIR}"/${VARIATION_NAME}"
+# # mkdir ${VARIATION_DIR}
+# # for RUN in {1..${N_RUNS}}
+# # do
+# #     eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
+# #     # print some information to check the progression of the job
+# #     squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
+# #     echo "Finished_NoCommThread_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
+# # done
+
+# done # MxM Size loop
+
+
+########################! Tracing ########################
+cd ${CUR_DIR}/Tracing/${OUT_DIR_NAME}
+export N_RUNS=1
+module load intelitac
+module unload ${CHAMELEON_VERSION}
+export CHAMELEON_VERSION="chameleon/intel_tool"
+module load ${CHAMELEON_VERSION}
+export TOPO_MIGRATION_STRAT=1 # 1=nearest, 2=4Hops, 3=2Hops
+export MXM_SIZE=90
+setMatrixDistribution
+echo ${MXM_DISTRIBUTION}
+export TOPO_ORDERED_LIST_SELECT=0
+export MIGRATION_OFFLOAD_TO_SINGLE_RANK=1
+
+export GROUP_INDEX=1    # for plotting
+export SOME_INDEX=0
+
+export VARIATION_NAME="${PROCS_PER_NODE}PPN_S${MXM_SIZE}_OLS${TOPO_ORDERED_LIST_SELECT}_OS${MIGRATION_OFFLOAD_TO_SINGLE_RANK}_Topology2Hops"
+VARIATION_DIR=${LOG_DIR}"/${VARIATION_NAME}"
+mkdir ${VARIATION_DIR}
+for RUN in {1..${N_RUNS}}
+do
+    eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
+    # print some information to check the progression of the job
+    squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
+    echo "Finished_TopologyNearest_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
+done
 
 # copy comparison logs to all executed test directories (copy no chameleon,... to test dirs)
 # find "${OUT_DIR}/../" -maxdepth 1 -iname "*${CUR_DATE_STR}" -type d -exec cp -r -n -- ${OUT_DIR}/logs '{}' ';'

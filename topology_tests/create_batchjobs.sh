@@ -19,30 +19,30 @@ MY_EXPORTS="OUT_DIR,CUR_DATE_STR,MXM_PARAMS,CPUS_PER_TASK,MXM_SIZE,MXM_DISTRIBUT
 #########################################################
 cd ${CUR_DIR}/../../chameleon/src
 
-# Chameleon with my affinity extension
-export INSTALL_DIR=~/install/chameleon/intel
-make
+# # Chameleon with my affinity extension
+# export INSTALL_DIR=~/install/chameleon/intel
+# make
 
-# chameleon with my affinity extension and keeping track of statistics
-export INSTALL_DIR=~/install/chameleon/intel_affinity_debug
-make aff_debug
+# # chameleon with my affinity extension and keeping track of statistics
+# export INSTALL_DIR=~/install/chameleon/intel_affinity_debug
+# make aff_debug
 
-# Chameleon with my topology aware task migration tool and affinity extension
-export INSTALL_DIR=~/install/chameleon/intel_tool
-make tool
+# # Chameleon with my topology aware task migration tool and affinity extension
+# export INSTALL_DIR=~/install/chameleon/intel_tool
+# make tool
 
-# Chameleon with affinity extension but without comm thread
-export INSTALL_DIR=~/install/chameleon/intel_aff_no_commthread
-make aff_no_commthread
+# # Chameleon with affinity extension but without comm thread
+# export INSTALL_DIR=~/install/chameleon/intel_aff_no_commthread
+# make aff_no_commthread
 
-# Chameleon without any of my modifications
-export INSTALL_DIR=~/install/chameleon/intel_no_affinity
-make vanilla
+# # Chameleon without any of my modifications
+# export INSTALL_DIR=~/install/chameleon/intel_no_affinity
+# make vanilla
 
 # ! tracing tool
-# module load intelitac
-# export INSTALL_DIR=~/install/chameleon/intel_tool
-# CUSTOM_COMPILE_FLAGS="-DUSE_TASK_AFFINITY=1 -DCHAMELEON_TOOL_SUPPORT=1" make trace
+module load intelitac
+export INSTALL_DIR=~/install/chameleon/intel_tool
+CUSTOM_COMPILE_FLAGS="-DUSE_TASK_AFFINITY=1 -DCHAMELEON_TOOL_SUPPORT=1" make trace
 
 cd ${CUR_DIR}
 
@@ -107,35 +107,10 @@ function chooseNodes()
 export GROUP_INDEX=-1
 
 ###################### 6 Nodes 4 PPN ##########################
-# for try in {1..120} # try multiple times when nodes are occupied
-# do
-# export OUT_DIR="${CUR_DIR}/outputs/NoAff_Topo_4PPN_S90_"${CUR_DATE_STR}
-# export WANTED_NODES="3,3"
-# chooseNodes
-# if [ "${CHOOSE_NODES_FAILED}" -eq "1" ]
-# then 
-#     echo "Failed to choose requested nodes!\nTry ${try}\nTrying again in 1 min.\n"
-#     sleep 60
-#     continue 
-# fi
-# mkdir -p ${OUT_DIR}
-# export CPUS_PER_TASK=12
-# export PROCS_PER_NODE=4
-# sbatch --nodes=6 --nodelist=${NODELIST} --ntasks-per-node=4 --cpus-per-task=${CPUS_PER_TASK} --job-name=4PPN_topo_mxm \
-# --output=${OUT_DIR}/slurmOutput4PPN.txt \
-# --export=${MY_EXPORTS} \
-# run_experiments.sh
-# break
-# done
-
-###################### 6 Nodes 2 PPN ##########################
 for try in {1..120} # try multiple times when nodes are occupied
 do
-# export OUT_DIR_NAME="Trace_NoAff_Topo_2PPN_S600_OLS1_0Hops_${CUR_DATE_STR}"
-export OUT_DIR_NAME="Stats_NoAff_Topo_2PPN_S600_OLS1_${CUR_DATE_STR}"
+export OUT_DIR_NAME="Trace_NoAff_Topo_4PPN_S90_OLS0_OS1_0Hops_${CUR_DATE_STR}"
 export OUT_DIR="${CUR_DIR}/outputs/${OUT_DIR_NAME}"
-mkdir -p ${OUT_DIR}
-# mkdir ${CUR_DIR}/Tracing/${OUT_DIR_NAME} && cd $_ #! Tracing
 export WANTED_NODES="3,3"
 chooseNodes
 if [ "${CHOOSE_NODES_FAILED}" -eq "1" ]
@@ -144,13 +119,40 @@ then
     sleep 60
     continue 
 fi
-export CPUS_PER_TASK=24
-export PROCS_PER_NODE=2
-sbatch --nodes=6 --nodelist=${NODELIST} --ntasks-per-node=${PROCS_PER_NODE} --cpus-per-task=${CPUS_PER_TASK} --job-name=2PPN_topo_mxm \
---output=${OUT_DIR}/slurmOutput2PPN.txt \
+mkdir -p ${OUT_DIR}
+mkdir ${CUR_DIR}/Tracing/${OUT_DIR_NAME} && cd $_ #! Tracing
+export CPUS_PER_TASK=12
+export PROCS_PER_NODE=4
+sbatch --nodes=6 --nodelist=${NODELIST} --ntasks-per-node=4 --cpus-per-task=${CPUS_PER_TASK} --job-name=4PPN_topo_mxm \
+--output=${OUT_DIR}/slurmOutput4PPN.txt \
 --export=${MY_EXPORTS} \
 ${CUR_DIR}/run_experiments.sh
 break
 done
+
+###################### 6 Nodes 2 PPN ##########################
+# for try in {1..120} # try multiple times when nodes are occupied
+# do
+# export OUT_DIR_NAME="Trace_NoAff_Topo_2PPN_S600_OLS1_0Hops_${CUR_DATE_STR}"
+# # export OUT_DIR_NAME="Stats_NoAff_Topo_2PPN_S600_OLS1_${CUR_DATE_STR}"
+# export OUT_DIR="${CUR_DIR}/outputs/${OUT_DIR_NAME}"
+# mkdir -p ${OUT_DIR}
+# # mkdir ${CUR_DIR}/Tracing/${OUT_DIR_NAME} && cd $_ #! Tracing
+# export WANTED_NODES="3,3"
+# chooseNodes
+# if [ "${CHOOSE_NODES_FAILED}" -eq "1" ]
+# then 
+#     echo "Failed to choose requested nodes!\nTry ${try}\nTrying again in 1 min.\n"
+#     sleep 60
+#     continue 
+# fi
+# export CPUS_PER_TASK=24
+# export PROCS_PER_NODE=2
+# sbatch --nodes=6 --nodelist=${NODELIST} --ntasks-per-node=${PROCS_PER_NODE} --cpus-per-task=${CPUS_PER_TASK} --job-name=2PPN_topo_mxm \
+# --output=${OUT_DIR}/slurmOutput2PPN.txt \
+# --export=${MY_EXPORTS} \
+# ${CUR_DIR}/run_experiments.sh
+# break
+# done
 
 unset NODELIST
