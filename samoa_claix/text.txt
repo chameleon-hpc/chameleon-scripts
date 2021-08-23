@@ -1,0 +1,277 @@
+Hallo
+Hallo
+Hallo
+Hallo
+Hallo
+Hallo
+Hallo
+Hallo
+Hallo
+Hallo
+Hallo
+Hallo
+Currently Loaded Modulefiles:
+ 1) DEVELOP        2) intel/19.0     3) intelmpi/2018 
+LC_PAPER=de_DE.UTF-8
+R_LOGNAME=ka387454
+MKLROOT=/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl
+MANPATH=/opt/intel/impi/2018.4.274/compilers_and_libraries/linux/mpi/man:/opt/intel/Compiler/19.0/1.144/rwthlnk/documentation_2019/en/debugger/gdb-ia/man:/opt/intel/Compiler/19.0/1.144/rwthlnk/documentation_2019/en/debugger/gdb-igfx/man:/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/benchmarks/mp_linpack/man:/opt/intel/Compiler/19.0/1.144/rwthlnk/man/common:/usr/local_rwth/modules/man:/opt/slurm/share/man:/usr/local_host/man:/usr/local_rwth/man:/usr/man:/usr/share/man:/usr/local/man:/usr/local/share/man
+FLAGS_MKL_INCLUDE=-I/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/include -I/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/include/fftw -I/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/include/intel64/lp64 -I/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/include/ia32 -I/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/include/intel64/lp64
+_INTERNAL_MKLROOT=intel
+_LIST_FLAGS_OPENMP=-qopenmp
+MPI_INCLUDE=/opt/intel/impi/2018.4.274/compilers_and_libraries/linux/mpi/include64
+LC_ADDRESS=de_DE.UTF-8
+_LAST_MPI_REVISION=274
+LC_MONETARY=de_DE.UTF-8
+HOSTNAME=login18-3.hpc.itc.rwth-aachen.de
+_LMFILES__modshare=/usr/local_rwth/modules/modulefiles/GLOBAL/DEVELOP:1:/usr/local_rwth/modules/modulefiles/linux/x86-64/DEVELOP/intel/19.0:1:/usr/local_rwth/modules/modulefiles/linux/x86-64/DEVELOP/intelmpi/2018:1
+_LIST__INTERNAL_INTEL_LICENSE_FILE=intelmpi intel
+I_MPI_PIN=off
+MODULEPATH_modshare=/home/ka387454/.modules:2:/usr/local_rwth/modules/modulefiles/linux/x86-64/DEVELOP:1:/usr/local_rwth/modules/modulefiles/GLOBAL:4
+INTEL_LICENSE_FILE=50017@license2.rz.rwth-aachen.de
+_LIST_FLAGS_ARCH32={ -m32 }
+FLAGS_INTEL_ARCH64= -m64 
+IPPROOT=/opt/intel/Compiler/19.0/1.144/rwthlnk/ipp
+MPI_LIBDIR=/opt/intel/impi/2018.4.274/compilers_and_libraries/linux/mpi/lib64
+SHELL=/usr/local_rwth/bin/zsh
+R_HWARCH=intel_64
+OBJCXX= 
+OBJC= 
+_LAST_MPI=intelmpi
+MPICC=mpiicc
+FLAGS_INTEL_AUTOPAR=-parallel
+I_MPI_FABRICS=shm:tmi
+SSH_CLIENT=134.61.97.29 35906 22
+R_LOGINTAG=91692@login18-3.hpc.itc.rwth-aachen.de
+TMPDIR=/tmp/ka387454/login18-3_84226
+R_DELIMITER=------------------------------------------------------------------------------
+PUREOPTIONS= -cache-dir=/work/ka387454
+GDBSERVER_MIC=/opt/intel/Compiler/19.0/1.144/debugger_2019/gdb/targets/intel64/x200/bin/gdbserver
+R_LOGINNAME=ka387454
+R_REMOTEHOST=unknown
+_LIST_CXX=icpc
+_INTERNAL_FLAGS_MKL_LINKER=MKL
+LIBRARY_PATH=/opt/intel/Compiler/19.0/1.144/rwthlnk/daal/lib/intel64_lin:/opt/intel/Compiler/19.0/1.144/rwthlnk/daal/lib/ia32_lin:/opt/intel/Compiler/19.0/1.144/rwthlnk/ipp/lib/intel64_lin:/opt/intel/Compiler/19.0/1.144/rwthlnk/ipp/lib/ia32_lin:/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/intel64_lin:/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/ia32_lin:/opt/intel/Compiler/19.0/1.144/rwthlnk/tbb/lib/intel64_lin/gcc4.7:/opt/intel/Compiler/19.0/1.144/rwthlnk/tbb/lib/ia32_lin/gcc4.7
+LIBRARY_PATH_modshare=/opt/intel/Compiler/19.0/1.144/rwthlnk/daal/lib/intel64_lin:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/ipp/lib/ia32_lin:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/tbb/lib/ia32_lin/gcc4.7:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/daal/lib/ia32_lin:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/intel64_lin:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/ipp/lib/intel64_lin:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/ia32_lin:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/tbb/lib/intel64_lin/gcc4.7:1
+FLAGS_ARCH64= -m64 
+_LIST_MKLROOT=/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl
+LC_NUMERIC=de_DE.UTF-8
+_LAST_REPLACES_FLAGS_RPATH=-Wl,-rpath=
+_MPI_LOADED=intelmpi/2018.4.274
+R_SVC_LDAP_MASTER=ldap01.hpc.itc.rwth-aachen.de
+R_LOGFILEDIR=/usr/local_host/logfiles
+_LIST_FLAGS_AUTOPAR=-parallel
+I_MPI_JOB_SIGNAL_PROPAGATION=on
+_LAST_MPI_MINORVERSION=4
+FLAGS_INTEL_FREE=-free -fpp
+FLAGS_INTEL_RUNTIME_LINKER=-Wl,-rpath=
+_LIST_FC=ifort
+_LIST__LAST_COMPILER_MAJORVERSION=19
+_LIST_INTEL_LICENSE_FILE=50017@license2.rz.rwth-aachen.de 50017@license2.rz.rwth-aachen.de
+_LIST__INTERNAL_FLAGS_RPATH=intel
+_LIST_CC=icc
+USER=ka387454
+R_GROUPS=all_nets,all_users,autoreboot,print,ssh_gssapi_authen,cgmv,perfmon,dialog,lustreclient,lc16,lc18,modules45,ldapclient,nss_merge,nss_merge_asap,cvmfs,hpc,fastx2,wd_xcpu,claix-2018,opa
+_INTERNAL_INTELARCH=intelmpi
+FLAGS_INTEL_FAST=-O3 -ip -xSSE4.2 -axCORE-AVX2,AVX -fp-model fast=2 
+LC_TELEPHONE=de_DE.UTF-8
+TEMP=/tmp/ka387454/login18-3_84226
+PSRC=/rwthfs/rz/SW/HPC/examples
+LD_LIBRARY_PATH=/opt/intel/impi/2018.4.274/compilers_and_libraries/linux/mpi/lib64:/opt/intel/impi/2018.4.274/compilers_and_libraries/linux/mpi/lib:/opt/intel/Compiler/19.0/1.144/rwthlnk/daal/lib/intel64_lin:/opt/intel/Compiler/19.0/1.144/rwthlnk/daal/lib/ia32_lin:/opt/intel/Compiler/19.0/1.144/rwthlnk/ipp/lib/intel64_lin:/opt/intel/Compiler/19.0/1.144/rwthlnk/ipp/lib/ia32_lin:/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/intel64_lin:/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/ia32_lin:/opt/intel/Compiler/19.0/1.144/rwthlnk/tbb/lib/intel64_lin/gcc4.7:/opt/intel/Compiler/19.0/1.144/rwthlnk/tbb/lib/ia32_lin/gcc4.7:/opt/intel/Compiler/19.0/1.144/rwthlnk/compiler/lib/intel64_lin:/opt/intel/Compiler/19.0/1.144/rwthlnk/compiler/lib/ia32_lin
+INCLUDE_modshare=/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/include:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/tbb/include:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/ipp/include:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/daal/include:1
+_INTERNAL_FLAGS_MKL_RPATH=MKL
+PSTLROOT=/opt/intel/Compiler/19.0/1.144/rwthlnk/pstl
+HPCWORK=/hpcwork/ka387454
+HOME_SNAPSHOT=/home/ka387454/.snapshot
+LAST_COMPILER=intel
+_LIST_FLAGS_MKL_RPATH={ -Wl,-rpath=/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/intel64_lin -Wl,-rpath=/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/ia32_lin }
+_LIST_FLAGS_FAST={-O3 -ip -xSSE4.2 -axCORE-AVX2,AVX -fp-model fast=2 }
+_LIST_FLAGS_RUNTIME_LINKER=-Wl,-rpath=
+R_OSDISTVERS=7.9
+TMPSESS=/tmp/ka387454/login18-3_84226
+ENV=/usr/local_host/etc/kshenv
+_LIST__INTERNAL_FLAGS_MKL_RPATH=MKL
+CLASSPATH_modshare=/opt/intel/impi/2018.4.274/compilers_and_libraries/linux/mpi/lib64/mpi.jar:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/daal/lib/daal.jar:1
+FLAGS_LPATH= -L/opt/intel/Compiler/19.0/1.144/rwthlnk/compiler/lib/intel64_lin                  -L/opt/intel/Compiler/19.0/1.144/rwthlnk/compiler/lib/ia32_lin                  -L/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/intel64_lin                   -L/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/ia32_lin  
+INTEL_F77=ifort -f77rtl -fpconstant -intconstant
+_LIST__LAST_COMPILER_REVISION=1.144
+FLAGS_INTEL_PIC=-fPIC -shared
+CPATH=/opt/intel/Compiler/19.0/1.144/rwthlnk/pstl/include:/opt/intel/Compiler/19.0/1.144/rwthlnk/pstl/stdlib:/opt/intel/Compiler/19.0/1.144/rwthlnk/daal/include:/opt/intel/Compiler/19.0/1.144/rwthlnk/ipp/include:/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/include:/opt/intel/Compiler/19.0/1.144/rwthlnk/tbb/include
+FLAGS_FAST=-O3 -ip -xSSE4.2 -axCORE-AVX2,AVX -fp-model fast=2 
+_LIST_F77={ifort -f77rtl -fpconstant -intconstant}
+R_LOGINPID=91692
+_COMPILER_INTELMPI=intel
+R_WLM_TYPE=slurm
+FLAGS_INTEL_ARCH32= -m32 
+_INTERNAL_FLAGS_LPATH=intelmpi
+FLAGS_INTEL_OPENMP=-qopenmp
+_LAST_MPI_MAJORVERSION=2018
+R_HW_NPROC=48
+R_LOGINMODE=LOGIN
+INTEL_CC=icc
+R_OSNAME=LINUX
+R_SERVICE=dialog
+FLAGS_INTEL_LINKER=-L/opt/intel/Compiler/19.0/1.144/rwthlnk/compiler/lib/intel64_lin -L/opt/intel/Compiler/19.0/1.144/rwthlnk/compiler/lib/ia32_lin -L/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/ia32_lin  -L/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/intel64_lin 
+_LIST__LAST_COMPILER_MINORVERSION=0
+FLAGS_RPATH=-Wl,-rpath=/opt/intel/Compiler/19.0/1.144/rwthlnk/compiler/lib/intel64_lin -Wl,-rpath=/opt/intel/Compiler/19.0/1.144/rwthlnk/compiler/lib/ia32_lin -Wl,-rpath=/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/intel64_lin  -Wl,-rpath=/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/ia32_lin 
+_LIST_OBJCXX={ }
+NLSPATH=/opt/intel/Compiler/19.0/1.144/debugger_2019/gdb/intel64/share/locale/%l_%t/%N:/opt/intel/Compiler/19.0/1.144/rwthlnk/daal/lib/intel64_lin/locale/%l_%t/%N:/opt/intel/Compiler/19.0/1.144/rwthlnk/ipp/lib/intel64_lin/locale/%l_%t/%N:/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/intel64_lin/locale/%l_%t/%N:/opt/intel/Compiler/19.0/1.144/rwthlnk/compiler/lib/intel64_lin/locale/%l_%t/%N
+PATH=/home/ka387454/local/bin:/home/ka387454/bin:/rwthfs/rz/cluster/home/ka387454/.vscode-server/bin/3866c3553be8b268c8a7f8c0482c0c0177aa8bfa/bin:/home/ka387454/local/bin:/home/ka387454/bin:/home/ka387454/.vscode-server/bin/3866c3553be8b268c8a7f8c0482c0c0177aa8bfa/bin:/home/ka387454/.cargo/bin:/opt/MPI/bin:/opt/intel/impi/2018.4.274/compilers_and_libraries/linux/mpi/bin64:/opt/intel/Compiler/19.0/1.144/rwthlnk/bin/intel64:/opt/slurm/bin:/usr/local_host/bin:/usr/local_host/sbin:/usr/local_rwth/bin:/usr/local_rwth/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/opt/singularity/bin:/usr/local/bin:/usr/local/sbin
+MAIL=/var/mail/ka387454
+R_SLURM_CLUSTER=rcc
+R_LOGINHOST=login18-3.hpc.itc.rwth-aachen.de
+FLAGS_FREE=-free -fpp
+MPI_NAME=intelmpi
+WORK=/work/ka387454
+LC_IDENTIFICATION=de_DE.UTF-8
+TBBROOT=/opt/intel/Compiler/19.0/1.144/rwthlnk/tbb
+_INTERNAL_FLAGS_MKL_INCLUDE=MKL
+MPITEST=/opt/MPI/bin/mpitest
+PWD=/home/ka387454/repos/chameleon-scripts/samoa_claix
+INTEL_OBJC= 
+_LMFILES_=/usr/local_rwth/modules/modulefiles/GLOBAL/DEVELOP:/usr/local_rwth/modules/modulefiles/linux/x86-64/DEVELOP/intel/19.0:/usr/local_rwth/modules/modulefiles/linux/x86-64/DEVELOP/intelmpi/2018
+FLAGS_MKL_LINKER=-mkl=sequential
+INTEL_FC=ifort
+_LAST_COMPILER_REVISION=1.144
+_LIST__INTERNAL_INTELARCH=intelmpi intel
+LANG=en_US.UTF-8
+GDB_CROSS=/opt/intel/Compiler/19.0/1.144/debugger_2019/gdb/intel64/bin/gdb-ia
+R_OSVERSION=3
+FINALDIR=/usr/local_rwth/modules/modulefiles/linux/x86-64
+MODULEPATH=/usr/local_rwth/modules/modulefiles/linux/x86-64/DEVELOP:/usr/local_rwth/modules/modulefiles/GLOBAL:/home/ka387454/.modules
+MPIFC=mpiifort
+LC_MEASUREMENT=de_DE.UTF-8
+TZ=:/etc/localtime
+R_HW_HOSTNAME=login18-3.hpc.itc.rwth-aachen.de
+LOADEDMODULES=DEVELOP:intel/19.0:intelmpi/2018
+_LIST_FLAGS_FAST_NO_FPOPT={-O3 -ip -xSSE4.2 -axCORE-AVX2,AVX -fp-model precise}
+FLAGS_MKL_RPATH= -Wl,-rpath=/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/intel64_lin -Wl,-rpath=/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/ia32_lin 
+R_MPI_ROOT=/opt/intel/impi/2018.4.274/compilers_and_libraries/linux/mpi
+R_OSTYPE=LINUX
+_LIST__INTERNAL_FLAGS_MKL_LINKER=MKL
+INTELARCH=64
+F77=ifort -f77rtl -fpconstant -intconstant
+FLAGS_MATH_LINKER=-mkl=sequential 
+CPATH_modshare=/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/include:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/tbb/include:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/pstl/stdlib:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/ipp/include:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/daal/include:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/pstl/include:1
+INTEL_OBJCXX= 
+DELIM_LINE=------------------------------------------------------------------------------
+JAVA_TOOL_OPTIONS=-Xmx2048m
+FLAGS_AUTOPAR=-parallel
+_LIST_LAST_COMPILER=intel
+DAALROOT=/opt/intel/Compiler/19.0/1.144/rwthlnk/daal
+R_OSDISTMAJVERS=7
+MPM_LAUNCHER=/opt/intel/Compiler/19.0/1.144/debugger_2019/mpm/mic/bin/start_mpm.sh
+CXX=icpc
+INTEL_PYTHONHOME=/opt/intel/Compiler/19.0/1.144/debugger_2019/python/intel64/
+FLAGS_PIC=-fPIC -shared
+FLAGS_INTEL_DEBUG=-g
+_LIST_FLAGS_FREE={-free -fpp}
+_LIST_FLAGS_ARCH64={ -m64 }
+HOME=/home/ka387454
+SHLVL=5
+R_CPUGROUPS=skylake-sp
+PATH_modshare=/usr/local_host/bin:1:/usr/bin:1:/opt/intel/impi/2018.4.274/compilers_and_libraries/linux/mpi/bin64:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/bin/intel64:1:/usr/local_host/sbin:1:/usr/local/bin:1:/opt/singularity/bin:1:/bin:1:/usr/local_rwth/sbin:1:/sbin:1:/opt/slurm/bin:1:/usr/sbin:1:/usr/local/sbin:1:/opt/MPI/bin:1:/usr/local_rwth/bin:1
+R_HWTYPE=i386
+WORK_SNAPSHOT=/work/ka387454/.snapshot
+LOGINPID=91692
+_INTERNAL_FLAGS_RPATH=intel
+_INTERNAL_INTEL_LICENSE_FILE=intelmpi
+_LIST__INTERNAL_MKLROOT=intel
+FLAGS_ARCH32= -m32 
+R_NAME=login18-3
+R_SLURM_ROLES=submit
+FLAGS_LINKER=-L/opt/intel/Compiler/19.0/1.144/rwthlnk/compiler/lib/intel64_lin -L/opt/intel/Compiler/19.0/1.144/rwthlnk/compiler/lib/ia32_lin -L/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/ia32_lin  -L/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/intel64_lin 
+MANPATH_modshare=/usr/local/share/man:1:/usr/local_rwth/man:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/documentation_2019/en/debugger/gdb-igfx/man:1:/usr/local_host/man:1:/usr/man:1:/usr/local/man:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/benchmarks/mp_linpack/man:1:/opt/slurm/share/man:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/man/common:1:/usr/local_rwth/modules/man:1:/opt/intel/impi/2018.4.274/compilers_and_libraries/linux/mpi/man:1:/usr/share/man:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/documentation_2019/en/debugger/gdb-ia/man:1
+FLAGS_DEBUG=-g
+FLAGS_INTEL_FAST_NO_FPOPT=-O3 -ip -xSSE4.2 -axCORE-AVX2,AVX -fp-model precise
+FC=ifort
+R_HOSTNAME=login18-3.hpc.itc.rwth-aachen.de
+BASH_ENV=/usr/local_host/etc/bashenv
+_LIST_FLAGS_PIC={-fPIC -shared}
+NLSPATH_modshare=/opt/intel/Compiler/19.0/1.144/debugger_2019/gdb/intel64/share/locale/%l_%t/%N:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/ipp/lib/intel64_lin/locale/%l_%t/%N:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/daal/lib/intel64_lin/locale/%l_%t/%N:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/compiler/lib/intel64_lin/locale/%l_%t/%N:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/intel64_lin/locale/%l_%t/%N:1
+FLAGS_MKL_SCALAPACK_LINKER=-lmkl_scalapack_lp64 -lmkl_blacs_intelmpi_lp64 -lpthread -lm
+LOGNAME=ka387454
+TMP=/tmp/ka387454/login18-3_84226
+_LIST_FLAGS_LINKER={-L/opt/intel/Compiler/19.0/1.144/rwthlnk/compiler/lib/intel64_lin -L/opt/intel/Compiler/19.0/1.144/rwthlnk/compiler/lib/ia32_lin -L/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/ia32_lin  -L/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/intel64_lin }
+_LIST_FLAGS_MKL_INCLUDE={-I/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/include -I/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/include/fftw -I/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/include/intel64/lp64 -I/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/include/ia32 -I/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/include/intel64/lp64}
+prepvintFLAGS_RPATH={djkch84adca/opt/intel/Compiler/19.0/1.144/rwthlnk/compiler/lib/intel64_lin djkch84adca/opt/intel/Compiler/19.0/1.144/rwthlnk/compiler/lib/ia32_lin djkch84adca/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/intel64_lin  djkch84adca/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/ia32_lin }
+LD_LIBRARY_PATH_modshare=/opt/intel/Compiler/19.0/1.144/rwthlnk/tbb/lib/ia32_lin/gcc4.7:1:/opt/intel/impi/2018.4.274/compilers_and_libraries/linux/mpi/lib64:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/ipp/lib/intel64_lin:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/compiler/lib/ia32_lin:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/intel64_lin:2:/opt/intel/Compiler/19.0/1.144/rwthlnk/tbb/lib/intel64_lin/gcc4.7:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/ia32_lin:2:/opt/intel/impi/2018.4.274/compilers_and_libraries/linux/mpi/lib:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/ipp/lib/ia32_lin:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/daal/lib/intel64_lin:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/compiler/lib/intel64_lin:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/daal/lib/ia32_lin:1
+MPIF77=mpiifort  -f77rtl -fpconstant -intconstant
+SSH_CONNECTION=134.61.97.29 35906 134.61.193.181 22
+R_OPA=claix18
+CLASSPATH=/opt/intel/impi/2018.4.274/compilers_and_libraries/linux/mpi/lib64/mpi.jar:/opt/intel/Compiler/19.0/1.144/rwthlnk/daal/lib/daal.jar
+MODULESHOME=/usr/local_rwth/modules/src
+_LIST__INTERNAL_FLAGS_LPATH=intelmpi intel
+FLAGS_RUNTIME_LINKER=-Wl,-rpath=
+OMP_NUM_THREADS=1
+FLAGS_MATH_INCLUDE=-I/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/include -I/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/include/fftw -I/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/include/intel64/lp64 -I/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/include/ia32 -I/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/include/intel64/lp64 
+I_MPI_TCP_BUFFER_SIZE=131072
+R_HW_REALMEM=385435
+LOADEDMODULES_modshare=intelmpi/2018:1:intel/19.0:1:DEVELOP:1
+FLAGS_MATH_RPATH= -Wl,-rpath=/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/intel64_lin -Wl,-rpath=/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/ia32_lin  
+R_INITENVDIR=/usr/local_host/etc
+INFOPATH=/opt/intel/Compiler/19.0/1.144/rwthlnk/documentation_2019/en/debugger/gdb-ia/info:/opt/intel/Compiler/19.0/1.144/rwthlnk/documentation_2019/en/debugger/gdb-igfx/info
+INFOPATH_modshare=/opt/intel/Compiler/19.0/1.144/rwthlnk/documentation_2019/en/debugger/gdb-ia/info:1:/opt/intel/Compiler/19.0/1.144/rwthlnk/documentation_2019/en/debugger/gdb-igfx/info:1
+_LAST_COMPILER_MAJORVERSION=19
+FLAGS_MPI_BATCH= -np 2
+CC=icc
+R_OSDIST=CENTOS
+FLAGS_OPENMP=-qopenmp
+_LIST_FLAGS_DEBUG=-g
+MPI_BINDIR=/opt/intel/impi/2018.4.274/compilers_and_libraries/linux/mpi/bin64
+INCLUDE=/opt/intel/Compiler/19.0/1.144/rwthlnk/daal/include:/opt/intel/Compiler/19.0/1.144/rwthlnk/ipp/include:/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/include:/opt/intel/Compiler/19.0/1.144/rwthlnk/tbb/include
+_LIST_FLAGS_MKL_LINKER=-mkl=sequential
+FLAGS_FAST_NO_FPOPT=-O3 -ip -xSSE4.2 -axCORE-AVX2,AVX -fp-model precise
+_LIST_OBJC={ }
+LC_TIME=de_DE.UTF-8
+R_SERVICES=dialog
+NODENAME=unknown
+prepvintFLAGS_LPATH={} {-L/opt/intel/Compiler/19.0/1.144/rwthlnk/compiler/lib/intel64_lin                  -L/opt/intel/Compiler/19.0/1.144/rwthlnk/compiler/lib/ia32_lin                  -L/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/intel64_lin                   -L/opt/intel/Compiler/19.0/1.144/rwthlnk/mkl/lib/ia32_lin  }
+_LAST_COMPILER_MINORVERSION=0
+_LIST_INTELARCH=64 64
+_LIST__INTERNAL_FLAGS_MKL_INCLUDE=MKL
+INTEL_CXX=icpc
+LC_NAME=de_DE.UTF-8
+R_LOGINTAG_UID=login18-3_40101
+MPICXX=mpiicpc
+I_MPI_ROOT=/opt/intel/impi/2018.4.274/compilers_and_libraries/linux/mpi
+MPIEXEC=/opt/MPI/bin/mpiexec
+BASH_FUNC_module()=() {  case "X`/usr/bin/whoami 2>/dev/null || /usr/ucb/whoami 2>/dev/null`" in 
+ X)
+ echo "module: cannot determine logname" 1>&2;
+ return 1
+ ;;
+ Xroot)
+ echo "module: not available for root" 1>&2;
+ return 1
+ ;;
+ esac;
+ typeset modulecmd=modulecmd.tcl;
+ typeset a="`tclsh /usr/local_rwth/modules/src/$modulecmd sh autoinit 2>/dev/null`";
+ if [ $? -ne 0 -o "X$a" = X ]; then
+ echo "no modules available" 1>&2;
+ return;
+ fi;
+ eval $a;
+ module $@
+}
+_=/usr/bin/env
+OLDPWD=/home/ka387454/repos/chameleon-scripts/samoa_claix
+EDITOR=vi
+VISUAL=vi
+FCEDIT=vi
+PAGER=less
+TERM=xterm-256color
+LC_ALL=en_US.UTF-8
+PS1=%F{51}%n@%m%f: %F{208}%1d%f$ 
+BROWSER=/rwthfs/rz/cluster/home/ka387454/.vscode-server/bin/3866c3553be8b268c8a7f8c0482c0c0177aa8bfa/bin/helpers/browser.sh
+TERM_PROGRAM=vscode
+TERM_PROGRAM_VERSION=1.59.1
+COLORTERM=truecolor
+VSCODE_GIT_IPC_HANDLE=/tmp/ka387454/login18-3_84226/vscode-git-6f7b74296c.sock
+GIT_ASKPASS=/rwthfs/rz/cluster/home/ka387454/.vscode-server/bin/3866c3553be8b268c8a7f8c0482c0c0177aa8bfa/extensions/git/dist/askpass.sh
+VSCODE_GIT_ASKPASS_NODE=/rwthfs/rz/cluster/home/ka387454/.vscode-server/bin/3866c3553be8b268c8a7f8c0482c0c0177aa8bfa/node
+VSCODE_GIT_ASKPASS_MAIN=/rwthfs/rz/cluster/home/ka387454/.vscode-server/bin/3866c3553be8b268c8a7f8c0482c0c0177aa8bfa/extensions/git/dist/askpass-main.js
+VSCODE_IPC_HOOK_CLI=/tmp/vscode-ipc-3ee3533c-12a7-405e-bc53-4296585706cf.sock
+R_SHLVL_INTERACTIVE=2
+R_SHLVL=4

@@ -1,0 +1,6 @@
+TaskSelectionStrat,PageSelectionStrat,PageWeightStrat,ConsiderTypes,PageN,TaskN,MapMode,CheckPhysical,SlurmNodes,SlurmTasksPerNode,OmpNumThreads,ChameleonVersion,Variation,PhaseTime
+3,8,2,1,16,16,3,0,2,1,8,chameleon/intel,affinity_16EQS_Middle_Con-All_No-AlChPh,275.0022
+1,2,2,1,16,3,3,1,2,1,8,chameleon/intel,affinity_default,274.0500
+1,2,2,1,16,3,3,1,2,1,8,chameleon/intel_no_affinity,no_affinity,255.6084
+1,2,2,0,16,3,3,1,2,1,8,chameleon/intel,affinity_ConsiderAll,273.7103
+3,8,2,1,16,16,0,0,2,1,8,chameleon/intel,affinity_DomainMode_16EQS_Middle,253.5237

@@ -4,5 +4,6 @@ affinity_tests_mxm/testingZSH/
 topology_tests/outputs/
 topology_tests/Tracing/
 topology_tests_pingpong/outputs/
+samoa_claix/outputs/
 /.vscode
 __pycache__
