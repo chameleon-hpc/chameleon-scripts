@@ -1,10 +1,7 @@
 #!/usr/local_rwth/bin/zsh
 ##SBATCH --job-name=samoa_chameleon
 ##SBATCH --output=output_samoa_chameleon.%J.txt
-#SBATCH --time=03:00:00
-##SBATCH --nodes=2
-##SBATCH --ntasks-per-node=2
-#SBATCH --cpus-per-task=12
+#SBATCH --time=10:00:00
 #SBATCH --hwctr=likwid
 #SBATCH --partition=c18m
 #SBATCH --account=thes0986
@@ -140,7 +137,7 @@ printEnv(){
 #                       Tests                           #
 #########################################################
 export GROUP_INDEX=-1
-for nSteps in 50 # 10 50 100 250 500 1000
+for nSteps in 50 #10 50 100 250 500 1000
 do
 export NUM_STEPS=${nSteps}
 export SIM_LIMIT="-nmax ${NUM_STEPS}"

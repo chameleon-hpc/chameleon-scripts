@@ -2,7 +2,7 @@
 export CUR_DATE_STR=${CUR_DATE_STR:-"$(date +"%Y%m%d_%H%M%S")"}
 export CUR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )" # get path of current script
 
-export TEST_NAME="Comparison_50Steps_4Threads_${CUR_DATE_STR}"
+export TEST_NAME="Comparison_50Steps_47Threads_${CUR_DATE_STR}"
 
 export SAMOA_DIR="/home/ka387454/repos/samoa-chameleon"
 export SAMOA_OUTPUT_DIR="/home/ka387454/repos/chameleon-scripts/samoa_claix/outputs/${TEST_NAME}/samoa_out"
@@ -55,7 +55,7 @@ export CHAMELEON_VERSION="chameleon/intel_no_affinity"
 
 # export NUM_STEPS=2000
 # export NUM_STEPS=150 #? How long is one simulated time step in reality?
-export ORIG_OMP_NUM_THREADS=4 #? Do those change automatically over time? Why ORIG...?
+export ORIG_OMP_NUM_THREADS=47 #? Do those change automatically over time? Why ORIG...?
 export RUN_TRACE=0  #! Tracing
 export ENABLE_TRACE_FROM_SYNC_CYCLE=1850
 export ENABLE_TRACE_TO_SYNC_CYCLE=1950
