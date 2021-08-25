@@ -5,7 +5,7 @@ import re
 import numpy as np
 #import statistics as st
 
-test_name = 'Comparison_50Steps_4Threads_20210825_103056'
+test_name = 'ChamStats_47Threads_20210825_083747'
 outDir_name = test_name
 # test_name = 'ChamStats_'+test_name
 
@@ -15,46 +15,31 @@ filename = test_name + '.csv'
 # has to be in the same dir as this .py script
 outputs_dir = 'outputs/' + outDir_name
 logs_dir = outputs_dir + '/logs'
+# find_string = [
+#     ["REGION", "Region"], # 0 = 0 hops, 1 = 2 hops, 2 = 4 hops
+#     ["PingPong with msg_size: 4 \( 0.004 KB\) took","Latency"],
+#     ["PingPong with msg_size: 268435456 \( 262144.000 KB\) took","256MB_time"],
+#     ["PingPong with msg_size: 268435456 \( 262144.000 KB\) took (\d)+\D(\d)+ us with a throughput of","256MB_throughput"],
+# ]
 
 computeTimeStats = False
 
 find_string = [
-    # Affinity Settings
-    ["CHAM_AFF_TASK_SELECTION_STRAT", "TaskSelectionStrat"],
-    ["CHAM_AFF_PAGE_SELECTION_STRAT", "PageSelectionStrat"],
-    ["CHAM_AFF_PAGE_WEIGHTING_STRAT", "PageWeightStrat"],
-    ["CHAM_AFF_CONSIDER_TYPES", "ConsiderTypes",],
-    ["CHAM_AFF_PAGE_SELECTION_N", "PageN"],
-    ["CHAM_AFF_TASK_SELECTION_N", "TaskN"],
-    ["CHAM_AFF_MAP_MODE", "MapMode"],
-    ["CHAM_AFF_ALWAYS_CHECK_PHYSICAL", "CheckPhysical"],
-    # SLURM information
-    ["SLURM_JOB_NUM_NODES", "SlurmNodes"],
-    ["SLURM_NTASKS_PER_NODE", "SlurmTasksPerNode"],
-    ["OMP_NUM_THREADS", "OmpNumThreads"],
-    # ["AUTOMATIC_NUMA_BALANCING", "NumaBalancing"],
-    # ["MXM_PARAMS", "MatrixSize,MatrixNumTasks,MatrixDistribution"],
-    ["CHAMELEON_VERSION", "ChameleonVersion"],
     ["CHAM_SETTINGS_STR", "Variation"],
-    # ["PROG", "Program"],
-    # ["NODELIST","Nodelist"],
-    # ["VARIATION_NAME","VariationName"],
-    # ["#R0: will create","R0_initTasks"],
-    # ["R#0: total effective throughput=","R0_TotalEffectiveThroughput"],
-    # ["R#0: task_migration_rate \(tasks/s\)","R0_TaskMigrationRate"],
-    # ["R#0: task_processing_rate \(tasks/s\)","R0_TaskProcessingRate"],
-    # ["R#0: _num_executed_tasks_overall","R0_NumExecutedTasksOverall"],
-    # ["R#0: _num_migration_decision_performed","R0_NumMigrationDecisionsPerformed"],
-    # ["R#0: _num_migration_done","R0_NumMigrationsDone"],
-    # ["R#0: _num_tasks_offloaded","R0_NumTasksOffloaded"],
-    # ["R#0: _time_taskwait_sum sum=","R0_TimeTaskwaitSum"],
-    # ["R#0: _time_taskwait_idling_sum sum=","R0_TimeTaskwaitIdlingSum"],
-    # ["#R1: will create","R1_initTasks"],
-    # ["R#1: task_processing_rate \(tasks/s\)","R1_TaskProcessingRate"],
-    # ["R#1: _num_executed_tasks_overall","R1_NumExecutedTasksOverall"],
-    # ["R#1: _time_taskwait_sum sum=","R1_TimeTaskwaitSum"],
-    # ["R#1: _time_taskwait_idling_sum sum=","R1_TimeTaskwaitIdlingSum"],
     ["Phase time:","PhaseTime"],
+    ["R#0: total effective throughput=","R0_TotalEffectiveThroughput"],
+    ["R#0: task_migration_rate \(tasks/s\)","R0_TaskMigrationRate"],
+    ["R#0: task_processing_rate \(tasks/s\)","R0_TaskProcessingRate"],
+    ["R#0: _num_executed_tasks_overall","R0_NumExecutedTasksOverall"],
+    ["R#0: _num_migration_decision_performed","R0_NumMigrationDecisionsPerformed"],
+    ["R#0: _num_migration_done","R0_NumMigrationsDone"],
+    ["R#0: _num_tasks_offloaded","R0_NumTasksOffloaded"],
+    ["R#0: _time_taskwait_sum sum=","R0_TimeTaskwaitSum"],
+    ["R#0: _time_taskwait_idling_sum sum=","R0_TimeTaskwaitIdlingSum"],
+    ["R#1: task_processing_rate \(tasks/s\)","R1_TaskProcessingRate"],
+    ["R#1: _num_executed_tasks_overall","R1_NumExecutedTasksOverall"],
+    ["R#1: _time_taskwait_sum sum=","R1_TimeTaskwaitSum"],
+    ["R#1: _time_taskwait_idling_sum sum=","R1_TimeTaskwaitIdlingSum"],
     ["GROUP_INDEX","Group"],  # Another Index for Plotting
     ["SOME_INDEX", "SomeIndex"],    # Index for simpler Plotting
     ]
@@ -280,7 +265,7 @@ def getParametersOfDir(cur_log_dir_path):
                 if not found:
                     csv_file.write("-1")
             csv_file.write(",")
-    
+
 def getParametersOfFile(cur_log_file_path):
     with open(cur_log_file_path, 'r') as f:
         lines = f.readlines()

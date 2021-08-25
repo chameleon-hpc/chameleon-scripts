@@ -1,7 +1,7 @@
 #!/usr/local_rwth/bin/zsh
 ##SBATCH --job-name=samoa_chameleon
 ##SBATCH --output=output_samoa_chameleon.%J.txt
-#SBATCH --time=10:00:00
+#SBATCH --time=03:00:00
 ##SBATCH --nodes=2
 ##SBATCH --ntasks-per-node=2
 #SBATCH --cpus-per-task=12
@@ -81,10 +81,10 @@ mkdir -p ${CUR_OUTP_STR}
 
 
 run_samoa_experiment() {
-    CUR_DIR=$(pwd)
+    # CUR_DIR=$(pwd)
     
     if [ "${RUN_TRACE}" = "1" ]; then   #! Trace
-        export VT_LOGFILE_PREFIX=trace_${EXE_NAME}
+        export VT_LOGFILE_PREFIX=${CUR_DIR}/Tracing/trace_${TEST_NAME}
         export VT_FLUSH_PREFIX=${VT_LOGFILE_PREFIX}
         mkdir -p ${VT_LOGFILE_PREFIX}
         cd ${VT_LOGFILE_PREFIX}    
@@ -140,7 +140,7 @@ printEnv(){
 #                       Tests                           #
 #########################################################
 export GROUP_INDEX=-1
-for nSteps in 10 50 100 250 500 1000
+for nSteps in 50 # 10 50 100 250 500 1000
 do
 export NUM_STEPS=${nSteps}
 export SIM_LIMIT="-nmax ${NUM_STEPS}"

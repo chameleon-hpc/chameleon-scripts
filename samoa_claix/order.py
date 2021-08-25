@@ -3,7 +3,7 @@ import os
 import csv
 
 #!#################################################
-test_name = 'NUM_STEPS_Comparison_47Threads_20210824_120750'
+test_name = 'Comparison_50Steps_4Threads_20210825_103056'
 rowNames=['Variation','SomeIndex','Group']
 #!#################################################
 
