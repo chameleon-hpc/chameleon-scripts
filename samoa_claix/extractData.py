@@ -5,7 +5,7 @@ import re
 import numpy as np
 #import statistics as st
 
-test_name = '150Steps_16Threads_20210823_110804'
+test_name = 'NUM_STEPS_Comparison_47Threads_20210824_120750'
 outDir_name = test_name
 # test_name = 'ChamStats_'+test_name
 
@@ -55,8 +55,8 @@ find_string = [
     # ["R#1: _time_taskwait_sum sum=","R1_TimeTaskwaitSum"],
     # ["R#1: _time_taskwait_idling_sum sum=","R1_TimeTaskwaitIdlingSum"],
     ["Phase time:","PhaseTime"],
-    # ["GROUP_INDEX","Group"],  # Another Index for Plotting
-    # ["SOME_INDEX", "SomeIndex"],    # Index for simpler Plotting
+    ["GROUP_INDEX","Group"],  # Another Index for Plotting
+    ["SOME_INDEX", "SomeIndex"],    # Index for simpler Plotting
     ]
 
 path_to_script = os.path.dirname(os.path.abspath(__file__))

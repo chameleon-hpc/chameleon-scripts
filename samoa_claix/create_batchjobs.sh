@@ -2,7 +2,7 @@
 export CUR_DATE_STR=${CUR_DATE_STR:-"$(date +"%Y%m%d_%H%M%S")"}
 export CUR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )" # get path of current script
 
-export TEST_NAME="150Steps_16Threads_${CUR_DATE_STR}"
+export TEST_NAME="NUM_STEPS_Comparison_47Threads_${CUR_DATE_STR}"
 
 export SAMOA_DIR="/home/ka387454/repos/samoa-chameleon"
 export SAMOA_OUTPUT_DIR="/home/ka387454/repos/chameleon-scripts/samoa_claix/outputs/${TEST_NAME}/samoa_out"
@@ -21,23 +21,23 @@ export MY_EXPORTS="CUR_DIR,CUR_DATE_STR,TEST_NAME,CHAMELEON_VERSION"
 #########################################################
 cd ${CUR_DIR}/../../chameleon/src
 
-# Chameleon with my affinity extension
+#* Chameleon with my affinity extension
 export INSTALL_DIR=~/install/chameleon/intel
 make
 
-# # chameleon with my affinity extension and keeping track of statistics
+# #* chameleon with my affinity extension and keeping track of statistics
 # export INSTALL_DIR=~/install/chameleon/intel_affinity_debug
 # make aff_debug
 
-# # Chameleon with my topology aware task migration tool and affinity extension
+# #* Chameleon with my topology aware task migration tool and affinity extension
 # export INSTALL_DIR=~/install/chameleon/intel_tool
 # make tool
 
-# # Chameleon with affinity extension but without comm thread
+# #* Chameleon with affinity extension but without comm thread
 # export INSTALL_DIR=~/install/chameleon/intel_aff_no_commthread
 # make aff_no_commthread
 
-# Chameleon without any of my modifications
+#* Chameleon without any of my modifications
 export INSTALL_DIR=~/install/chameleon/intel_no_affinity
 make vanilla
 
@@ -53,7 +53,7 @@ export CHAMELEON_VERSION="chameleon/intel_no_affinity"
 
 # export NUM_STEPS=2000
 export NUM_STEPS=150 #? How long is one simulated time step in reality?
-export ORIG_OMP_NUM_THREADS=16 #? Do those change automatically over time? Why ORIG...?
+export ORIG_OMP_NUM_THREADS=47 #? Do those change automatically over time? Why ORIG...?
 export RUN_TRACE=0
 export ENABLE_TRACE_FROM_SYNC_CYCLE=1850
 export ENABLE_TRACE_TO_SYNC_CYCLE=1950

@@ -1,0 +1,13 @@
+TaskSelectionStrat,PageSelectionStrat,PageWeightStrat,ConsiderTypes,PageN,TaskN,MapMode,CheckPhysical,SlurmNodes,SlurmTasksPerNode,OmpNumThreads,ChameleonVersion,Variation,PhaseTime
+3,8,2,1,16,16,0,0,2,1,16,chameleon/intel,100_affinity_DomainMode_16EQS_Middle,31.4317
+3,8,2,1,16,16,0,0,2,1,16,chameleon/intel_no_affinity,100_no_affinity,29.1586
+3,8,2,1,16,16,0,0,2,1,16,chameleon/intel,10_affinity_DomainMode_16EQS_Middle,3.2718
+1,2,2,1,16,3,3,1,2,1,16,chameleon/intel_no_affinity,10_no_affinity,3.1792
+3,8,2,1,16,16,0,0,2,1,16,chameleon/intel,250_affinity_DomainMode_16EQS_Middle,74.2456
+3,8,2,1,16,16,0,0,2,1,16,chameleon/intel_no_affinity,250_no_affinity,71.5225
+3,8,2,1,16,16,0,0,2,1,16,chameleon/intel,500_affinity_DomainMode_16EQS_Middle,144.9635
+3,8,2,1,16,16,0,0,2,1,16,chameleon/intel_no_affinity,500_no_affinity,141.0737
+3,8,2,1,16,16,0,0,2,1,16,chameleon/intel,50_affinity_DomainMode_16EQS_Middle,16.4351
+3,8,2,1,16,16,0,0,2,1,16,chameleon/intel_no_affinity,50_no_affinity,14.8948
+3,8,2,1,16,16,0,0,2,1,16,chameleon/intel,750_affinity_DomainMode_16EQS_Middle,215.9569
+3,8,2,1,16,16,0,0,2,1,16,chameleon/intel_no_affinity,750_no_affinity,210.5150

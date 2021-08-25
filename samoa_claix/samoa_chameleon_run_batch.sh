@@ -1,7 +1,7 @@
 #!/usr/local_rwth/bin/zsh
 ##SBATCH --job-name=samoa_chameleon
 ##SBATCH --output=output_samoa_chameleon.%J.txt
-#SBATCH --time=02:30:00
+#SBATCH --time=10:00:00
 ##SBATCH --nodes=2
 ##SBATCH --ntasks-per-node=2
 #SBATCH --cpus-per-task=12
@@ -139,78 +139,118 @@ printEnv(){
 #########################################################
 #                       Tests                           #
 #########################################################
-for nSteps in 10 500
+export GROUP_INDEX=-1
+for nSteps in 10 50 100 250 500 1000
 do
 export NUM_STEPS=${nSteps}
 export SIM_LIMIT="-nmax ${NUM_STEPS}"
 source samoa_core_env.sh
+export GROUP_INDEX=$(($GROUP_INDEX+1))    # for plotting
+export SOME_INDEX=-1
 
 #* No affinity
+export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
 export CHAMELEON_VERSION="chameleon/intel_no_affinity"
 export CHAM_SETTINGS_STR="${NUM_STEPS}_no_affinity" #for naming the result file
 source samoa_load_modules.sh
 run_experiment
 printEnv &>> ${RES_PATH} # print affinity settings, etc. in log file
 
-# #* default affinity (checks a lot of tasks physically)
+#* default affinity (checks a lot of tasks physically)
+export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
+export CHAM_AFF_TASK_SELECTION_STRAT=1      # all-linear
+export CHAM_AFF_PAGE_SELECTION_STRAT=2      # every n-th
+export CHAM_AFF_PAGE_WEIGHTING_STRAT=2      # BY_SIZE
+export CHAM_AFF_CONSIDER_TYPES=1            # CONSIDER-TO
+export CHAM_AFF_PAGE_SELECTION_N=16         # PageN
+export CHAM_AFF_TASK_SELECTION_N=3         # TaskN
+export CHAM_AFF_MAP_MODE=3                  # COMBINED_MODE
+export CHAM_AFF_ALWAYS_CHECK_PHYSICAL=1     # recheck every time
+export CHAMELEON_VERSION="chameleon/intel"
+export CHAM_SETTINGS_STR="${NUM_STEPS}_affinity_default" #for naming the result file
+source samoa_load_modules.sh
+run_experiment
+printEnv &>> ${RES_PATH} # print affinity settings, etc. in log file
+
+# #* default affinity but with consider-all
+# export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
+# export CHAM_AFF_TASK_SELECTION_STRAT=1      # all-linear
+# export CHAM_AFF_PAGE_SELECTION_STRAT=2      # every n-th
+# export CHAM_AFF_PAGE_WEIGHTING_STRAT=2      # BY_SIZE
+# export CHAM_AFF_PAGE_SELECTION_N=16         # PageN
+# export CHAM_AFF_TASK_SELECTION_N=3         # TaskN
+# export CHAM_AFF_MAP_MODE=3                  # COMBINED_MODE
+# export CHAM_AFF_ALWAYS_CHECK_PHYSICAL=1     # recheck every time
+# export CHAM_AFF_CONSIDER_TYPES=0            # CONSIDER ALL
 # export CHAMELEON_VERSION="chameleon/intel"
-# export CHAM_SETTINGS_STR="${NUM_STEPS}_affinity_default" #for naming the result file
+# export CHAM_SETTINGS_STR="${NUM_STEPS}_affinity_ConsiderAll" #for naming the result file
 # source samoa_load_modules.sh
 # run_experiment
 # printEnv &>> ${RES_PATH} # print affinity settings, etc. in log file
 
-# #* default affinity but with consider-all
-# export CHAM_AFF_CONSIDER_TYPES=0            # CONSIDER ALL
-# export CHAMELEON_VERSION="chameleon/intel"
-# export CHAM_SETTINGS_STR="${NUM_STEPS}_affinity_ConsiderAll" #for naming the result file
-# source samoa_core_env.sh
-# run_experiment
-# printEnv &>> ${RES_PATH} # print affinity settings, etc. in log file
-
-# #* affinity checking less tasks and pages
-# export CHAM_AFF_TASK_SELECTION_STRAT=3      # N_EQS
-# export CHAM_AFF_PAGE_SELECTION_STRAT=8      # middle
-# export CHAM_AFF_PAGE_WEIGHTING_STRAT=2      # BY_SIZE
-# export CHAM_AFF_CONSIDER_TYPES=1            # CONSIDER-ALL
-# export CHAM_AFF_PAGE_SELECTION_N=16         # PageN
-# export CHAM_AFF_TASK_SELECTION_N=16         # TaskN
-# export CHAM_AFF_MAP_MODE=3                  # COMBINED_MODE
-# export CHAM_AFF_ALWAYS_CHECK_PHYSICAL=0     # dont recheck every time
-# export CHAMELEON_VERSION="chameleon/intel"
-# export CHAM_SETTINGS_STR="${NUM_STEPS}_affinity_16EQS_Middle_Con-All_No-AlChPh" #for naming the result file
-# source samoa_core_env.sh
-# run_experiment
-# printEnv &>> ${RES_PATH} # print affinity settings, etc. in log file
-
-#* affinity domain mode checking less tasks and pages
+#* affinity checking less tasks and pages
+export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
 export CHAM_AFF_TASK_SELECTION_STRAT=3      # N_EQS
 export CHAM_AFF_PAGE_SELECTION_STRAT=8      # middle
 export CHAM_AFF_PAGE_WEIGHTING_STRAT=2      # BY_SIZE
-export CHAM_AFF_CONSIDER_TYPES=1            # CONSIDER-ALL
+export CHAM_AFF_CONSIDER_TYPES=0            # CONSIDER-ALL
+export CHAM_AFF_PAGE_SELECTION_N=16         # PageN
+export CHAM_AFF_TASK_SELECTION_N=16         # TaskN
+export CHAM_AFF_MAP_MODE=3                  # COMBINED_MODE
+export CHAM_AFF_ALWAYS_CHECK_PHYSICAL=0     # dont recheck every time
+export CHAMELEON_VERSION="chameleon/intel"
+export CHAM_SETTINGS_STR="${NUM_STEPS}_affinity_16EQS_Middle_Con-All_No-AlChPh" #for naming the result file
+source samoa_load_modules.sh
+run_experiment
+printEnv &>> ${RES_PATH} # print affinity settings, etc. in log file
+
+#* affinity domain mode checking less tasks and pages
+export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
+export CHAM_AFF_TASK_SELECTION_STRAT=3      # N_EQS
+export CHAM_AFF_PAGE_SELECTION_STRAT=8      # middle
+export CHAM_AFF_PAGE_WEIGHTING_STRAT=2      # BY_SIZE
+export CHAM_AFF_CONSIDER_TYPES=0            # CONSIDER-ALL
 export CHAM_AFF_PAGE_SELECTION_N=16         # PageN
 export CHAM_AFF_TASK_SELECTION_N=16         # TaskN
 export CHAM_AFF_MAP_MODE=0                  # DOMAIN_MODE
 export CHAM_AFF_ALWAYS_CHECK_PHYSICAL=0     # dont recheck every time
 export CHAMELEON_VERSION="chameleon/intel"
 export CHAM_SETTINGS_STR="${NUM_STEPS}_affinity_DomainMode_16EQS_Middle" #for naming the result file
-source samoa_core_env.sh
+source samoa_load_modules.sh
 run_experiment
 printEnv &>> ${RES_PATH} # print affinity settings, etc. in log file
 
-# #* affinity enabled but no tasks checked
-# export CHAM_AFF_TASK_SELECTION_STRAT=0      # NONE
-# export CHAM_AFF_PAGE_SELECTION_STRAT=8      # middle
-# export CHAM_AFF_PAGE_WEIGHTING_STRAT=2      # BY_SIZE
-# export CHAM_AFF_CONSIDER_TYPES=1            # CONSIDER-ALL
-# export CHAM_AFF_PAGE_SELECTION_N=16         # PageN
-# export CHAM_AFF_TASK_SELECTION_N=16         # TaskN
-# export CHAM_AFF_MAP_MODE=0                  # DOMAIN_MODE
-# export CHAM_AFF_ALWAYS_CHECK_PHYSICAL=0     # dont recheck every time
-# export CHAMELEON_VERSION="chameleon/intel"
-# export CHAM_SETTINGS_STR="${NUM_STEPS}_affinity_NONE_DomainMode_Middle" #for naming the result file
-# source samoa_core_env.sh
-# run_experiment
-# printEnv &>> ${RES_PATH} # print affinity settings, etc. in log file
+#* affinity enabled but no tasks checked, only initial location calculation
+export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
+export CHAM_AFF_TASK_SELECTION_STRAT=0      # NONE
+export CHAM_AFF_PAGE_SELECTION_STRAT=8      # middle
+export CHAM_AFF_PAGE_WEIGHTING_STRAT=2      # BY_SIZE
+export CHAM_AFF_CONSIDER_TYPES=0            # CONSIDER-ALL
+export CHAM_AFF_PAGE_SELECTION_N=16         # PageN
+export CHAM_AFF_TASK_SELECTION_N=16         # TaskN
+export CHAM_AFF_MAP_MODE=0                  # DOMAIN_MODE
+export CHAM_AFF_ALWAYS_CHECK_PHYSICAL=0     # dont recheck every time
+export CHAMELEON_VERSION="chameleon/intel"
+export CHAM_SETTINGS_STR="${NUM_STEPS}_affinity_NONE_MiddlePage" #for naming the result file
+source samoa_load_modules.sh
+run_experiment
+printEnv &>> ${RES_PATH} # print affinity settings, etc. in log file
+
+#* affinity enabled but no tasks checked, initial location calc minimized
+export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
+export CHAM_AFF_TASK_SELECTION_STRAT=0      # NONE
+export CHAM_AFF_PAGE_SELECTION_STRAT=0      # first-of-first only
+export CHAM_AFF_PAGE_WEIGHTING_STRAT=0      # first only
+export CHAM_AFF_CONSIDER_TYPES=0            # CONSIDER-ALL
+export CHAM_AFF_PAGE_SELECTION_N=16         # PageN
+export CHAM_AFF_TASK_SELECTION_N=16         # TaskN
+export CHAM_AFF_MAP_MODE=0                  # DOMAIN_MODE
+export CHAM_AFF_ALWAYS_CHECK_PHYSICAL=0     # dont recheck every time
+export CHAMELEON_VERSION="chameleon/intel"
+export CHAM_SETTINGS_STR="${NUM_STEPS}_affinity_NONE_FirstOfFirstPage" #for naming the result file
+source samoa_load_modules.sh
+run_experiment
+printEnv &>> ${RES_PATH} # print affinity settings, etc. in log file
 
 echo "finished NUM_STEPS=${NUM_STEPS}\n"
 done # NUM_STEPS
