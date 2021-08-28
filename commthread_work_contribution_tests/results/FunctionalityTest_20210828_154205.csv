@@ -1,0 +1,4 @@
+CommThreadWorkContributionLimit,MatrixSize,MatrixNumTasks,MatrixDistribution,VariationName,TimeChameleon,SUM_NumMigrationDecisionsPerformed,SUM_NumMigrationsDone,SUM_TasksExecutedByCommThread,Group,SomeIndex
+-10,600,1400,800 400 200 0,-1,25.8772,6.0,6.0,118.0,-1,1
+0,600,1400,800 400 200 0,-1,13.53742,2633737.0,1011.0,0.0,-1,2
+10,600,1400,800 400 200 0,-1,24.87897,393.0,91.0,114.0,-1,3

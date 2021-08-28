@@ -2,7 +2,7 @@
 export CUR_DATE_STR=${CUR_DATE_STR:-"$(date +"%Y%m%d_%H%M%S")"}
 export CUR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )" # get path of current script
 
-export TEST_NAME="Comparison_50Steps_47Threads_${CUR_DATE_STR}"
+export TEST_NAME="Debug_NoAffTaskSelect_AffDefault_Retest_${CUR_DATE_STR}"
 
 export SAMOA_DIR="/home/ka387454/repos/samoa-chameleon"
 export SAMOA_OUTPUT_DIR="/home/ka387454/repos/chameleon-scripts/samoa_claix/outputs/${TEST_NAME}/samoa_out"
@@ -21,9 +21,9 @@ export MY_EXPORTS="CUR_DIR,CUR_DATE_STR,TEST_NAME,CHAMELEON_VERSION"
 #########################################################
 cd ${CUR_DIR}/../../chameleon/src
 
-# #* Chameleon with my affinity extension
-# export INSTALL_DIR=~/install/chameleon/intel
-# make
+#* Chameleon with my affinity extension
+export INSTALL_DIR=~/install/chameleon/intel
+make
 
 # #* Chameleon without any of my modifications
 # export INSTALL_DIR=~/install/chameleon/intel_no_affinity

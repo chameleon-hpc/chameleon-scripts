@@ -6,5 +6,6 @@ topology_tests/Tracing/
 topology_tests_pingpong/outputs/
 samoa_claix/outputs/
 samoa_claix/Tracing/
+commthread_work_contribution_tests/outputs/
 /.vscode
 __pycache__
