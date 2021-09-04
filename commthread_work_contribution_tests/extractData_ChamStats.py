@@ -6,7 +6,7 @@ import numpy as np
 #import statistics as st
 import csv
 
-test_name = 'FunctionalityTest_20210828_154205'
+test_name = 'ContributionVariation_3Threads_Stats_20210904_092245'
 outDir_name = test_name
 # test_name = 'ChamStats_'+test_name
 
@@ -36,26 +36,26 @@ find_string = [
     # ["CHAM_AFF_MAP_MODE", "MapMode"],
     # ["CHAM_AFF_ALWAYS_CHECK_PHYSICAL", "CheckPhysical"],
     # # SLURM information
-    # ["SLURM_JOB_NUM_NODES", "SlurmNodes"],
-    # ["SLURM_NTASKS_PER_NODE", "SlurmTasksPerNode"],
-    # ["OMP_NUM_THREADS", "OmpNumThreads"],
+    ["SLURM_JOB_NUM_NODES", "SlurmNodes"],
+    ["SLURM_NTASKS_PER_NODE", "SlurmTasksPerNode"],
+    ["OMP_NUM_THREADS", "OmpNumThreads"],
     # ["AUTOMATIC_NUMA_BALANCING", "NumaBalancing"],
     ["CHAM_COMMTHREAD_WORKCONTRIBUTION_LIMIT","CommThreadWorkContributionLimit"],
     ["MXM_PARAMS", "MatrixSize,MatrixNumTasks,MatrixDistribution"],
-    # ["CHAMELEON_VERSION", "ChameleonVersion"],
+    ["CHAMELEON_VERSION", "ChameleonVersion"],
     # ["PROG", "Program"],
     # ["NODELIST","Nodelist"],
     # # runtime
     # topology settings
     # ["TOPO_MIGRATION_STRAT","TopoStrat"],
     # ["MIGRATION_OFFLOAD_TO_SINGLE_RANK","TopoOffloadSingle"],
-    # ["N_RUNS", "NRuns"], # Number of repetitions per scenario
+    ["N_RUNS", "NRuns"], # Number of repetitions per scenario
     # # Likwid
     # ["L2 miss ratio STAT", "Likwid_L2MissRatio"],
     # ["L3 miss ratio STAT", "Likwid_L3MissRatio"],
     # ["Runtime \(RDTSC\) \[s\] STAT", "Likwid_Runtime"], # don't know what time this is, seems to be not usefull for me
     # ["Clock \[MHz\] STAT", "Likwid_Clock"], # probably not usefull for me
-    ["VARIATION_NAME","VariationName"],
+    # ["VARIATION_NAME","VariationName"],
     ["Computations with chameleon took", "TimeChameleon"],
     # ["-", "TCUQ"], # Time Chameleon Upper Quartile
     # ["-", "TCLQ"], # Time Chameleon Lower Quartile

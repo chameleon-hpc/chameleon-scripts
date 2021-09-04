@@ -1,0 +1,12 @@
+SlurmNodes,SlurmTasksPerNode,OmpNumThreads,CommThreadWorkContributionLimit,MatrixSize,MatrixNumTasks,MatrixDistribution,ChameleonVersion,NRuns,TimeChameleon,SUM_NumMigrationDecisionsPerformed,SUM_NumMigrationsDone,SUM_TasksExecutedByCommThread,Group,SomeIndex
+1,4,1,0,600,1400,350 350 350 350,chameleon/intel_no_affinity,5,50.07682,-1.0,-1.0,-1.0,0,0
+1,4,2,0,600,1400,350 350 350 350,chameleon/intel_no_affinity,5,25.26225,-1.0,-1.0,-1.0,1,0
+1,4,3,0,600,1400,350 350 350 350,chameleon/intel_no_affinity,5,16.60636,-1.0,-1.0,-1.0,2,0
+1,4,4,0,600,1400,350 350 350 350,chameleon/intel_no_affinity,5,13.34466,-1.0,-1.0,-1.0,3,0
+1,4,5,0,600,1400,350 350 350 350,chameleon/intel_no_affinity,5,11.48737,-1.0,-1.0,-1.0,4,0
+1,4,6,0,600,1400,350 350 350 350,chameleon/intel_no_affinity,5,10.96003,-1.0,-1.0,-1.0,5,0
+1,4,7,0,600,1400,350 350 350 350,chameleon/intel_no_affinity,5,10.81852,-1.0,-1.0,-1.0,6,0
+1,4,8,0,600,1400,350 350 350 350,chameleon/intel_no_affinity,5,10.80387,-1.0,-1.0,-1.0,7,0
+1,4,9,0,600,1400,350 350 350 350,chameleon/intel_no_affinity,5,10.79494,-1.0,-1.0,-1.0,8,0
+1,4,10,0,600,1400,350 350 350 350,chameleon/intel_no_affinity,5,10.94234,-1.0,-1.0,-1.0,9,0
+1,4,11,0,600,1400,350 350 350 350,chameleon/intel_no_affinity,5,11.28965,-1.0,-1.0,-1.0,10,0

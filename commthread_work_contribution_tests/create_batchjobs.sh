@@ -3,7 +3,7 @@
 export CUR_DATE_STR=${CUR_DATE_STR:-"$(date +"%Y%m%d_%H%M%S")"}
 export CUR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )" # get path of current script
 
-export TEST_NAME="FunctionalityTest_${CUR_DATE_STR}"
+export TEST_NAME="ContributionVariation_3Threads_Stats_${CUR_DATE_STR}"
 
 export OUT_DIR="${CUR_DIR}/outputs/"${TEST_NAME}
 # export OUT_DIR="${CUR_DIR}/outputs/stats_mapMode_CheckPhy_NoNuma_1Node_PageChangeCheck"
@@ -17,8 +17,8 @@ MY_EXPORTS="OUT_DIR,CUR_DATE_STR,MXM_PARAMS,CPUS_PER_TASK,MXM_SIZE,MXM_DISTRIBUT
 #########################################################
 cd ${CUR_DIR}/../../chameleon/src
 
-# export INSTALL_DIR=~/install/chameleon/intel_no_affinity
-# make vanilla
+export INSTALL_DIR=~/install/chameleon/intel_no_affinity
+make vanilla
 
 export INSTALL_DIR=~/install/chameleon/intel
 make commthread_contribution
