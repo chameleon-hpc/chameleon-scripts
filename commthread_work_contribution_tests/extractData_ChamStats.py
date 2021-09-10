@@ -6,7 +6,7 @@ import numpy as np
 #import statistics as st
 import csv
 
-test_name = 'ContributionVariation_3Threads_Stats_20210904_092245'
+test_name = 'ScenariosThreadScaling_20210909_114304'
 outDir_name = test_name
 # test_name = 'ChamStats_'+test_name
 
@@ -83,7 +83,7 @@ find_string = [
     # ["R#1: _time_taskwait_idling_sum sum=","R1_TimeTaskwaitIdlingSum"],
     ["_num_migration_decision_performed","SUM_NumMigrationDecisionsPerformed"],
     ["_num_migration_done","SUM_NumMigrationsDone"],
-    ["_num_tasks_executed_by_commthread","SUM_TasksExecutedByCommThread"],
+    ["_num_tasks_executed_by_commthread","SUM_TasksExecutedByCommThreads"],
     ["GROUP_INDEX","Group"],  # Another Index for Plotting
     ["SOME_INDEX", "SomeIndex"],    # Index for simpler Plotting
     ]
@@ -333,7 +333,9 @@ csv_file.close()
 ####################################################
 
 # rowNames=['Variation','SomeIndex','Group']
-rowNames=['SomeIndex','Group']
+# rowNames=['SomeIndex','Group']
+# rowNames=['SomeIndex','Group','CommThreadWorkContributionLimit']
+rowNames=['SomeIndex','Group','MatrixDistribution']
 
 path_to_script = os.path.dirname(os.path.abspath(__file__))
 file_path = path_to_script+'/results/'+test_name+'.csv'
