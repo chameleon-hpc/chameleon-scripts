@@ -6,7 +6,11 @@ import numpy as np
 #import statistics as st
 import csv
 
-test_name = 'NUM_STEPS_Comparison_4Threads_20210825_112007'
+#!################################################
+test_name = 'ThreadComparison_50Steps_20210915_112527'
+rowNames=['SomeIndex','Group','OmpNumThreads'] # ordering
+#!################################################
+
 outDir_name = test_name
 # test_name = 'ChamStats_'+test_name
 
@@ -21,22 +25,22 @@ computeTimeStats = False
 
 find_string = [
     # Affinity Settings
-    ["CHAM_AFF_TASK_SELECTION_STRAT", "TaskSelectionStrat"],
-    ["CHAM_AFF_PAGE_SELECTION_STRAT", "PageSelectionStrat"],
-    ["CHAM_AFF_PAGE_WEIGHTING_STRAT", "PageWeightStrat"],
-    ["CHAM_AFF_CONSIDER_TYPES", "ConsiderTypes",],
-    ["CHAM_AFF_PAGE_SELECTION_N", "PageN"],
-    ["CHAM_AFF_TASK_SELECTION_N", "TaskN"],
-    ["CHAM_AFF_MAP_MODE", "MapMode"],
-    ["CHAM_AFF_ALWAYS_CHECK_PHYSICAL", "CheckPhysical"],
+    ["CHAM_AFF_TASK_SELECTION_STRAT=", "TaskSelectionStrat"],
+    ["CHAM_AFF_PAGE_SELECTION_STRAT=", "PageSelectionStrat"],
+    ["CHAM_AFF_PAGE_WEIGHTING_STRAT=", "PageWeightStrat"],
+    ["CHAM_AFF_CONSIDER_TYPES=", "ConsiderTypes",],
+    ["CHAM_AFF_PAGE_SELECTION_N=", "PageN"],
+    ["CHAM_AFF_TASK_SELECTION_N=", "TaskN"],
+    ["CHAM_AFF_MAP_MODE=", "MapMode"],
+    ["CHAM_AFF_ALWAYS_CHECK_PHYSICAL=", "CheckPhysical"],
     # SLURM information
     ["SLURM_JOB_NUM_NODES", "SlurmNodes"],
     ["SLURM_NTASKS_PER_NODE", "SlurmTasksPerNode"],
-    ["OMP_NUM_THREADS", "OmpNumThreads"],
+    ["OMP_NUM_THREADS=", "OmpNumThreads"],
     # ["AUTOMATIC_NUMA_BALANCING", "NumaBalancing"],
     # ["MXM_PARAMS", "MatrixSize,MatrixNumTasks,MatrixDistribution"],
-    ["CHAMELEON_VERSION", "ChameleonVersion"],
-    ["CHAM_SETTINGS_STR", "Variation"],
+    ["CHAMELEON_VERSION=", "ChameleonVersion"],
+    ["CHAM_SETTINGS_STR=", "Variation"],
     # ["PROG", "Program"],
     # ["NODELIST","Nodelist"],
     # ["VARIATION_NAME","VariationName"],
@@ -56,8 +60,8 @@ find_string = [
     # ["R#1: _time_taskwait_sum sum=","R1_TimeTaskwaitSum"],
     # ["R#1: _time_taskwait_idling_sum sum=","R1_TimeTaskwaitIdlingSum"],
     ["Phase time:","PhaseTime"],
-    ["GROUP_INDEX","Group"],  # Another Index for Plotting
-    ["SOME_INDEX", "SomeIndex"],    # Index for simpler Plotting
+    ["GROUP_INDEX=","Group"],  # Another Index for Plotting
+    ["SOME_INDEX=", "SomeIndex"],    # Index for simpler Plotting
     ]
 
 path_to_script = os.path.dirname(os.path.abspath(__file__))
@@ -146,7 +150,7 @@ csv_file.close()
 #               Order file                         #
 ####################################################
 
-rowNames=['Variation','SomeIndex','Group']
+
 
 path_to_script = os.path.dirname(os.path.abspath(__file__))
 file_path = path_to_script+'/results/'+test_name+'.csv'

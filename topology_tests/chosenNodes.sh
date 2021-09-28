@@ -1,2 +1,2 @@
-export NODELIST=ncm0001,ncm0002,ncm0004,ncm0041,ncm0042,ncm0043
+export NODELIST=ncm0042,ncm0043,ncm0045,ncm0123,ncm0135,ncm0136
 export CHOOSE_NODES_FAILED=0

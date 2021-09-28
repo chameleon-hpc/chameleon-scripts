@@ -3,10 +3,10 @@
 export CUR_DATE_STR=${CUR_DATE_STR:-"$(date +"%Y%m%d_%H%M%S")"}
 export CUR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )" # get path of current script
 
-# export TEST_NAME="ContributionVariation_3Threads_Stats_${CUR_DATE_STR}"
+export TEST_NAME="ContributionVariation_3Threads_${CUR_DATE_STR}"
 # export TEST_NAME="NumThreads_${CUR_DATE_STR}"
 # export TEST_NAME="ContributionThreadScaling_${CUR_DATE_STR}"
-export TEST_NAME="ScenariosThreadScaling_${CUR_DATE_STR}"
+# export TEST_NAME="ScenariosThreadScaling_${CUR_DATE_STR}"
 
 export OUT_DIR="${CUR_DIR}/outputs/"${TEST_NAME}
 # export OUT_DIR="${CUR_DIR}/outputs/stats_mapMode_CheckPhy_NoNuma_1Node_PageChangeCheck"
@@ -18,14 +18,15 @@ MY_EXPORTS="OUT_DIR,CUR_DATE_STR,MXM_PARAMS,CPUS_PER_TASK,MXM_SIZE,MXM_DISTRIBUT
 #########################################################
 #           Compile Chameleon Versions                  #
 #########################################################
-# cd ${CUR_DIR}/../../chameleon/src
+cd ${CUR_DIR}/../../chameleon/src
 
 # export INSTALL_DIR=~/install/chameleon/intel_no_affinity
 # make vanilla
 
-# export INSTALL_DIR=~/install/chameleon/intel
+# export INSTALL_DIR=~/install/chameleon/intel_comm_contribution
 # make commthread_contribution
-# cd ${CUR_DIR}
+
+cd ${CUR_DIR}
 
 #########################################################
 #           Compile Matrix Example Versions             #

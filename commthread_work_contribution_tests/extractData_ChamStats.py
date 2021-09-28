@@ -6,7 +6,14 @@ import numpy as np
 #import statistics as st
 import csv
 
-test_name = 'ScenariosThreadScaling_20210909_114304'
+#!###################################################
+test_name = 'ContributionThreadScaling_20210915_120406'
+# rowNames=['Variation','SomeIndex','Group']
+# rowNames=['SomeIndex','Group']
+rowNames=['SomeIndex','Group','CommThreadWorkContributionLimit']
+# rowNames=['SomeIndex','Group','MatrixDistribution']
+#!###################################################
+
 outDir_name = test_name
 # test_name = 'ChamStats_'+test_name
 
@@ -331,11 +338,6 @@ csv_file.close()
 ####################################################
 #               Order file                         #
 ####################################################
-
-# rowNames=['Variation','SomeIndex','Group']
-# rowNames=['SomeIndex','Group']
-# rowNames=['SomeIndex','Group','CommThreadWorkContributionLimit']
-rowNames=['SomeIndex','Group','MatrixDistribution']
 
 path_to_script = os.path.dirname(os.path.abspath(__file__))
 file_path = path_to_script+'/results/'+test_name+'.csv'

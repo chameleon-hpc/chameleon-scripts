@@ -5,7 +5,12 @@ import re
 import numpy as np
 #import statistics as st
 
-test_name = 'NoAff_Topo_2PPN_S90_20210814_112836'
+import csv
+
+#!################################################
+test_name = 'NoAff_Topo_4PPN_S314_S2048_20210917_101821'
+rowNames=['SomeIndex','Group','OmpNumThreads'] # ordering
+#!################################################
 
 # name of the new csv file (overwrites existing file)
 filename = test_name + '.csv'
@@ -52,6 +57,7 @@ find_string = [
     # topology settings
     ["TOPO_MIGRATION_STRAT","TopoStrat"],
     ["MIGRATION_OFFLOAD_TO_SINGLE_RANK","TopoOffloadSingle"],
+    ["TOPO_ORDERED_LIST_SELECT","TopoOrderedListSelect"],
     ["N_RUNS", "NRuns"], # Number of repetitions per scenario
     # Likwid
     # ["L2 miss ratio STAT", "Likwid_L2MissRatio"],
@@ -264,3 +270,28 @@ for cur_log_dir in os.listdir(logs_path):
     csv_file.write("\n")
 
 csv_file.close()
+
+####################################################
+#               Order file                         #
+####################################################
+
+
+
+path_to_script = os.path.dirname(os.path.abspath(__file__))
+file_path = path_to_script+'/results/'+test_name+'.csv'
+
+out_path = path_to_script+'/results/'+test_name+"_ordered.csv"
+
+for rowName in rowNames:
+    with open(file_path, 'r') as f_input:
+        csv_input = csv.DictReader(f_input)
+        data = sorted(csv_input, key=lambda row: row[rowName])
+
+    with open(out_path, 'w') as f_output:    
+        csv_output = csv.DictWriter(f_output, fieldnames=csv_input.fieldnames)
+        csv_output.writeheader()
+        csv_output.writerows(data)
+
+    os.remove(file_path)
+    os.rename(out_path, file_path)
+

@@ -27,9 +27,9 @@ cd ${CUR_DIR}/../../chameleon/src
 # export INSTALL_DIR=~/install/chameleon/intel_affinity_debug
 # make aff_debug
 
-# # Chameleon with my topology aware task migration tool and affinity extension
-# export INSTALL_DIR=~/install/chameleon/intel_tool
-# make tool
+# Chameleon with my topology aware task migration tool, without affinity extension
+export INSTALL_DIR=~/install/chameleon/intel_tool
+make tool
 
 # # Chameleon with affinity extension but without comm thread
 # export INSTALL_DIR=~/install/chameleon/intel_aff_no_commthread
@@ -40,9 +40,9 @@ cd ${CUR_DIR}/../../chameleon/src
 # make vanilla
 
 # ! tracing tool
-module load intelitac
-export INSTALL_DIR=~/install/chameleon/intel_tool
-CUSTOM_COMPILE_FLAGS="-DUSE_TASK_AFFINITY=1 -DCHAMELEON_TOOL_SUPPORT=1" make trace
+# module load intelitac
+# export INSTALL_DIR=~/install/chameleon/intel_tool
+# CUSTOM_COMPILE_FLAGS="-DUSE_TASK_AFFINITY=1 -DCHAMELEON_TOOL_SUPPORT=1" make trace
 
 cd ${CUR_DIR}
 
@@ -109,7 +109,7 @@ export GROUP_INDEX=-1
 ###################### 6 Nodes 4 PPN ##########################
 for try in {1..120} # try multiple times when nodes are occupied
 do
-export OUT_DIR_NAME="Trace_NoAff_Topo_4PPN_S90_OLS0_OS1_0Hops_${CUR_DATE_STR}"
+export OUT_DIR_NAME="Stats_NoAff_Topo_4PPN_S90_${CUR_DATE_STR}"
 export OUT_DIR="${CUR_DIR}/outputs/${OUT_DIR_NAME}"
 export WANTED_NODES="3,3"
 chooseNodes
@@ -120,7 +120,7 @@ then
     continue 
 fi
 mkdir -p ${OUT_DIR}
-mkdir ${CUR_DIR}/Tracing/${OUT_DIR_NAME} && cd $_ #! Tracing
+# mkdir ${CUR_DIR}/Tracing/${OUT_DIR_NAME} && cd $_ #! Tracing
 export CPUS_PER_TASK=12
 export PROCS_PER_NODE=4
 sbatch --nodes=6 --nodelist=${NODELIST} --ntasks-per-node=4 --cpus-per-task=${CPUS_PER_TASK} --job-name=4PPN_topo_mxm \

@@ -23,7 +23,7 @@ export OMP_NUM_THREADS=3
 export MIN_ABS_LOAD_IMBALANCE_BEFORE_MIGRATION=$((${OMP_NUM_THREADS}*1.3))
 export MIN_REL_LOAD_IMBALANCE_BEFORE_MIGRATION=0.1
 export PROG="mxm_chameleon"
-export CHAMELEON_VERSION="chameleon/intel"
+export CHAMELEON_VERSION="chameleon/intel_comm_contribution"
 export OMP_PLACES=cores 
 export OMP_PROC_BIND=spread
 
@@ -110,59 +110,59 @@ function prep_no_chameleon()
 #*########################################################
 #*   Vary Distribution and Work Contribution             #
 #*########################################################
-# distributions=(
-#     "800 400 200 0"
-#     "700 400 200 100"
-#     "350 350 350 350"
-# )
+distributions=(
+    "800 400 200 0"
+    "500 400 300 200"
+    "350 350 350 350"
+)
 
-# export GROUP_INDEX=-1
+export GROUP_INDEX=-1
 
-# for VAR1 in "${distributions[@]}"
-# do
-#     export MXM_DISTRIBUTION="${VAR1}"
-#     export SOME_INDEX=-1
-#     export GROUP_INDEX=$(($GROUP_INDEX+1))    # for plotting
+for VAR1 in "${distributions[@]}"
+do
+    export MXM_DISTRIBUTION="${VAR1}"
+    export SOME_INDEX=-1
+    export GROUP_INDEX=$(($GROUP_INDEX+1))    # for plotting
 
-#     #* Chameleon default
-#     prep_no_affinity
-#     export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
-#     export CHAM_COMMTHREAD_WORKCONTRIBUTION_LIMIT=0
-#     VARIATION_DIR=${OUT_DIR}"/logs/Distribution-${GROUP_INDEX}_Cham-Vanilla"
-#     mkdir ${VARIATION_DIR}
-#     for RUN in {1..${N_RUNS}}
-#     do
-#         eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
-#         # print some information to check the progression of the job
-#         squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
-#         echo "Finished_no_affinity_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
-#     done
+    #* Chameleon default
+    prep_no_affinity
+    export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
+    export CHAM_COMMTHREAD_WORKCONTRIBUTION_LIMIT=0
+    VARIATION_DIR=${OUT_DIR}"/logs/Distribution-${GROUP_INDEX}_Cham-Vanilla"
+    mkdir ${VARIATION_DIR}
+    for RUN in {1..${N_RUNS}}
+    do
+        eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
+        # print some information to check the progression of the job
+        squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
+        echo "Finished_no_affinity_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
+    done
 
-#     #* Chameleon with Commthread work contribution
-#     module unload ${CHAMELEON_VERSION}
-#     export CHAMELEON_VERSION="chameleon/intel"
-#     module load ${CHAMELEON_VERSION}
-#     for VAR2 in 0 1 10 100 1000 10000 100000 1000000
-#     do
-#         export CHAM_COMMTHREAD_WORKCONTRIBUTION_LIMIT=${VAR2}
-#         export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
-#         VARIATION_DIR=${LOG_DIR}"/Distribution-"${GROUP_INDEX}"_Contribution-"${VAR2}
-#         mkdir ${VARIATION_DIR}
-#         for RUN in {1..${N_RUNS}}
-#         do
-#             eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
-#             # print some information to check the progression of the job
-#             squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
-#             echo "Finished"${GROUP_INDEX}"_"${VAR2}"_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
-#         done
-#     done
-# done
+    #* Chameleon with Commthread work contribution
+    module unload ${CHAMELEON_VERSION}
+    export CHAMELEON_VERSION="chameleon/intel_comm_contribution"
+    module load ${CHAMELEON_VERSION}
+    for VAR2 in 0 1 10 100 1000 10000 100000 1000000
+    do
+        export CHAM_COMMTHREAD_WORKCONTRIBUTION_LIMIT=${VAR2}
+        export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
+        VARIATION_DIR=${LOG_DIR}"/Distribution-"${GROUP_INDEX}"_Contribution-"${VAR2}
+        mkdir ${VARIATION_DIR}
+        for RUN in {1..${N_RUNS}}
+        do
+            eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
+            # print some information to check the progression of the job
+            squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
+            echo "Finished"${GROUP_INDEX}"_"${VAR2}"_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
+        done
+    done
+done
 
 #*########################################################
 #*   Vary NumThreads and Work Contribution               #
 #*########################################################
 # export GROUP_INDEX=-1
-# export MXM_DISTRIBUTION="800 400 200 0"
+# export MXM_DISTRIBUTION="500 400 300 200"
 
 # for VAR1 in 1 2 3 4 5 6 7 8 9 10 11
 # do
@@ -187,7 +187,7 @@ function prep_no_chameleon()
 
 #     #* Chameleon with Commthread work contribution
 #     module unload ${CHAMELEON_VERSION}
-#     export CHAMELEON_VERSION="chameleon/intel"
+#     export CHAMELEON_VERSION="chameleon/intel_comm_contribution"
 #     module load ${CHAMELEON_VERSION}
 #     for VAR2 in 10000 100000 1000000
 #     do
@@ -206,56 +206,56 @@ function prep_no_chameleon()
 # done
 
 #*########################################################
-#*   Vary NumThreads and Work Contribution               #
+#*   Vary NumThreads and Task Distributions              #
 #*########################################################
-export GROUP_INDEX=-1
-export CHAM_COMMTHREAD_WORKCONTRIBUTION_LIMIT=100000
-distributions=(
-    "800 400 200 0"
-    "700 400 200 100"
-    "350 350 350 350"
-)
+# export GROUP_INDEX=-1
+# export CHAM_COMMTHREAD_WORKCONTRIBUTION_LIMIT=100000
+# distributions=(
+#     "800 400 200 0"
+#     "500 400 300 200"
+#     "350 350 350 350"
+# )
 
-for VAR1 in 1 2 3 4 5 6 7 8 9 10 11
-do
-    export OMP_NUM_THREADS="${VAR1}"
-    export MIN_ABS_LOAD_IMBALANCE_BEFORE_MIGRATION=$((${OMP_NUM_THREADS}*1.3))
-    export SOME_INDEX=-1
-    export GROUP_INDEX=$(($GROUP_INDEX+1))    # for plotting
+# for VAR1 in 1 2 3 4 5 6 7 8 9 10 11
+# do
+#     export OMP_NUM_THREADS="${VAR1}"
+#     export MIN_ABS_LOAD_IMBALANCE_BEFORE_MIGRATION=$((${OMP_NUM_THREADS}*1.3))
+#     export SOME_INDEX=-1
+#     export GROUP_INDEX=$(($GROUP_INDEX+1))    # for plotting
 
-    for VAR2 in "${distributions[@]}"
-    do
-        export MXM_DISTRIBUTION="${VAR2}"
+#     for VAR2 in "${distributions[@]}"
+#     do
+#         export MXM_DISTRIBUTION="${VAR2}"
 
-        #* Chameleon default
-        prep_no_affinity
-        export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
-        VARIATION_DIR=${OUT_DIR}"/logs/${VAR1}-Threads_Distribution-${SOME_INDEX}_Cham-Vanilla"
-        mkdir ${VARIATION_DIR}
-        for RUN in {1..${N_RUNS}}
-        do
-            eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
-            # print some information to check the progression of the job
-            squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
-            echo "Finished_no_contribution_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
-        done
+#         #* Chameleon default
+#         prep_no_affinity
+#         export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
+#         VARIATION_DIR=${OUT_DIR}"/logs/${VAR1}-Threads_Distribution-${SOME_INDEX}_Cham-Vanilla"
+#         mkdir ${VARIATION_DIR}
+#         for RUN in {1..${N_RUNS}}
+#         do
+#             eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
+#             # print some information to check the progression of the job
+#             squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
+#             echo "Finished_no_contribution_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
+#         done
 
-        #* Chameleon with Commthread work contribution
-        module unload ${CHAMELEON_VERSION}
-        export CHAMELEON_VERSION="chameleon/intel"
-        module load ${CHAMELEON_VERSION}
-        export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
-        VARIATION_DIR=${LOG_DIR}"/"${VAR1}"-Threads_Distribution-"${SOME_INDEX}
-        mkdir ${VARIATION_DIR}
-        for RUN in {1..${N_RUNS}}
-        do
-            eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
-            # print some information to check the progression of the job
-            squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
-            echo "Finished"${GROUP_INDEX}"_"${SOME_INDEX}"_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
-        done
-    done
-done
+#         #* Chameleon with Commthread work contribution
+#         module unload ${CHAMELEON_VERSION}
+#         export CHAMELEON_VERSION="chameleon/intel_comm_contribution"
+#         module load ${CHAMELEON_VERSION}
+#         export SOME_INDEX=$(($SOME_INDEX+1))    # for plotting
+#         VARIATION_DIR=${LOG_DIR}"/"${VAR1}"-Threads_Distribution-"${SOME_INDEX}
+#         mkdir ${VARIATION_DIR}
+#         for RUN in {1..${N_RUNS}}
+#         do
+#             eval "run_experiment" >>& ${VARIATION_DIR}/R${RUN}.log
+#             # print some information to check the progression of the job
+#             squeue -u ka387454 >> ${OUT_DIR}/runtime_progression.log
+#             echo "Finished"${GROUP_INDEX}"_"${SOME_INDEX}"_R"${RUN} >> ${OUT_DIR}/runtime_progression.log
+#         done
+#     done
+# done
 
 #*########################################################
 #*              Vary OpenMP Num Threads                  #
@@ -294,7 +294,7 @@ done
 # export OMP_NUM_THREADS=$((${CPUS_PER_TASK}-1))  # chameleon communication thread
 # export MIN_ABS_LOAD_IMBALANCE_BEFORE_MIGRATION=$((${OMP_NUM_THREADS}*1.3))
 # export PROG="mxm_chameleon"
-# export CHAMELEON_VERSION="chameleon/intel"
+# export CHAMELEON_VERSION="chameleon/intel_comm_contribution"
 # export OMP_PLACES=cores 
 # export OMP_PROC_BIND=spread
 

@@ -4,8 +4,13 @@ import os
 import re
 import numpy as np
 #import statistics as st
+import csv
 
-test_name = 'Stats_NoAff_Topo_2PPN_S600_OLS1_20210814_150640'
+#!################################################
+test_name = 'Stats_NoAff_Topo_4PPN_S90_20210926_095122'
+rowNames=['SomeIndex','Group'] # ordering
+#!################################################
+
 outDir_name = test_name
 # test_name = 'ChamStats_'+test_name
 
@@ -319,3 +324,28 @@ for cur_log_dir in os.listdir(logs_path):
     csv_file.write("\n")
 
 csv_file.close()
+
+####################################################
+#               Order file                         #
+####################################################
+
+
+
+path_to_script = os.path.dirname(os.path.abspath(__file__))
+file_path = path_to_script+'/results/'+test_name+'.csv'
+
+out_path = path_to_script+'/results/'+test_name+"_ordered.csv"
+
+for rowName in rowNames:
+    with open(file_path, 'r') as f_input:
+        csv_input = csv.DictReader(f_input)
+        data = sorted(csv_input, key=lambda row: row[rowName])
+
+    with open(out_path, 'w') as f_output:    
+        csv_output = csv.DictWriter(f_output, fieldnames=csv_input.fieldnames)
+        csv_output.writeheader()
+        csv_output.writerows(data)
+
+    os.remove(file_path)
+    os.rename(out_path, file_path)
+

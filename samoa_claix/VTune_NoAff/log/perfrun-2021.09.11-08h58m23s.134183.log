@@ -1,0 +1,77 @@
+9 [1455916672] INFO perfrun.launcher <> - Launcher main begin
+17 [1455916672] INFO perfrun.launcher <> - MessageCatalogInit finished
+17 [1455916672] INFO perfrun.launcher <> - Launcher instance created
+17 [1455916672] INFO perfrun.launcher <> - argc = 6; cmdline = /rwthfs/rz/SW/intel/vtune/XE2020-u01/vtune_profiler_2020.1.0.607630/bin32/amplxe-runss -dump-vdso -r /w0/tmp/slurm_ka387454.23121573/amplxe-tmp-ka387454/amplxe-res-134172-115653657362295354 --tmp-dir /w0/tmp/slurm_ka387454.23121573/amplxe-tmp-ka387454 
+46 [1455916672] INFO perfrun.launcher <> - plugin remoteplug has been added successfully
+46 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+46 [1455916672] INFO perfrun.launcher <> - plugin vdso has been added successfully
+46 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+46 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+46 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+46 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+46 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+46 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+46 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+46 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+46 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+46 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+50 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+50 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+50 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+50 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+50 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+50 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+50 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+50 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+50 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+50 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+50 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+50 [1455916672] INFO perfrun.launcher <> - plugin  has been added successfully
+59 [1455916672] INFO perfrun.launcher <> - the option was added --interval: BADMSG: perfrun1.launcher.plugin_manager::interval
+59 [1455916672] INFO perfrun.launcher <> - the option was added --follow-child: BADMSG: perfrun1.launcher.plugin_manager::follow-child
+59 [1455916672] INFO perfrun.launcher <> - the option was added --gelding: BADMSG: perfrun1.launcher.plugin_manager::gelding
+59 [1455916672] INFO perfrun.launcher <> - the option was added --time-source: BADMSG: perfrun1.launcher.plugin_manager::time-source
+59 [1455916672] INFO perfrun.launcher <> - the option was added --stack: BADMSG: perfrun1.launcher.plugin_manager::stack
+59 [1455916672] INFO perfrun.launcher <> - the option was added --stack-stitching: BADMSG: perfrun1.launcher.plugin_manager::stack-stitching
+59 [1455916672] INFO perfrun.launcher <> - the option was added --type: BADMSG: perfrun1.launcher.plugin_manager::type
+59 [1455916672] INFO perfrun.launcher <> - the option was added --mrte-mode: BADMSG: perfrun1.launcher.plugin_manager::mrte-mode
+59 [1455916672] INFO perfrun.launcher <> - the option was added --mrte-mode-list: BADMSG: perfrun1.launcher.plugin_manager::mrte-mode-list
+59 [1455916672] INFO perfrun.launcher <> - the option was added --mrte-type: BADMSG: perfrun1.launcher.plugin_manager::mrte-type
+59 [1455916672] INFO perfrun.launcher <> - the option was added --mrte-type-list: BADMSG: perfrun1.launcher.plugin_manager::mrte-type-list
+59 [1455916672] INFO perfrun.launcher <> - the option was added --trace-strategy: BADMSG: perfrun1.launcher.plugin_manager::trace-strategy
+60 [1455916672] INFO perfrun.launcher <> - the option was added --collector: BADMSG: perfrun1.launcher.plugin_manager::collector
+60 [1455916672] INFO perfrun.launcher <> - the option was added --system-wide: BADMSG: perfrun1.launcher.plugin_manager::system-wide
+60 [1455916672] INFO perfrun.launcher <> - the option was added --kvm-guest: BADMSG: perfrun1.launcher.plugin_manager::kvm-guest
+60 [1455916672] INFO perfrun.launcher <> - the option was added --kvm-guest-kallsyms: BADMSG: perfrun1.launcher.plugin_manager::kvm-guest-kallsyms
+60 [1455916672] INFO perfrun.launcher <> - the option was added --kvm-guest-modules: BADMSG: perfrun1.launcher.plugin_manager::kvm-guest-modules
+60 [1455916672] INFO perfrun.launcher <> - the option was added --dump-vdso: Dump [vdso] to result directory
+60 [1455916672] INFO perfrun.launcher <> - the option was added --system-collector-config: Specify subcollectors. Possible values: all, vdso.
+60 [1455916672] INFO perfrun.launcher <> - create msngr2::ICliToolContext
+61 [1455916672] INFO perfrun.launcher <> - create file finder object
+64 [1458629440] INFO perfrun.launcher <> - plugin [remoteplug] was disabled because it doesn't support the given collection type.
+64 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+64 [1458629440] INFO perfrun.vdso <> - dumping [vdso] pseudomodule
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1458629440] INFO perfrun.launcher <> - plugin [] was disabled because it doesn't support the given collection type.
+65 [1455916672] INFO perfrun.launcher <> - Application exit code: 0
+65 [1455916672] INFO perfrun.launcher <> - Exit code: 0
